@@ -247,7 +247,9 @@
     viewBtn.addEventListener("click", function () {
       if (!selectedID) return;
       const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
-      const pdfUrl = baseUrl + "export/pdf/" + selectedID;
+      // Tambahkan parameter preview=true agar tidak auto-download
+      const pdfUrl = baseUrl + "export/pdf/" + selectedID + "?preview=true";
+      const downloadUrl = baseUrl + "export/pdf/" + selectedID; // URL untuk tombol download tetap biasa
       
       const previewModal = new bootstrap.Modal(document.getElementById('previewPdfModal'));
       const iframe = document.getElementById('pdfPreviewFrame');
@@ -263,7 +265,7 @@
       
       // Load PDF
       iframe.src = pdfUrl + '#toolbar=0&navpanes=0&scrollbar=0';
-      downloadBtn.href = pdfUrl;
+      downloadBtn.href = downloadUrl;
       
       iframe.onload = function() {
           loader.style.display = 'none';

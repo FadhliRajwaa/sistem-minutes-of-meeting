@@ -70,7 +70,12 @@ class ExportController extends BaseController
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
 
-            return $dompdf->stream('notulen_rapat.pdf');
+            // Cek parameter 'preview' dari URL
+            $isPreview = $this->request->getGet('preview') === 'true';
+
+            return $dompdf->stream('notulen_rapat.pdf', [
+                'Attachment' => $isPreview ? 0 : 1
+            ]);
 
         } catch (\Throwable $e) {
             // In production, we might want to log this instead of showing it
