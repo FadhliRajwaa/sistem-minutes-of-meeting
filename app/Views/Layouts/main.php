@@ -423,11 +423,16 @@
 
 </div>
 
-<script src="<?= base_url('js/jquery.min.js') ?>"></script>
-<script src="<?= base_url('js/bootstrap.bundle.min.js') ?>"></script>
+<!-- Use CDN for reliability in cloud deployment -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    const siteBaseUrl = '<?= base_url() ?>';
+    // Force HTTPS if current page is HTTPS to avoid Mixed Content errors
+    let siteBaseUrl = '<?= base_url() ?>';
+    if (window.location.protocol === 'https:' && siteBaseUrl.startsWith('http:')) {
+        siteBaseUrl = siteBaseUrl.replace(/^http:/, 'https:');
+    }
     
     function loadContent(page) {
         // Tutup sidebar di mobile setelah klik menu
