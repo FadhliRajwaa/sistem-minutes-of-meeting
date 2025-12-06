@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/main') ?>
+<?= $this->extend('Layouts/main') ?>
 <?= $this->section('content') ?>
 
 <h2>Tambah Peserta</h2>

@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/main') ?>
+<?= $this->extend('Layouts/main') ?>
 <?= $this->section('content') ?>
 
 <!-- Tambahkan Tailwind CDN (jika belum ada di layout/main) -->
