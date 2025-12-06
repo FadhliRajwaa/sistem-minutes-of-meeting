@@ -27,6 +27,40 @@ class Database extends Config
         'failover' => [],
         'port'     => 3306,
     ];
+
+    /**
+     * Database configuration for Aiven Cloud
+     */
+    public array $aiven = [
+        'DSN'      => '',
+        'hostname' => 'companyinterior-fadhlirajwaarahmana-9486.i.aivencloud.com',
+        'username' => 'avnadmin',
+        'password' => '', // Diisi lewat Environment Variable
+        'database' => 'minutes-of-meeting', // Ubah sesuai nama database di Aiven jika berbeda
+        'DBDriver' => 'MySQLi',
+        'DBPrefix' => '',
+        'pConnect' => false,
+        'DBDebug'  => (ENVIRONMENT !== 'production'),
+        'cacheOn'  => false,
+        'charset'  => 'utf8',
+        'DBCollat' => 'utf8_general_ci',
+        'swapPre'  => '',
+        'encrypt'  => true, // SSL Mode: REQUIRED
+        'compress' => false,
+        'strictOn' => false,
+        'failover' => [],
+        'port'     => 16722,
+    ];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Load Aiven password from Environment Variable if exists
+        if (getenv('AIVEN_PASSWORD')) {
+            $this->aiven['password'] = getenv('AIVEN_PASSWORD');
+        }
+    }
 }
 
 
