@@ -107,18 +107,38 @@
     const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
     
     function loadMeetings() {
-        $.get(baseUrl + 'api/meetings', function(data){
-            $('#meetingSelect').empty();
-            if(data.length === 0) {
-                 $('#meetingSelect').append('<option value="">Tidak ada meeting aktif</option>');
-                 return;
-            }
-            $.each(data, function(i, meeting){
-                $('#meetingSelect').append(`<option value="${meeting.id}">${meeting.nama_meeting}</option>`);
+        // Tampilkan loading state
+        $('#meetingSelect').html('<option>Memuat data...</option>');
+
+        $.get(baseUrl + 'api/meetings')
+            .done(function(data){
+                $('#meetingSelect').empty();
+                
+                if(Array.isArray(data) && data.length === 0) {
+                     $('#meetingSelect').append('<option value="">Tidak ada meeting aktif</option>');
+                     $('#addParticipantBtn').prop('disabled', true);
+                     return;
+                }
+                
+                // Jika data bukan array (misal error object), handle gracefully
+                if (!Array.isArray(data)) {
+                    console.error("Invalid data format:", data);
+                    $('#meetingSelect').html('<option value="">Error memuat data</option>');
+                    return;
+                }
+
+                $.each(data, function(i, meeting){
+                    $('#meetingSelect').append(`<option value="${meeting.id}">${meeting.nama_meeting}</option>`);
+                });
+                
+                $('#addParticipantBtn').prop('disabled', false);
+                // Load participant untuk meeting pertama
+                loadParticipants();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("AJAX Error:", textStatus, errorThrown);
+                $('#meetingSelect').html('<option value="">Gagal memuat data (Cek Koneksi)</option>');
             });
-            // Load participant untuk meeting pertama
-            loadParticipants();
-        });
     }
 
     function loadParticipants() {
