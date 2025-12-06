@@ -179,14 +179,37 @@
                 display: none;
             }
             .right-side {
-                background: #f3f4f6;
+                background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+                padding: 1.5rem;
             }
             .login-container {
-                background: white;
-                padding: 2.5rem;
-                border-radius: 20px;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+                background: rgba(255, 255, 255, 0.9);
+                padding: 2rem;
+                border-radius: 24px;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.8);
             }
+            .mobile-logo {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+            .mobile-logo img {
+                width: 70px;
+                height: auto;
+                background: white;
+                padding: 12px;
+                border-radius: 16px;
+                box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            }
+            .login-container h3 {
+                font-size: 1.5rem; /* Smaller title on mobile */
+            }
+        }
+        
+        .mobile-logo {
+            display: none;
         }
     </style>
 </head>
@@ -212,6 +235,12 @@
     <!-- Right Section -->
     <div class="right-side">
         <div class="login-container">
+            
+            <!-- Mobile Logo (Only visible on mobile) -->
+            <div class="mobile-logo">
+                <img src="<?= base_url('images/mom.png') ?>" alt="Logo">
+            </div>
+
             <div class="text-center mb-4">
                 <h3 class="fw-bold text-dark mb-1">Selamat Datang Kembali!</h3>
                 <p class="text-muted">Silakan login ke akun Anda</p>
