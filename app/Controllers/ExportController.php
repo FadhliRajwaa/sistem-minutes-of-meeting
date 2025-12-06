@@ -52,6 +52,15 @@ class ExportController extends BaseController
         
         $options = $dompdf->getOptions();
         $options->set('isRemoteEnabled', true);
+        
+        // FIX VERCEL: Set writable paths for fonts and cache
+        // Vercel only allows writing to /tmp
+        $tmpDir = sys_get_temp_dir();
+        $options->set('fontDir', $tmpDir);
+        $options->set('fontCache', $tmpDir);
+        $options->set('tempDir', $tmpDir);
+        $options->set('chroot', FCPATH); // Restrict file access to project root for security
+
         $dompdf->setOptions($options);
 
         $dompdf->loadHtml($html);
