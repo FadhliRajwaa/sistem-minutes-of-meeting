@@ -24,7 +24,20 @@ class App extends BaseConfig
 
         // Override baseURL dynamically if on Vercel/Production and not set via Env
         if (isset($_SERVER['HTTP_HOST']) && !getenv('app.baseURL')) {
-            $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://';
+            $protocol = 'http://';
+            
+            // Check standard HTTPS header
+            if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+                $protocol = 'https://';
+            }
+            // Check Proxy headers (Vercel/Cloudflare/etc)
+            elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+                $protocol = 'https://';
+            }
+            elseif (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on') {
+                $protocol = 'https://';
+            }
+
             $this->baseURL = $protocol . $_SERVER['HTTP_HOST'] . '/';
         }
     }
