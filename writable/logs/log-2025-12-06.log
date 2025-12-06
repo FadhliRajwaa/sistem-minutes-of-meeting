@@ -35,3 +35,146 @@ DEBUG - 2025-12-06 11:28:01 --> Session: Class initialized using 'CodeIgniter\Se
 DEBUG - 2025-12-06 11:36:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2025-12-06 11:36:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2025-12-06 11:36:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-12-06 13:10:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2025-12-06 13:12:27 --> mysqli_sql_exception: Table 'users' already exists in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `u...', 0)
+#1 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `u...')
+#2 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `u...')
+#3 C:\xampp\htdocs\minutes-meeting\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `u...')
+#4 C:\xampp\htdocs\minutes-meeting\app\Database\Migrations\2025-12-05-000001_CreateUsersTable.php(23): CodeIgniter\Database\Forge->createTable('users')
+#5 C:\xampp\htdocs\minutes-meeting\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateUsersTable->up()
+#6 C:\xampp\htdocs\minutes-meeting\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 C:\xampp\htdocs\minutes-meeting\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest('aiven')
+#8 C:\xampp\htdocs\minutes-meeting\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\minutes-meeting\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\minutes-meeting\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\minutes-meeting\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\minutes-meeting\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-12-06 13:12:45 --> mysqli_sql_exception: Table 'users' already exists in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `u...', 0)
+#1 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `u...')
+#2 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `u...')
+#3 C:\xampp\htdocs\minutes-meeting\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `u...')
+#4 C:\xampp\htdocs\minutes-meeting\app\Database\Migrations\2025-12-05-000001_CreateUsersTable.php(23): CodeIgniter\Database\Forge->createTable('users')
+#5 C:\xampp\htdocs\minutes-meeting\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateUsersTable->up()
+#6 C:\xampp\htdocs\minutes-meeting\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 C:\xampp\htdocs\minutes-meeting\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest('aiven')
+#8 C:\xampp\htdocs\minutes-meeting\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\minutes-meeting\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\minutes-meeting\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\minutes-meeting\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\minutes-meeting\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-12-06 13:14:49 --> mysqli_sql_exception: Table 'users' already exists in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `u...', 0)
+#1 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `u...')
+#2 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `u...')
+#3 C:\xampp\htdocs\minutes-meeting\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `u...')
+#4 C:\xampp\htdocs\minutes-meeting\app\Database\Migrations\2025-12-05-000001_CreateUsersTable.php(23): CodeIgniter\Database\Forge->createTable('users')
+#5 C:\xampp\htdocs\minutes-meeting\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateUsersTable->up()
+#6 C:\xampp\htdocs\minutes-meeting\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 C:\xampp\htdocs\minutes-meeting\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest('aiven')
+#8 C:\xampp\htdocs\minutes-meeting\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\minutes-meeting\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\minutes-meeting\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\minutes-meeting\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\minutes-meeting\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-12-06 13:15:18 --> mysqli_sql_exception: Table 'users' already exists in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `u...', 0)
+#1 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `u...')
+#2 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `u...')
+#3 C:\xampp\htdocs\minutes-meeting\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `u...')
+#4 C:\xampp\htdocs\minutes-meeting\app\Database\Migrations\2025-12-05-000001_CreateUsersTable.php(23): CodeIgniter\Database\Forge->createTable('users')
+#5 C:\xampp\htdocs\minutes-meeting\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateUsersTable->up()
+#6 C:\xampp\htdocs\minutes-meeting\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 C:\xampp\htdocs\minutes-meeting\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest('aiven')
+#8 C:\xampp\htdocs\minutes-meeting\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\minutes-meeting\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\minutes-meeting\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\minutes-meeting\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\minutes-meeting\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-12-06 13:17:34 --> mysqli_sql_exception: Table 'users' already exists in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(327): mysqli->query('CREATE TABLE `u...', 0)
+#1 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `u...')
+#2 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `u...')
+#3 C:\xampp\htdocs\minutes-meeting\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `u...')
+#4 C:\xampp\htdocs\minutes-meeting\app\Database\Migrations\2025-12-05-000001_CreateUsersTable.php(23): CodeIgniter\Database\Forge->createTable('users')
+#5 C:\xampp\htdocs\minutes-meeting\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateUsersTable->up()
+#6 C:\xampp\htdocs\minutes-meeting\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+#7 C:\xampp\htdocs\minutes-meeting\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest('aiven')
+#8 C:\xampp\htdocs\minutes-meeting\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#9 C:\xampp\htdocs\minutes-meeting\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#10 C:\xampp\htdocs\minutes-meeting\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#11 C:\xampp\htdocs\minutes-meeting\system\Boot.php(104): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#12 C:\xampp\htdocs\minutes-meeting\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#13 {main}
+ERROR - 2025-12-06 13:19:58 --> Error connecting to the database: mysqli_sql_exception: Access denied for user 'avnadmin'@'182.8.193.94' (using password: YES) in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('companyinterior...', 'avnadmin', Object(SensitiveParameterValue), 'minutes-of-meet...', 16722, '', 0)
+#1 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\minutes-meeting\test_db.php(19): CodeIgniter\Database\BaseConnection->initialize()
+#3 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user '****'@'182.8.193.94' (using password: YES) in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\minutes-meeting\test_db.php(19): CodeIgniter\Database\BaseConnection->initialize()
+#2 {main}
+ERROR - 2025-12-06 13:20:33 --> Error connecting to the database: mysqli_sql_exception: Access denied for user 'avnadmin'@'182.8.193.94' (using password: YES) in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('companyinterior...', 'avnadmin', Object(SensitiveParameterValue), 'minutes-of-meet...', 16722, '', 0)
+#1 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\minutes-meeting\test_db.php(28): CodeIgniter\Database\BaseConnection->initialize()
+#3 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user '****'@'182.8.193.94' (using password: YES) in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\minutes-meeting\test_db.php(28): CodeIgniter\Database\BaseConnection->initialize()
+#2 {main}
+ERROR - 2025-12-06 13:21:09 --> Error connecting to the database: mysqli_sql_exception: Access denied for user 'avnadmin'@'182.8.193.94' (using password: YES) in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('companyinterior...', 'avnadmin', Object(SensitiveParameterValue), 'minutes-of-meet...', 16722, '', 0)
+#1 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(284): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\minutes-meeting\test_db.php(28): CodeIgniter\Database\MySQLi\Connection->setDatabase('defaultdb')
+#4 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user '****'@'182.8.193.94' (using password: YES) in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(284): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\minutes-meeting\test_db.php(28): CodeIgniter\Database\MySQLi\Connection->setDatabase('defaultdb')
+#3 {main}
+ERROR - 2025-12-06 13:21:44 --> Error connecting to the database: mysqli_sql_exception: Access denied for user 'avnadmin'@'182.8.193.94' (using password: YES) in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('companyinterior...', 'avnadmin', Object(SensitiveParameterValue), 'defaultdb', 16722, '', 0)
+#1 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\minutes-meeting\test_db.php(41): CodeIgniter\Database\BaseConnection->initialize()
+#3 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user '****'@'182.8.193.94' (using password: YES) in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\minutes-meeting\test_db.php(41): CodeIgniter\Database\BaseConnection->initialize()
+#2 {main}
+ERROR - 2025-12-06 13:22:26 --> Error connecting to the database: mysqli_sql_exception: Access denied for user 'avnadmin'@'182.8.193.94' (using password: YES) in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('companyinterior...', 'avnadmin', Object(SensitiveParameterValue), '', 16722, '', 0)
+#1 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\minutes-meeting\test_db.php(41): CodeIgniter\Database\BaseConnection->initialize()
+#3 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user '****'@'182.8.193.94' (using password: YES) in C:\xampp\htdocs\minutes-meeting\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 C:\xampp\htdocs\minutes-meeting\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\minutes-meeting\test_db.php(41): CodeIgniter\Database\BaseConnection->initialize()
+#2 {main}
