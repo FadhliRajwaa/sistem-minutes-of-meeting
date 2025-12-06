@@ -15,10 +15,10 @@ error_reporting(E_ALL & ~E_DEPRECATED);
 
     /*
      * --------------------------------------------------------------------------
-     * Display Error (Debug Mode)
+     * Display Error
      * --------------------------------------------------------------------------
      *
-     * If an error occurs, we want to see the details to debug it.
+     * If an error occurs, we want to show the user the "Whoops!" page.
      */
-    ini_set('display_errors', '1');
-    defined('CI_DEBUG') || define('CI_DEBUG', true);
+    ini_set('display_errors', '0');
+    defined('CI_DEBUG') || define('CI_DEBUG', false);
