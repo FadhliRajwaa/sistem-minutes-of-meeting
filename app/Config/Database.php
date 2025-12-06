@@ -56,6 +56,11 @@ class Database extends Config
     {
         parent::__construct();
 
+        // Check for Vercel/Environment override for default group
+        if (getenv('DATABASE_DEFAULT_GROUP')) {
+            $this->defaultGroup = getenv('DATABASE_DEFAULT_GROUP');
+        }
+
         // Load Aiven password from Environment Variable if exists
         if (getenv('AIVEN_PASSWORD')) {
             $this->aiven['password'] = getenv('AIVEN_PASSWORD');
