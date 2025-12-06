@@ -13,8 +13,84 @@
       </div>
       
       <div class="card-body p-0">
+        <style>
+            @media (max-width: 768px) {
+                /* Force table to not be like tables anymore */
+                .no-more-tables table, 
+                .no-more-tables thead, 
+                .no-more-tables tbody, 
+                .no-more-tables th, 
+                .no-more-tables td, 
+                .no-more-tables tr { 
+                    display: block; 
+                }
+         
+                /* Hide table headers (but not display: none;, for accessibility) */
+                .no-more-tables thead tr { 
+                    position: absolute;
+                    top: -9999px;
+                    left: -9999px;
+                }
+         
+                .no-more-tables tr { 
+                    border: 1px solid #eee; 
+                    margin-bottom: 10px; 
+                    border-radius: 8px;
+                    background: #fff;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                }
+         
+                .no-more-tables td { 
+                    /* Behave  like a "row" */
+                    border: none;
+                    border-bottom: 1px solid #eee; 
+                    position: relative;
+                    padding-left: 50% !important; 
+                    white-space: normal;
+                    text-align: left;
+                }
+         
+                .no-more-tables td:before { 
+                    /* Now like a table header */
+                    position: absolute;
+                    /* Top/left values mimic padding */
+                    top: 12px;
+                    left: 15px;
+                    width: 45%; 
+                    padding-right: 10px; 
+                    white-space: nowrap;
+                    text-align: left;
+                    font-weight: bold;
+                    color: #6c757d;
+                }
+         
+                /* Label the data */
+                .no-more-tables td:nth-of-type(1):before { content: "Pilih"; }
+                .no-more-tables td:nth-of-type(2):before { content: "Topik"; }
+                .no-more-tables td:nth-of-type(3):before { content: "Notulis"; }
+                .no-more-tables td:nth-of-type(4):before { content: "Tanggal"; }
+
+                /* Adjust input check position */
+                .no-more-tables td:nth-of-type(1) {
+                    padding-left: 15px !important;
+                    text-align: right;
+                }
+                .no-more-tables td:nth-of-type(1):before {
+                    content: "";
+                }
+
+                /* Action Buttons Stack */
+                .action-buttons {
+                    flex-direction: column;
+                    width: 100%;
+                }
+                .action-buttons button {
+                    width: 100%;
+                }
+            }
+        </style>
         <form action="<?= base_url('export/pdf') ?>" method="post" target="_blank" id="exportForm">
-            <div class="table-responsive">
+            <div class="table-responsive no-more-tables">
               <table class="table table-hover align-middle mb-0">
                 <thead class="bg-light text-secondary">
                   <tr>
@@ -45,7 +121,7 @@
               </table>
             </div>
 
-            <div class="p-3 border-top d-flex justify-content-end gap-2 bg-white rounded-bottom">
+            <div class="p-3 border-top d-flex justify-content-end gap-2 bg-white rounded-bottom action-buttons">
               <button id="viewBtn" type="button" class="btn btn-outline-primary rounded-pill px-4" disabled>
                   <i class="fas fa-eye me-2"></i> Preview
               </button>
