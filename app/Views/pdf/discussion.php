@@ -127,11 +127,16 @@
     <div class="header-container">
         <?php 
             // Cek logo, gunakan FCPATH agar terbaca oleh Dompdf
+            // PENTING: Cek juga apakah ekstensi GD aktif, karena Vercel mungkin tidak memilikinya
             $logoPath = FCPATH . 'images/mom.png';
-            if (file_exists($logoPath)) {
-                $imageData = base64_encode(file_get_contents($logoPath));
-                $src = 'data:image/png;base64,'.$imageData;
-                echo '<img src="'.$src.'" class="logo">';
+            if (file_exists($logoPath) && extension_loaded('gd')) {
+                try {
+                    $imageData = base64_encode(file_get_contents($logoPath));
+                    $src = 'data:image/png;base64,'.$imageData;
+                    echo '<img src="'.$src.'" class="logo">';
+                } catch (\Throwable $e) {
+                    // Ignore image error
+                }
             }
         ?>
         <div class="header-text">

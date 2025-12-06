@@ -47,11 +47,9 @@ class ExportController extends BaseController
             'participants' => $participants
         ];
 
-        // DEBUG: Enable error reporting temporarily to see why it crashes
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
-
+        // Fix Vercel: /tmp path for fonts
+        // GD Extension check is handled in the View (pdf/discussion.php)
+        
         try {
             $dompdf = new \Dompdf\Dompdf();
             $html = view('pdf/discussion', $data);
@@ -59,14 +57,11 @@ class ExportController extends BaseController
             $options = $dompdf->getOptions();
             $options->set('isRemoteEnabled', true);
             
-            // FIX VERCEL: Set writable paths for fonts and cache
             $tmpDir = sys_get_temp_dir();
             $options->set('fontDir', $tmpDir);
             $options->set('fontCache', $tmpDir);
             $options->set('tempDir', $tmpDir);
             $options->set('chroot', FCPATH); 
-            
-            // Disable font subsetting to reduce processing
             $options->set('isFontSubsettingEnabled', false);
 
             $dompdf->setOptions($options);
@@ -78,10 +73,9 @@ class ExportController extends BaseController
             return $dompdf->stream('notulen_rapat.pdf');
 
         } catch (\Throwable $e) {
-            return "PDF Error: " . $e->getMessage() . 
-                   "<br>File: " . $e->getFile() . 
-                   "<br>Line: " . $e->getLine() .
-                   "<br>Trace: <pre>" . $e->getTraceAsString() . "</pre>";
+            // In production, we might want to log this instead of showing it
+            // But for now, let's show a user-friendly error
+            return "Maaf, gagal membuat PDF. Server Error: " . $e->getMessage();
         }
     }
 
