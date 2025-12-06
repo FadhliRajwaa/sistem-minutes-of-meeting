@@ -42,12 +42,15 @@ class MeetingController extends BaseController
 
     public function getUpcoming()
     {
+        // Ambil waktu sekarang
         $now = date('Y-m-d H:i:s');
-        $limit = date('Y-m-d H:i:s', strtotime('+1 day'));
-
+        
+        // Ambil 1 meeting terdekat yang akan datang (tanpa batasan waktu 1 hari)
+        // Atau meeting yang sedang berlangsung (jika logika bisnis mengizinkan)
         $meetings = $this->meetingModel->where('tanggal >=', $now)
-                                      ->where('tanggal <=', $limit)
+                                      ->where('status !=', 'Sudah Dilaksanakan')
                                       ->orderBy('tanggal', 'ASC')
+                                      ->limit(1) // Cukup ambil 1 yang terdekat
                                       ->findAll();
 
         return $this->response->setJSON($meetings);

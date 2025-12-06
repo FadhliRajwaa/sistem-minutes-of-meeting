@@ -197,8 +197,16 @@
                   <p class="mb-1 text-muted"><i class="fas fa-map-marker-alt me-2"></i>${meeting.tempat}</p>
                   <p class="mb-0 text-muted"><i class="far fa-clock me-2"></i>${new Date(meeting.tanggal).toLocaleString()}</p>
               </div>
-              <div class="mt-3 mt-md-0">
-                  ${getTimeRemaining(meeting.tanggal)}
+              <div class="mt-3 mt-md-0 text-md-end">
+                  <div class="mb-2">${getTimeRemaining(meeting.tanggal)}</div>
+                  <div class="d-flex gap-2 justify-content-md-end">
+                      <button onclick="location.hash='#participant-content'" class="btn btn-sm btn-success rounded-pill px-3 shadow-sm">
+                        <i class="fas fa-user-check me-1"></i> Absensi
+                      </button>
+                      <button onclick="location.hash='#discussion-content'" class="btn btn-sm btn-info text-white rounded-pill px-3 shadow-sm">
+                        <i class="fas fa-edit me-1"></i> Notulensi
+                      </button>
+                  </div>
               </div>
           </div>
         `;
