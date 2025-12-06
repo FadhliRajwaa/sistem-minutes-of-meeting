@@ -35,8 +35,8 @@ class Database extends Config
         'DSN'      => '',
         'hostname' => 'companyinterior-fadhlirajwaarahmana-9486.i.aivencloud.com',
         'username' => 'avnadmin',
-        'password' => '', // Diisi lewat Environment Variable
-        'database' => 'minutes-of-meeting', // Ubah sesuai nama database di Aiven jika berbeda
+        'password' => '', // Set via AIVEN_PASSWORD env variable
+        'database' => 'minutes-of-meeting',
         'DBDriver' => 'MySQLi',
         'DBPrefix' => '',
         'pConnect' => false,

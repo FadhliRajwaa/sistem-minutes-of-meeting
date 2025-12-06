@@ -1,0 +1,41 @@
+# Environment
+.env
+
+# Vendor dependencies
+/vendor/
+
+# Writable directory (logs, cache, sessions)
+/writable/cache/*
+/writable/logs/*
+/writable/session/*
+/writable/debugbar/*
+!/writable/cache/.gitkeep
+!/writable/logs/.gitkeep
+!/writable/session/.gitkeep
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Composer
+composer.lock
+
+# Test files
+/test_*.php
+/phpunit.xml
+/.phpunit.result.cache
+
+# Build
+/build/
+/node_modules/
+
+# Temporary files
+*.tmp
+*.bak
