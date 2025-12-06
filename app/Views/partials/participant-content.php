@@ -110,7 +110,7 @@
         // Tampilkan loading state
         $('#meetingSelect').html('<option>Memuat data...</option>');
 
-        $.get(baseUrl + 'api/meetings')
+        $.get(baseUrl + 'v1/meetings')
             .done(function(data){
                 $('#meetingSelect').empty();
                 
@@ -145,7 +145,7 @@
         const meetingId = $('#meetingSelect').val();
         if (!meetingId) return;
         
-        $.get(baseUrl + 'api/participants/' + meetingId, function(data){
+        $.get(baseUrl + 'v1/participants/' + meetingId, function(data){
             $('#participantTable').empty();
             $('#participantCount').text(data.length + ' Peserta');
             
@@ -191,7 +191,7 @@
             return;
         }
 
-        $.post(baseUrl + 'api/participants', {
+        $.post(baseUrl + 'v1/participants', {
             meeting_id: $('#meeting_id').val(),
             name: nameVal,
             barcode_id: barcodeVal

@@ -29,17 +29,17 @@ $routes->get('partials/export-content', 'ExportController::index');
 $routes->get('partials/settings-content', 'PartialController::settings');
 
 // ✅ API & CRUD Meeting
-$routes->get('api/meetings', 'MeetingController::getMeetings');
+$routes->get('v1/meetings', 'MeetingController::getMeetings');
 $routes->post('meeting/save', 'MeetingController::save');
 $routes->post('meeting/update', 'MeetingController::update');
 $routes->post('meeting/delete', 'MeetingController::delete');
 $routes->get('meetings/json', 'MeetingController::getMeetings');
-$routes->get('api/reminder', 'MeetingController::getUpcoming');
+$routes->get('v1/reminder', 'MeetingController::getUpcoming');
 
 // ✅ API Participant
-$routes->get('api/participants/(:num)', 'ParticipantController::getParticipants/$1');
-$routes->post('api/participants', 'ParticipantController::addParticipant');
-$routes->post('api/scan', 'ParticipantController::scanBarcode');
+$routes->get('v1/participants/(:num)', 'ParticipantController::getParticipants/$1');
+$routes->post('v1/participants', 'ParticipantController::addParticipant');
+$routes->post('v1/scan', 'ParticipantController::scanBarcode');
 $routes->post('participant/absen', 'ParticipantController::absen');
 
 // ✅ API Discussion

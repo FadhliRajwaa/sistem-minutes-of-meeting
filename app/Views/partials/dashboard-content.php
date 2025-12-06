@@ -185,7 +185,7 @@
     return `<span class="badge bg-info text-white">Dimulai dalam ${hours} jam ${minutes} menit</span>`;
   }
 
-  fetch(baseUrl + 'api/reminder')
+  fetch(baseUrl + 'v1/reminder')
     .then(res => res.json())
     .then(data => {
       if (data.length > 0) {
