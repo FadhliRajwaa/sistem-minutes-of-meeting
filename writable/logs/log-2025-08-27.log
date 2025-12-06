@@ -1,0 +1,36 @@
+CRITICAL - 2025-08-27 04:20:30 --> GuzzleHttp\Exception\ConnectException: cURL error 52: Empty reply from server (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://www.googleapis.com/oauth2/v2/userinfo
+[Method: GET, Route: auth/google-callback]
+in VENDORPATH\guzzlehttp\guzzle\src\Handler\CurlFactory.php on line 275.
+ 1 VENDORPATH\guzzlehttp\guzzle\src\Handler\CurlFactory.php(205): GuzzleHttp\Handler\CurlFactory::createRejection(Object(GuzzleHttp\Handler\EasyHandle), [...])
+ 2 VENDORPATH\guzzlehttp\guzzle\src\Handler\CurlFactory.php(157): GuzzleHttp\Handler\CurlFactory::finishError(Object(GuzzleHttp\Handler\CurlHandler), Object(GuzzleHttp\Handler\EasyHandle), Object(GuzzleHttp\Handler\CurlFactory))
+ 3 VENDORPATH\guzzlehttp\guzzle\src\Handler\CurlHandler.php(47): GuzzleHttp\Handler\CurlFactory::finish(Object(GuzzleHttp\Handler\CurlHandler), Object(GuzzleHttp\Handler\EasyHandle), Object(GuzzleHttp\Handler\CurlFactory))
+ 4 VENDORPATH\guzzlehttp\guzzle\src\Handler\Proxy.php(28): GuzzleHttp\Handler\CurlHandler->__invoke(Object(GuzzleHttp\Psr7\Request), [...])
+ 5 VENDORPATH\guzzlehttp\guzzle\src\Handler\Proxy.php(48): GuzzleHttp\Handler\Proxy::GuzzleHttp\Handler\{closure}(Object(GuzzleHttp\Psr7\Request), [...])
+ 6 VENDORPATH\google\auth\src\Middleware\ScopedAccessTokenMiddleware.php(125): GuzzleHttp\Handler\Proxy::GuzzleHttp\Handler\{closure}(Object(GuzzleHttp\Psr7\Request), [...])
+ 7 VENDORPATH\guzzlehttp\guzzle\src\PrepareBodyMiddleware.php(35): Google\Auth\Middleware\ScopedAccessTokenMiddleware->Google\Auth\Middleware\{closure}(Object(GuzzleHttp\Psr7\Request), [...])
+ 8 VENDORPATH\guzzlehttp\guzzle\src\Middleware.php(31): GuzzleHttp\PrepareBodyMiddleware->__invoke(Object(GuzzleHttp\Psr7\Request), [...])
+ 9 VENDORPATH\guzzlehttp\guzzle\src\RedirectMiddleware.php(71): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Request), [...])
+10 VENDORPATH\guzzlehttp\guzzle\src\Middleware.php(63): GuzzleHttp\RedirectMiddleware->__invoke(Object(GuzzleHttp\Psr7\Request), [...])
+11 VENDORPATH\guzzlehttp\guzzle\src\HandlerStack.php(75): GuzzleHttp\Middleware::GuzzleHttp\{closure}(Object(GuzzleHttp\Psr7\Request), [...])
+12 VENDORPATH\guzzlehttp\guzzle\src\Client.php(333): GuzzleHttp\HandlerStack->__invoke(Object(GuzzleHttp\Psr7\Request), [...])
+13 VENDORPATH\guzzlehttp\guzzle\src\Client.php(107): GuzzleHttp\Client->transfer(Object(GuzzleHttp\Psr7\Request), [...])
+14 VENDORPATH\guzzlehttp\guzzle\src\Client.php(124): GuzzleHttp\Client->sendAsync(Object(GuzzleHttp\Psr7\Request), [...])
+15 VENDORPATH\google\auth\src\HttpHandler\Guzzle6HttpHandler.php(65): GuzzleHttp\Client->send(Object(GuzzleHttp\Psr7\Request), [...])
+16 VENDORPATH\google\apiclient\src\Http\REST.php(84): Google\Auth\HttpHandler\Guzzle6HttpHandler->__invoke(Object(GuzzleHttp\Psr7\Request))
+17 [internal function]: Google\Http\REST::doExecute(Object(GuzzleHttp\Client), Object(GuzzleHttp\Psr7\Request), 'Google\\Service\\Oauth2\\Userinfo')
+18 VENDORPATH\google\apiclient\src\Task\Runner.php(187): call_user_func_array([...], [...])
+19 VENDORPATH\google\apiclient\src\Http\REST.php(66): Google\Task\Runner->run()
+20 VENDORPATH\google\apiclient\src\Client.php(972): Google\Http\REST::execute(Object(GuzzleHttp\Client), Object(GuzzleHttp\Psr7\Request), 'Google\\Service\\Oauth2\\Userinfo', [], null)
+21 VENDORPATH\google\apiclient\src\Service\Resource.php(248): Google\Client->execute(Object(GuzzleHttp\Psr7\Request), 'Google\\Service\\Oauth2\\Userinfo')
+22 VENDORPATH\google\apiclient-services\src\Oauth2\Resource\Userinfo.php(43): Google\Service\Resource->call('get', [...], 'Google\\Service\\Oauth2\\Userinfo')
+23 APPPATH\Controllers\AuthController.php(115): Google\Service\Oauth2\Resource\Userinfo->get()
+24 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AuthController->googleCallback()
+25 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+26 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+27 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+28 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+29 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+30 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-08-27 04:21:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-27 04:22:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-27 04:22:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

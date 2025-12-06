@@ -1,0 +1,582 @@
+DEBUG - 2025-06-23 01:58:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 02:32:44 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "welcome.php"
+[Method: GET, Route: /]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('welcome.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('welcome', [], true)
+ 3 APPPATH\Controllers\MainController.php(14): view('welcome')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MainController->welcome()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MainController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 02:35:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 02:50:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2025-06-23 03:28:01 --> mysqli_sql_exception: Column 'topik' cannot be null in C:\laragonnew\www\minuts-meeting\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\laragonnew\www\minuts-meeting\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `di...', 0)
+#1 C:\laragonnew\www\minuts-meeting\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `di...')
+#2 C:\laragonnew\www\minuts-meeting\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `di...')
+#3 C:\laragonnew\www\minuts-meeting\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `di...', Array, false)
+#4 C:\laragonnew\www\minuts-meeting\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+#5 C:\laragonnew\www\minuts-meeting\system\BaseModel.php(843): CodeIgniter\Model->doInsert(Array)
+#6 C:\laragonnew\www\minuts-meeting\system\Model.php(800): CodeIgniter\BaseModel->insert(Array, false)
+#7 C:\laragonnew\www\minuts-meeting\system\BaseModel.php(754): CodeIgniter\Model->insert(Array, false)
+#8 C:\laragonnew\www\minuts-meeting\app\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save(Array)
+#9 C:\laragonnew\www\minuts-meeting\system\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+#10 C:\laragonnew\www\minuts-meeting\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+#11 C:\laragonnew\www\minuts-meeting\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#12 C:\laragonnew\www\minuts-meeting\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#13 C:\laragonnew\www\minuts-meeting\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#14 C:\laragonnew\www\minuts-meeting\public\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#15 C:\laragonnew\www\minuts-meeting\system\rewrite.php(44): require_once('C:\\laragonnew\\w...')
+#16 {main}
+CRITICAL - 2025-06-23 03:28:01 --> CodeIgniter\Database\Exceptions\DatabaseException: Column 'topik' cannot be null
+[Method: POST, Route: discussion/save]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (:meeting_id:, :topik:, :pembahasan:, :tanggal:, :nama_notulis:, :created_at:, :updated_at:)', [...], false)
+ 2 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 3 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 4 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 5 SYSTEMPATH\BaseModel.php(754): CodeIgniter\Model->insert([...], false)
+ 6 APPPATH\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save([...])
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 03:28:01 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Column 'topik' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (\'1\', NULL, \'null\', NULL, NULL, \'2025-06-23 03:28:01\', \'2025-06-23 03:28:01\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (\'1\', NULL, \'null\', NULL, NULL, \'2025-06-23 03:28:01\', \'2025-06-23 03:28:01\')')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (:meeting_id:, :topik:, :pembahasan:, :tanggal:, :nama_notulis:, :created_at:, :updated_at:)', [...], false)
+ 4 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 5 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 6 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 7 SYSTEMPATH\BaseModel.php(754): CodeIgniter\Model->insert([...], false)
+ 8 APPPATH\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save([...])
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+15 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 03:28:01 --> [Caused by] mysqli_sql_exception: Column 'topik' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (\'1\', NULL, \'null\', NULL, NULL, \'2025-06-23 03:28:01\', \'2025-06-23 03:28:01\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (\'1\', NULL, \'null\', NULL, NULL, \'2025-06-23 03:28:01\', \'2025-06-23 03:28:01\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (\'1\', NULL, \'null\', NULL, NULL, \'2025-06-23 03:28:01\', \'2025-06-23 03:28:01\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (:meeting_id:, :topik:, :pembahasan:, :tanggal:, :nama_notulis:, :created_at:, :updated_at:)', [...], false)
+ 5 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 7 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 8 SYSTEMPATH\BaseModel.php(754): CodeIgniter\Model->insert([...], false)
+ 9 APPPATH\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save([...])
+10 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+11 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+12 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+ERROR - 2025-06-23 03:32:33 --> mysqli_sql_exception: Column 'topik' cannot be null in C:\laragonnew\www\minuts-meeting\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\laragonnew\www\minuts-meeting\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `di...', 0)
+#1 C:\laragonnew\www\minuts-meeting\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `di...')
+#2 C:\laragonnew\www\minuts-meeting\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `di...')
+#3 C:\laragonnew\www\minuts-meeting\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `di...', Array, false)
+#4 C:\laragonnew\www\minuts-meeting\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+#5 C:\laragonnew\www\minuts-meeting\system\BaseModel.php(843): CodeIgniter\Model->doInsert(Array)
+#6 C:\laragonnew\www\minuts-meeting\system\Model.php(800): CodeIgniter\BaseModel->insert(Array, false)
+#7 C:\laragonnew\www\minuts-meeting\system\BaseModel.php(754): CodeIgniter\Model->insert(Array, false)
+#8 C:\laragonnew\www\minuts-meeting\app\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save(Array)
+#9 C:\laragonnew\www\minuts-meeting\system\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+#10 C:\laragonnew\www\minuts-meeting\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+#11 C:\laragonnew\www\minuts-meeting\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#12 C:\laragonnew\www\minuts-meeting\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#13 C:\laragonnew\www\minuts-meeting\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#14 C:\laragonnew\www\minuts-meeting\public\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#15 C:\laragonnew\www\minuts-meeting\system\rewrite.php(44): require_once('C:\\laragonnew\\w...')
+#16 {main}
+CRITICAL - 2025-06-23 03:32:33 --> CodeIgniter\Database\Exceptions\DatabaseException: Column 'topik' cannot be null
+[Method: POST, Route: discussion/save]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (:meeting_id:, :topik:, :pembahasan:, :tanggal:, :nama_notulis:, :created_at:, :updated_at:)', [...], false)
+ 2 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 3 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 4 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 5 SYSTEMPATH\BaseModel.php(754): CodeIgniter\Model->insert([...], false)
+ 6 APPPATH\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save([...])
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 03:32:33 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Column 'topik' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (\'5\', NULL, \'null\', NULL, NULL, \'2025-06-23 03:32:33\', \'2025-06-23 03:32:33\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (\'5\', NULL, \'null\', NULL, NULL, \'2025-06-23 03:32:33\', \'2025-06-23 03:32:33\')')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (:meeting_id:, :topik:, :pembahasan:, :tanggal:, :nama_notulis:, :created_at:, :updated_at:)', [...], false)
+ 4 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 5 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 6 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 7 SYSTEMPATH\BaseModel.php(754): CodeIgniter\Model->insert([...], false)
+ 8 APPPATH\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save([...])
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+15 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 03:32:33 --> [Caused by] mysqli_sql_exception: Column 'topik' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (\'5\', NULL, \'null\', NULL, NULL, \'2025-06-23 03:32:33\', \'2025-06-23 03:32:33\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (\'5\', NULL, \'null\', NULL, NULL, \'2025-06-23 03:32:33\', \'2025-06-23 03:32:33\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (\'5\', NULL, \'null\', NULL, NULL, \'2025-06-23 03:32:33\', \'2025-06-23 03:32:33\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama_notulis`, `created_at`, `updated_at`) VALUES (:meeting_id:, :topik:, :pembahasan:, :tanggal:, :nama_notulis:, :created_at:, :updated_at:)', [...], false)
+ 5 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 7 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 8 SYSTEMPATH\BaseModel.php(754): CodeIgniter\Model->insert([...], false)
+ 9 APPPATH\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save([...])
+10 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+11 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+12 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 03:49:44 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 03:49:47 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 03:49:55 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 03:59:04 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 03:59:05 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 04:01:57 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 04:01:58 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 04:02:07 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 04:03:01 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 04:03:04 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 04:03:11 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 04:04:29 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-23 04:04:35 --> ErrorException: Undefined array key "topic"
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 17.
+ 1 APPPATH\Views\partials\export-content.php(17): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 17)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\ExportController.php(15): view('partials/export-content', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 04:29:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 04:29:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 04:29:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 04:30:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 04:47:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 05:03:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 05:03:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 06:52:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 06:52:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 06:59:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 06:59:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 07:17:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 07:17:30 --> CodeIgniter\Database\Exceptions\DataException: There is no data to update.
+[Method: POST, Route: settings/upload-photo]
+in SYSTEMPATH\BaseModel.php on line 1014.
+ 1 SYSTEMPATH\BaseModel.php(1014): CodeIgniter\Database\Exceptions\DataException::forEmptyDataset('update')
+ 2 SYSTEMPATH\Model.php(863): CodeIgniter\BaseModel->update(null, [])
+ 3 APPPATH\Controllers\SettingsController.php(31): CodeIgniter\Model->update(null, [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->uploadPhoto()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 07:17:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 07:17:49 --> CodeIgniter\Database\Exceptions\DataException: There is no data to update.
+[Method: POST, Route: settings/upload-photo]
+in SYSTEMPATH\BaseModel.php on line 1014.
+ 1 SYSTEMPATH\BaseModel.php(1014): CodeIgniter\Database\Exceptions\DataException::forEmptyDataset('update')
+ 2 SYSTEMPATH\Model.php(863): CodeIgniter\BaseModel->update(null, [])
+ 3 APPPATH\Controllers\SettingsController.php(31): CodeIgniter\Model->update(null, [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->uploadPhoto()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 07:20:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 07:37:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 07:58:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 07:59:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 07:59:00 --> Error: Class "App\Controllers\UserModel" not found
+[Method: POST, Route: settings/update-name]
+in APPPATH\Controllers\SettingsController.php on line 51.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->updateName()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 7 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:00:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:01:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:01:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:02:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:03:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:04:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:04:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 08:04:15 --> Error: Class "App\Controllers\UserModel" not found
+[Method: POST, Route: settings/update-name]
+in APPPATH\Controllers\SettingsController.php on line 51.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->updateName()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 7 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:04:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 08:04:24 --> Error: Class "App\Controllers\UserModel" not found
+[Method: POST, Route: settings/update-name]
+in APPPATH\Controllers\SettingsController.php on line 51.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->updateName()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 7 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:04:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:05:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 08:05:41 --> Error: Class "App\Controllers\UserModel" not found
+[Method: POST, Route: settings/update-name]
+in APPPATH\Controllers\SettingsController.php on line 51.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->updateName()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 7 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:07:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 08:07:41 --> CodeIgniter\Database\Exceptions\DataException: There is no data to update.
+[Method: POST, Route: settings/update-name]
+in SYSTEMPATH\BaseModel.php on line 1014.
+ 1 SYSTEMPATH\BaseModel.php(1014): CodeIgniter\Database\Exceptions\DataException::forEmptyDataset('update')
+ 2 SYSTEMPATH\Model.php(863): CodeIgniter\BaseModel->update(null, [])
+ 3 APPPATH\Controllers\SettingsController.php(54): CodeIgniter\Model->update(null, [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->updateName()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:11:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 08:11:45 --> ErrorException: Trying to access array offset on value of type null
+[Method: POST, Route: settings/update-name]
+in APPPATH\Controllers\SettingsController.php on line 48.
+ 1 APPPATH\Controllers\SettingsController.php(48): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Controllers\\SettingsController.php', 48)
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->updateName()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:11:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 08:11:46 --> ErrorException: Trying to access array offset on value of type null
+[Method: POST, Route: settings/update-name]
+in APPPATH\Controllers\SettingsController.php on line 48.
+ 1 APPPATH\Controllers\SettingsController.php(48): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Controllers\\SettingsController.php', 48)
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->updateName()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:11:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 08:11:46 --> ErrorException: Trying to access array offset on value of type null
+[Method: POST, Route: settings/update-name]
+in APPPATH\Controllers\SettingsController.php on line 48.
+ 1 APPPATH\Controllers\SettingsController.php(48): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Controllers\\SettingsController.php', 48)
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->updateName()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:11:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 08:11:55 --> ErrorException: Trying to access array offset on value of type null
+[Method: POST, Route: settings/update-name]
+in APPPATH\Controllers\SettingsController.php on line 48.
+ 1 APPPATH\Controllers\SettingsController.php(48): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Controllers\\SettingsController.php', 48)
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->updateName()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:14:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 08:14:01 --> ErrorException: Trying to access array offset on value of type null
+[Method: POST, Route: settings/update-name]
+in APPPATH\Controllers\SettingsController.php on line 48.
+ 1 APPPATH\Controllers\SettingsController.php(48): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Controllers\\SettingsController.php', 48)
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->updateName()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:14:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:14:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:16:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:16:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:16:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:16:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:16:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 08:16:42 --> CodeIgniter\Database\Exceptions\DatabaseException: Updates are not allowed unless they contain a "where" or "like" clause.
+[Method: POST, Route: settings/update-email]
+in SYSTEMPATH\Model.php on line 456.
+ 1 SYSTEMPATH\BaseModel.php(1031): CodeIgniter\Model->doUpdate(null, [...])
+ 2 SYSTEMPATH\Model.php(863): CodeIgniter\BaseModel->update(null, [...])
+ 3 APPPATH\Controllers\SettingsController.php(90): CodeIgniter\Model->update(null, [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->updateEmail()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:27:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:28:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:31:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:31:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-23 08:32:11 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "partials/settings-akun-content.php"
+[Method: GET, Route: settings]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('partials/settings-akun-content.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/settings-akun-content', [], true)
+ 3 APPPATH\Controllers\SettingsController.php(17): view('partials/settings-akun-content')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\SettingsController->akun()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\SettingsController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-23 08:36:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:36:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:39:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:40:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:40:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:40:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:40:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:40:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:40:22 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:40:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:40:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:40:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:42:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:42:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:43:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:46:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:46:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:48:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:49:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:49:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:49:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:50:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-06-23 08:50:21 --> Kode verifikasi untuk user : 987727
+DEBUG - 2025-06-23 08:56:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:56:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:56:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-23 08:57:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

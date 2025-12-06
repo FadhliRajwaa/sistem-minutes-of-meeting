@@ -1,0 +1,356 @@
+DEBUG - 2025-06-17 02:18:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-17 02:18:44 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/meeting-content]
+in APPPATH\Views\partials\meeting-content.php on line 16.
+ 1 APPPATH\Views\partials\meeting-content.php(16): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php', 16)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/meeting-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(16): view('partials/meeting-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->meeting()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 02:18:48 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/discussion-content]
+in APPPATH\Views\partials\discussion-content.php on line 9.
+ 1 APPPATH\Views\partials\discussion-content.php(9): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php', 9)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/discussion-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(26): view('partials/discussion-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->discussion()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 02:18:50 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/discussion-content]
+in APPPATH\Views\partials\discussion-content.php on line 9.
+ 1 APPPATH\Views\partials\discussion-content.php(9): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php', 9)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/discussion-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(26): view('partials/discussion-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->discussion()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 02:18:54 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/discussion-content]
+in APPPATH\Views\partials\discussion-content.php on line 9.
+ 1 APPPATH\Views\partials\discussion-content.php(9): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php', 9)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/discussion-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(26): view('partials/discussion-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->discussion()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 02:19:21 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/meeting-content]
+in APPPATH\Views\partials\meeting-content.php on line 16.
+ 1 APPPATH\Views\partials\meeting-content.php(16): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php', 16)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/meeting-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(16): view('partials/meeting-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->meeting()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 02:22:08 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/meeting-content]
+in APPPATH\Views\partials\meeting-content.php on line 16.
+ 1 APPPATH\Views\partials\meeting-content.php(16): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php', 16)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/meeting-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(16): view('partials/meeting-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->meeting()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 02:22:22 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/discussion-content]
+in APPPATH\Views\partials\discussion-content.php on line 9.
+ 1 APPPATH\Views\partials\discussion-content.php(9): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php', 9)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/discussion-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(26): view('partials/discussion-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->discussion()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 02:22:23 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/discussion-content]
+in APPPATH\Views\partials\discussion-content.php on line 9.
+ 1 APPPATH\Views\partials\discussion-content.php(9): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php', 9)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/discussion-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(26): view('partials/discussion-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->discussion()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 02:28:10 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/discussion-content]
+in APPPATH\Views\partials\discussion-content.php on line 9.
+ 1 APPPATH\Views\partials\discussion-content.php(9): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php', 9)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/discussion-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(26): view('partials/discussion-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->discussion()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 02:28:16 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/discussion-content]
+in APPPATH\Views\partials\discussion-content.php on line 9.
+ 1 APPPATH\Views\partials\discussion-content.php(9): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php', 9)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\discussion-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/discussion-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(26): view('partials/discussion-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->discussion()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 03:00:27 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/meeting-content]
+in APPPATH\Views\partials\meeting-content.php on line 16.
+ 1 APPPATH\Views\partials\meeting-content.php(16): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php', 16)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/meeting-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(16): view('partials/meeting-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->meeting()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 03:23:27 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/meeting-content]
+in APPPATH\Views\partials\meeting-content.php on line 16.
+ 1 APPPATH\Views\partials\meeting-content.php(16): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php', 16)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/meeting-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(16): view('partials/meeting-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->meeting()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 03:23:30 --> ErrorException: Undefined variable $meetings
+[Method: GET, Route: partials/meeting-content]
+in APPPATH\Views\partials\meeting-content.php on line 16.
+ 1 APPPATH\Views\partials\meeting-content.php(16): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $meetings', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php', 16)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\meeting-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/meeting-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(16): view('partials/meeting-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->meeting()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 04:15:42 --> ErrorException: Undefined variable $discussions
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 14.
+ 1 APPPATH\Views\partials\export-content.php(14): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $discussions', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 14)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(31): view('partials/export-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->export()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 04:15:45 --> ErrorException: Undefined variable $discussions
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 14.
+ 1 APPPATH\Views\partials\export-content.php(14): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $discussions', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 14)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(31): view('partials/export-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->export()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 04:15:49 --> ErrorException: Undefined variable $discussions
+[Method: GET, Route: partials/export-content]
+in APPPATH\Views\partials\export-content.php on line 14.
+ 1 APPPATH\Views\partials\export-content.php(14): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $discussions', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php', 14)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\partials\\export-content.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-content', [], true)
+ 5 APPPATH\Controllers\PartialController.php(31): view('partials/export-content')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->export()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 04:17:25 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "pdf/discussion.php"
+[Method: POST, Route: export/pdf]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('pdf/discussion.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('pdf/discussion', [], true)
+ 3 APPPATH\Controllers\ExportController.php(24): view('pdf/discussion', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->generatePDF()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-17 06:27:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2025-06-17 06:31:04 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '`notulis`, `created_at`, `updated_at`) VALUES ('1', NULL, 'null', NULL, NULL, '2' at line 1 in C:\laragonnew\www\minuts-meeting\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\laragonnew\www\minuts-meeting\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `di...', 0)
+#1 C:\laragonnew\www\minuts-meeting\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `di...')
+#2 C:\laragonnew\www\minuts-meeting\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `di...')
+#3 C:\laragonnew\www\minuts-meeting\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `di...', Array, false)
+#4 C:\laragonnew\www\minuts-meeting\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+#5 C:\laragonnew\www\minuts-meeting\system\BaseModel.php(843): CodeIgniter\Model->doInsert(Array)
+#6 C:\laragonnew\www\minuts-meeting\system\Model.php(800): CodeIgniter\BaseModel->insert(Array, false)
+#7 C:\laragonnew\www\minuts-meeting\system\BaseModel.php(754): CodeIgniter\Model->insert(Array, false)
+#8 C:\laragonnew\www\minuts-meeting\app\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save(Array)
+#9 C:\laragonnew\www\minuts-meeting\system\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+#10 C:\laragonnew\www\minuts-meeting\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+#11 C:\laragonnew\www\minuts-meeting\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#12 C:\laragonnew\www\minuts-meeting\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#13 C:\laragonnew\www\minuts-meeting\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#14 C:\laragonnew\www\minuts-meeting\public\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#15 C:\laragonnew\www\minuts-meeting\system\rewrite.php(44): require_once('C:\\laragonnew\\w...')
+#16 {main}
+CRITICAL - 2025-06-17 06:31:04 --> CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '`notulis`, `created_at`, `updated_at`) VALUES ('1', NULL, 'null', NULL, NULL, '2' at line 1
+[Method: POST, Route: discussion/save]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama` `notulis`, `created_at`, `updated_at`) VALUES (:meeting_id:, :topik:, :pembahasan:, :tanggal:, :nama notulis:, :created_at:, :updated_at:)', [...], false)
+ 2 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 3 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 4 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 5 SYSTEMPATH\BaseModel.php(754): CodeIgniter\Model->insert([...], false)
+ 6 APPPATH\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save([...])
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 06:31:04 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '`notulis`, `created_at`, `updated_at`) VALUES ('1', NULL, 'null', NULL, NULL, '2' at line 1
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama` `notulis`, `created_at`, `updated_at`) VALUES (\'1\', NULL, \'null\', NULL, NULL, \'2025-06-17 06:31:04\', \'2025-06-17 06:31:04\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama` `notulis`, `created_at`, `updated_at`) VALUES (\'1\', NULL, \'null\', NULL, NULL, \'2025-06-17 06:31:04\', \'2025-06-17 06:31:04\')')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama` `notulis`, `created_at`, `updated_at`) VALUES (:meeting_id:, :topik:, :pembahasan:, :tanggal:, :nama notulis:, :created_at:, :updated_at:)', [...], false)
+ 4 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 5 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 6 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 7 SYSTEMPATH\BaseModel.php(754): CodeIgniter\Model->insert([...], false)
+ 8 APPPATH\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save([...])
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+15 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 06:31:04 --> [Caused by] mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '`notulis`, `created_at`, `updated_at`) VALUES ('1', NULL, 'null', NULL, NULL, '2' at line 1
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama` `notulis`, `created_at`, `updated_at`) VALUES (\'1\', NULL, \'null\', NULL, NULL, \'2025-06-17 06:31:04\', \'2025-06-17 06:31:04\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama` `notulis`, `created_at`, `updated_at`) VALUES (\'1\', NULL, \'null\', NULL, NULL, \'2025-06-17 06:31:04\', \'2025-06-17 06:31:04\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama` `notulis`, `created_at`, `updated_at`) VALUES (\'1\', NULL, \'null\', NULL, NULL, \'2025-06-17 06:31:04\', \'2025-06-17 06:31:04\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `discussions` (`meeting_id`, `topik`, `pembahasan`, `tanggal`, `nama` `notulis`, `created_at`, `updated_at`) VALUES (:meeting_id:, :topik:, :pembahasan:, :tanggal:, :nama notulis:, :created_at:, :updated_at:)', [...], false)
+ 5 SYSTEMPATH\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH\BaseModel.php(843): CodeIgniter\Model->doInsert([...])
+ 7 SYSTEMPATH\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 8 SYSTEMPATH\BaseModel.php(754): CodeIgniter\Model->insert([...], false)
+ 9 APPPATH\Controllers\DiscussionController.php(32): CodeIgniter\BaseModel->save([...])
+10 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\DiscussionController->save()
+11 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DiscussionController))
+12 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 06:48:45 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "pdf/discussion.php"
+[Method: POST, Route: export/pdf]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('pdf/discussion.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('pdf/discussion', [], true)
+ 3 APPPATH\Controllers\ExportController.php(24): view('pdf/discussion', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->generatePDF()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+CRITICAL - 2025-06-17 06:52:38 --> ErrorException: Undefined array key "topic"
+[Method: POST, Route: export/pdf]
+in APPPATH\Views\pdf\discussion.php on line 15.
+ 1 APPPATH\Views\pdf\discussion.php(15): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "topic"', 'C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\pdf\\discussion.php', 15)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\laragonnew\\www\\minuts-meeting\\app\\Views\\pdf\\discussion.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('pdf/discussion', [], true)
+ 5 APPPATH\Controllers\ExportController.php(24): view('pdf/discussion', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->generatePDF()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minuts-meeting\\public\\index.php')
+DEBUG - 2025-06-17 08:17:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-17 08:21:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-17 09:09:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

@@ -1,0 +1,74 @@
+/* General Reset */
+body {
+    background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container untuk login */
+.login-container {
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo */
+.login-logo {
+    display: block;
+    margin: 0 auto 20px;
+    max-width: 120px;
+}
+
+/* Heading */
+.login-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+/* Form input */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Tombol login */
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background: #0d6efd;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background: #0056b3;
+}
+
+/* Link tambahan */
+.login-links {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.login-links a {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.login-links a:hover {
+    text-decoration: underline;
+}

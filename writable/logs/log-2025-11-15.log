@@ -1,0 +1,69 @@
+CRITICAL - 2025-11-15 01:59:37 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "partials/export-to-pdf.php"
+[Method: GET, Route: partials/export-content]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('partials/export-to-pdf.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-to-pdf', [], true)
+ 3 APPPATH\Controllers\ExportController.php(27): view('partials/export-to-pdf')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minutes-meeting\\public\\index.php')
+CRITICAL - 2025-11-15 01:59:39 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "partials/export-to-pdf.php"
+[Method: GET, Route: partials/export-content]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('partials/export-to-pdf.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/export-to-pdf', [], true)
+ 3 APPPATH\Controllers\ExportController.php(27): view('partials/export-to-pdf')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ExportController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ExportController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minutes-meeting\\public\\index.php')
+DEBUG - 2025-11-15 02:58:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-11-15 03:00:07 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "partials/settings-content.php"
+[Method: GET, Route: partials/settings-content]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('partials/settings-content.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/settings-content', [], true)
+ 3 APPPATH\Controllers\PartialController.php(39): view('partials/settings-content')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->settings()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minutes-meeting\\public\\index.php')
+CRITICAL - 2025-11-15 03:00:08 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "partials/settings-content.php"
+[Method: GET, Route: partials/settings-content]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('partials/settings-content.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/settings-content', [], true)
+ 3 APPPATH\Controllers\PartialController.php(39): view('partials/settings-content')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->settings()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minutes-meeting\\public\\index.php')
+CRITICAL - 2025-11-15 03:01:05 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "partials/settings-content.php"
+[Method: GET, Route: partials/settings-content]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('partials/settings-content.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('partials/settings-content', [], true)
+ 3 APPPATH\Controllers\PartialController.php(39): view('partials/settings-content')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\PartialController->settings()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PartialController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(62): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\laragonnew\\www\\minutes-meeting\\public\\index.php')
+DEBUG - 2025-11-15 03:02:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-15 03:03:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-11-15 03:03:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
