@@ -6,9 +6,16 @@ use CodeIgniter\Config\BaseConfig;
 
 class Google extends BaseConfig
 {
-    public $clientID     = '391089448293-v51fha2ivfvrrreht4t7t8faugu6kppf.apps.googleusercontent.com';
-    public $clientSecret = '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';
-    public $redirectUri  = 'http://localhost:8080/auth/google-callback';
+    public $clientID;
+    public $clientSecret;
+    public $redirectUri;
+
+    public function __construct()
+    {
+        $this->clientID = getenv('GOOGLE_CLIENT_ID');
+        $this->clientSecret = getenv('GOOGLE_CLIENT_SECRET');
+        $this->redirectUri = getenv('GOOGLE_REDIRECT_URI') ?: base_url('auth/google-callback');
+    }
 
     public $scopes = [
         'email',

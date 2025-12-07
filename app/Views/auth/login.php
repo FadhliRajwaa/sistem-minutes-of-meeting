@@ -260,8 +260,8 @@
 
             <form action="<?= base_url('auth/login') ?>" method="post">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
-                    <label for="username" class="text-muted">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username / Email" required>
+                    <label for="username" class="text-muted">Username / Email</label>
                 </div>
                 
                 <div class="form-floating mb-4">
