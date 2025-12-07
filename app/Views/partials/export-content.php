@@ -249,8 +249,16 @@
       const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
       // Tambahkan parameter preview=true agar tidak auto-download
       const pdfUrl = baseUrl + "export/pdf/" + selectedID + "?preview=true";
-      const downloadUrl = baseUrl + "export/pdf/" + selectedID; // URL untuk tombol download tetap biasa
+      const downloadUrl = baseUrl + "export/pdf/" + selectedID; 
       
+      // FIX MOBILE PREVIEW:
+      // Browser mobile (Android/iOS) sering gagal render PDF di dalam iframe.
+      // Jadi jika layar kecil (< 768px), buka di tab baru saja.
+      if (window.innerWidth < 768) {
+          window.open(pdfUrl, '_blank');
+          return;
+      }
+
       const previewModal = new bootstrap.Modal(document.getElementById('previewPdfModal'));
       const iframe = document.getElementById('pdfPreviewFrame');
       const loader = document.getElementById('pdfLoader');
