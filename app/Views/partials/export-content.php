@@ -252,10 +252,12 @@
       const downloadUrl = baseUrl + "export/pdf/" + selectedID; 
       
       // FIX MOBILE PREVIEW:
-      // Browser mobile (Android/iOS) sering gagal render PDF di dalam iframe.
-      // Jadi jika layar kecil (< 768px), buka di tab baru saja.
+      // Browser mobile (Android/iOS) sering gagal render PDF di dalam iframe dan malah download.
+      // Solusi: Gunakan Google Docs Viewer untuk preview tanpa download.
       if (window.innerWidth < 768) {
-          window.open(pdfUrl, '_blank');
+          // Encode URL agar aman masuk query param
+          const googleViewerUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(downloadUrl); // Gunakan downloadUrl (URL asli PDF)
+          window.open(googleViewerUrl, '_blank');
           return;
       }
 
