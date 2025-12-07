@@ -23,7 +23,6 @@
         }
     ],
     "env": {
-        "CI_ENVIRONMENT": "production",
         "DATABASE_DEFAULT_GROUP": "aiven"
     }
 }
