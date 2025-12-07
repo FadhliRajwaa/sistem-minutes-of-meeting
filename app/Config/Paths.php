@@ -64,6 +64,14 @@ class Paths
      */
     public string $testsDirectory = __DIR__ . '/../../tests';
 
+    public function __construct()
+    {
+        // Check if WRITEPATH constant is defined (e.g. by api/index.php for Vercel)
+        if (defined('WRITEPATH')) {
+            $this->writableDirectory = WRITEPATH;
+        }
+    }
+
     /**
      * ---------------------------------------------------------------
      * VIEW DIRECTORY NAME
