@@ -72,10 +72,24 @@ class ExportController extends BaseController
 
             // Cek parameter 'preview' dari URL
             $isPreview = $this->request->getGet('preview') === 'true';
-
-            return $dompdf->stream('notulen_rapat.pdf', [
-                'Attachment' => $isPreview ? 0 : 1
-            ]);
+            
+            // Get PDF output
+            $pdfOutput = $dompdf->output();
+            
+            // Use CodeIgniter Response for proper header control
+            $response = $this->response;
+            $response->setContentType('application/pdf');
+            
+            if ($isPreview) {
+                // Inline display (preview in browser)
+                $response->setHeader('Content-Disposition', 'inline; filename="notulen_rapat.pdf"');
+            } else {
+                // Force download
+                $response->setHeader('Content-Disposition', 'attachment; filename="notulen_rapat.pdf"');
+            }
+            
+            $response->setBody($pdfOutput);
+            return $response;
 
         } catch (\Throwable $e) {
             // In production, we might want to log this instead of showing it
