@@ -79,6 +79,10 @@ class ExportController extends BaseController
             // Use CodeIgniter Response for proper header control
             $response = $this->response;
             $response->setContentType('application/pdf');
+            $response->setHeader('Content-Length', strlen($pdfOutput));
+            $response->setHeader('Cache-Control', 'public, must-revalidate, max-age=0');
+            $response->setHeader('Pragma', 'public');
+            $response->setHeader('X-Content-Type-Options', 'nosniff');
             
             if ($isPreview) {
                 // Inline display (preview in browser)
