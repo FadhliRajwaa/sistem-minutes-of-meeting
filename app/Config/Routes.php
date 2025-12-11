@@ -50,6 +50,7 @@ $routes->post('discussion/store', 'DiscussionController::store');
 // ✅ EXPORT TO PDF
 $routes->post('export/pdf', 'ExportController::generatePDF');
 $routes->get('export/pdf/(:num)', 'ExportController::generatePDF/$1');
+$routes->get('export/preview/(:num)', 'ExportController::previewHTML/$1');
 $routes->get('/discussion/search', 'DiscussionController::search');
 $routes->post('discussion/delete', 'DiscussionController::delete');
 

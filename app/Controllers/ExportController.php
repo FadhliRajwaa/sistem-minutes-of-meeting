@@ -102,4 +102,39 @@ class ExportController extends BaseController
         }
     }
 
+    /**
+     * Preview as HTML (no PDF, no download)
+     * This completely bypasses IDM and other download managers
+     */
+    public function previewHTML($id = null)
+    {
+        if (!$id) {
+            return "ID diskusi tidak diberikan.";
+        }
+
+        $model = new \App\Models\DiscussionModel();
+        $discussion = $model->find($id);
+
+        if (!$discussion) {
+            return "Data diskusi tidak ditemukan.";
+        }
+        
+        // Ambil data meeting terkait
+        $meetingModel = new \App\Models\MeetingModel();
+        $meeting = $meetingModel->find($discussion['meeting_id']);
+        
+        // Ambil data peserta hadir
+        $participantModel = new \App\Models\ParticipantModel();
+        $participants = $participantModel->where('meeting_id', $discussion['meeting_id'])->findAll();
+
+        $data = [
+            'discussion' => $discussion,
+            'meeting' => $meeting,
+            'participants' => $participants
+        ];
+
+        // Return the same view template but as HTML (not PDF)
+        return view('pdf/discussion', $data);
+    }
+
 }

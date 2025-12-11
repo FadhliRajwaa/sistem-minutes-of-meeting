@@ -160,35 +160,25 @@
   </div>
 </div>
 
-<!-- PDF.js Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script>
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-</script>
-
+<!-- Preview Modal (HTML based, no PDF) -->
 <div class="modal fade" id="previewPdfModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content border-0 shadow-lg rounded-4" style="height: 90vh;">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title fw-bold text-primary"><i class="fas fa-file-pdf me-2"></i>Preview Notulensi</h5>
-        <div class="d-flex align-items-center gap-2">
-          <button id="pdfPrevPage" class="btn btn-sm btn-outline-secondary" disabled><i class="fas fa-chevron-left"></i></button>
-          <span id="pdfPageInfo" class="small text-muted">1 / 1</span>
-          <button id="pdfNextPage" class="btn btn-sm btn-outline-secondary" disabled><i class="fas fa-chevron-right"></i></button>
-          <button type="button" class="btn-close ms-3" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body p-2 bg-light d-flex justify-content-center align-items-start overflow-auto" style="flex: 1;">
-         <div id="pdfLoader" class="text-center position-absolute" style="top: 50%; transform: translateY(-50%);">
+      <div class="modal-body p-0 bg-light" style="flex: 1; overflow: hidden;">
+         <div id="pdfLoader" class="text-center" style="padding-top: 200px;">
              <div class="spinner-border text-primary" role="status"></div>
              <p class="mt-2 text-muted">Memuat dokumen...</p>
          </div>
-         <canvas id="pdfCanvas" style="max-width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.1);"></canvas>
+         <iframe id="previewFrame" src="" style="width: 100%; height: 100%; border: none; display: none;"></iframe>
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Tutup</button>
         <a id="downloadPdfBtn" href="#" class="btn btn-primary rounded-pill px-4 shadow-sm">
-            <i class="fas fa-download me-2"></i> Download
+            <i class="fas fa-download me-2"></i> Download PDF
         </a>
       </div>
     </div>
@@ -254,92 +244,33 @@
     });
   }
 
-  // PDF.js Preview Variables
-  let pdfDoc = null;
-  let currentPage = 1;
-  let totalPages = 0;
-  const pdfCanvas = document.getElementById('pdfCanvas');
-  const pdfCtx = pdfCanvas ? pdfCanvas.getContext('2d') : null;
-  
-  function renderPdfPage(pageNum) {
-    if (!pdfDoc) return;
-    pdfDoc.getPage(pageNum).then(function(page) {
-      const scale = 1.5;
-      const viewport = page.getViewport({ scale: scale });
-      pdfCanvas.height = viewport.height;
-      pdfCanvas.width = viewport.width;
-      
-      const renderContext = {
-        canvasContext: pdfCtx,
-        viewport: viewport
-      };
-      page.render(renderContext);
-      
-      // Update page info
-      document.getElementById('pdfPageInfo').textContent = pageNum + ' / ' + totalPages;
-      document.getElementById('pdfPrevPage').disabled = (pageNum <= 1);
-      document.getElementById('pdfNextPage').disabled = (pageNum >= totalPages);
-    });
-  }
-  
-  // Page navigation
-  document.getElementById('pdfPrevPage')?.addEventListener('click', () => {
-    if (currentPage > 1) {
-      currentPage--;
-      renderPdfPage(currentPage);
-    }
-  });
-  
-  document.getElementById('pdfNextPage')?.addEventListener('click', () => {
-    if (currentPage < totalPages) {
-      currentPage++;
-      renderPdfPage(currentPage);
-    }
-  });
-
   if (viewBtn) {
     viewBtn.addEventListener("click", function () {
       if (!selectedID) return;
       const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
-      const pdfUrl = baseUrl + "export/pdf/" + selectedID + "?preview=true";
+      // Use HTML preview endpoint (NO PDF at all!)
+      const previewUrl = baseUrl + "export/preview/" + selectedID;
       const downloadUrl = baseUrl + "export/pdf/" + selectedID; 
-      
-      // FIX MOBILE PREVIEW: Google Docs Viewer for mobile
-      if (window.innerWidth < 768) {
-          const googleViewerUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(downloadUrl);
-          window.open(googleViewerUrl, '_blank');
-          return;
-      }
 
       const previewModal = new bootstrap.Modal(document.getElementById('previewPdfModal'));
       const loader = document.getElementById('pdfLoader');
+      const iframe = document.getElementById('previewFrame');
       const downloadBtn = document.getElementById('downloadPdfBtn');
       
       // Reset state
       loader.style.display = 'block';
-      pdfCanvas.style.display = 'none';
-      currentPage = 1;
-      pdfDoc = null;
+      iframe.style.display = 'none';
+      iframe.src = '';
       
       previewModal.show();
       downloadBtn.href = downloadUrl;
       
-      // Use PDF.js to load PDF via ArrayBuffer (bypasses IDM)
-      fetch(pdfUrl)
-        .then(response => response.arrayBuffer())
-        .then(data => {
-          pdfjsLib.getDocument({ data: data }).promise.then(function(pdf) {
-            pdfDoc = pdf;
-            totalPages = pdf.numPages;
-            loader.style.display = 'none';
-            pdfCanvas.style.display = 'block';
-            renderPdfPage(currentPage);
-          });
-        })
-        .catch(err => {
-          console.error('PDF load error:', err);
-          loader.innerHTML = '<p class="text-danger">Gagal memuat PDF</p>';
-        });
+      // Load HTML preview (not PDF!)
+      iframe.src = previewUrl;
+      iframe.onload = function() {
+        loader.style.display = 'none';
+        iframe.style.display = 'block';
+      };
     });
   }
 
