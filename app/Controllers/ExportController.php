@@ -3,17 +3,27 @@
 namespace App\Controllers;
 
 use App\Models\DiscussionModel;
-use Dompdf\Dompdf;
+use App\Models\MeetingModel;
+use App\Models\ParticipantModel;
 
 class ExportController extends BaseController
 {
-    public function index()
-{
-    $model = new \App\Models\DiscussionModel();
-    $data['discussions'] = $model->findAll();
+    /**
+     * Helper: ambil user_id dari session
+     */
+    private function getUserId(): int
+    {
+        return (int) session()->get('user')['id'];
+    }
 
-    return view('partials/export-content', $data);
-}
+    public function index()
+    {
+        $model = new DiscussionModel();
+        // Hanya tampilkan diskusi milik user ini
+        $data['discussions'] = $model->where('user_id', $this->getUserId())->findAll();
+
+        return view('partials/export-content', $data);
+    }
 
     public function generatePDF($id = null)
     {
@@ -26,19 +36,22 @@ class ExportController extends BaseController
             return "ID diskusi tidak diberikan.";
         }
 
-        $model = new \App\Models\DiscussionModel();
-        $discussion = $model->find($id);
+        $userId = $this->getUserId();
+        $model = new DiscussionModel();
+        
+        // Pastikan discussion milik user ini
+        $discussion = $model->where('id', $id)->where('user_id', $userId)->first();
 
         if (!$discussion) {
             return "Data diskusi tidak ditemukan.";
         }
         
         // Ambil data meeting terkait
-        $meetingModel = new \App\Models\MeetingModel();
+        $meetingModel = new MeetingModel();
         $meeting = $meetingModel->find($discussion['meeting_id']);
         
         // Ambil data peserta hadir
-        $participantModel = new \App\Models\ParticipantModel();
+        $participantModel = new ParticipantModel();
         $participants = $participantModel->where('meeting_id', $discussion['meeting_id'])->findAll();
 
         $data = [
@@ -47,9 +60,6 @@ class ExportController extends BaseController
             'participants' => $participants
         ];
 
-        // Fix Vercel: /tmp path for fonts
-        // GD Extension check is handled in the View (pdf/discussion.php)
-        
         try {
             $dompdf = new \Dompdf\Dompdf();
             $html = view('pdf/discussion', $data);
@@ -70,13 +80,10 @@ class ExportController extends BaseController
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
 
-            // Cek parameter 'preview' dari URL
             $isPreview = $this->request->getGet('preview') === 'true';
             
-            // Get PDF output
             $pdfOutput = $dompdf->output();
             
-            // Use CodeIgniter Response for proper header control
             $response = $this->response;
             $response->setContentType('application/pdf');
             $response->setHeader('Content-Length', strlen($pdfOutput));
@@ -85,10 +92,8 @@ class ExportController extends BaseController
             $response->setHeader('X-Content-Type-Options', 'nosniff');
             
             if ($isPreview) {
-                // Inline display (preview in browser)
                 $response->setHeader('Content-Disposition', 'inline; filename="notulen_rapat.pdf"');
             } else {
-                // Force download
                 $response->setHeader('Content-Disposition', 'attachment; filename="notulen_rapat.pdf"');
             }
             
@@ -96,15 +101,12 @@ class ExportController extends BaseController
             return $response;
 
         } catch (\Throwable $e) {
-            // In production, we might want to log this instead of showing it
-            // But for now, let's show a user-friendly error
             return "Maaf, gagal membuat PDF. Server Error: " . $e->getMessage();
         }
     }
 
     /**
      * Preview as HTML (no PDF, no download)
-     * This completely bypasses IDM and other download managers
      */
     public function previewHTML($id = null)
     {
@@ -112,19 +114,22 @@ class ExportController extends BaseController
             return "ID diskusi tidak diberikan.";
         }
 
-        $model = new \App\Models\DiscussionModel();
-        $discussion = $model->find($id);
+        $userId = $this->getUserId();
+        $model = new DiscussionModel();
+        
+        // Pastikan discussion milik user ini
+        $discussion = $model->where('id', $id)->where('user_id', $userId)->first();
 
         if (!$discussion) {
             return "Data diskusi tidak ditemukan.";
         }
         
         // Ambil data meeting terkait
-        $meetingModel = new \App\Models\MeetingModel();
+        $meetingModel = new MeetingModel();
         $meeting = $meetingModel->find($discussion['meeting_id']);
         
         // Ambil data peserta hadir
-        $participantModel = new \App\Models\ParticipantModel();
+        $participantModel = new ParticipantModel();
         $participants = $participantModel->where('meeting_id', $discussion['meeting_id'])->findAll();
 
         $data = [
@@ -133,8 +138,6 @@ class ExportController extends BaseController
             'participants' => $participants
         ];
 
-        // Return the same view template but as HTML (not PDF)
         return view('pdf/discussion', $data);
     }
-
 }

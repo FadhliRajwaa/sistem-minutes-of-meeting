@@ -1,266 +1,1016 @@
-<div class="container-fluid p-0">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800 fw-bold text-dark">Participant Input</h1>
-        <button id="btnScan" class="btn btn-success shadow-sm rounded-pill px-4">
-            <i class="fas fa-qrcode me-2"></i> Scan Barcode
+<style>
+    /* ===== PARTICIPANT PAGE - Premium Design System ===== */
+    .participant-page {
+        --color-primary: #0F766E;
+        --color-accent: #0D9488;
+        --color-surface: #F8FAFC;
+        --color-border: #E2E8F0;
+        --color-text: #0F172A;
+        --color-muted: #64748B;
+        --color-success: #059669;
+        --color-danger: #DC2626;
+        --color-warning: #D97706;
+        --radius-sm: 6px;
+        --radius-md: 10px;
+        --radius-lg: 14px;
+        --radius-xl: 18px;
+        --shadow-xs: 0 1px 2px rgba(15,23,42,0.04);
+        --shadow-sm: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+        --shadow-md: 0 4px 6px -1px rgba(15,23,42,0.06), 0 2px 4px -2px rgba(15,23,42,0.04);
+        --shadow-lg: 0 10px 15px -3px rgba(15,23,42,0.06), 0 4px 6px -4px rgba(15,23,42,0.04);
+        --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .participant-page .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.75rem;
+        gap: 1rem;
+    }
+
+    .participant-page .page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text);
+        margin: 0;
+        letter-spacing: -0.025em;
+        line-height: 1.2;
+    }
+
+    .participant-page .page-subtitle {
+        font-size: 0.8125rem;
+        color: var(--color-muted);
+        margin-top: 2px;
+        font-weight: 400;
+    }
+
+    .participant-page .btn-scan-barcode {
+        background: var(--color-success);
+        color: #fff;
+        border: none;
+        padding: 0.625rem 1.25rem;
+        border-radius: 100px;
+        font-weight: 600;
+        font-size: 0.8125rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all var(--transition-base);
+        box-shadow: 0 1px 2px rgba(5,150,105,0.2);
+        white-space: nowrap;
+    }
+
+    .participant-page .btn-scan-barcode:hover {
+        background: #047857;
+        box-shadow: 0 4px 12px rgba(5,150,105,0.3);
+        transform: translateY(-1px);
+    }
+
+    .participant-page .btn-scan-barcode:active {
+        transform: translateY(0);
+    }
+
+    /* Cards */
+    .participant-page .p-card {
+        background: #fff;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+        transition: box-shadow var(--transition-base);
+    }
+
+    .participant-page .p-card:hover {
+        box-shadow: var(--shadow-md);
+    }
+
+    .participant-page .p-card-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--color-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        background: #fff;
+    }
+
+    .participant-page .p-card-title {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        letter-spacing: -0.01em;
+    }
+
+    .participant-page .p-card-title .title-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: var(--radius-sm);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .participant-page .p-card-title .title-icon.teal {
+        background: rgba(15,118,110,0.08);
+        color: var(--color-primary);
+    }
+
+    .participant-page .p-card-title .title-icon.blue {
+        background: rgba(59,130,246,0.08);
+        color: #3B82F6;
+    }
+
+    .participant-page .p-card-body {
+        padding: 1.25rem;
+    }
+
+    /* Form Elements */
+    .participant-page .form-label-sm {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        color: var(--color-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+    }
+
+    .participant-page .select-meeting {
+        width: 100%;
+        padding: 0.625rem 0.875rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        font-size: 0.875rem;
+        color: var(--color-text);
+        background-color: var(--color-surface);
+        transition: all var(--transition-fast);
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748B' d='M6 8.825a.5.5 0 0 1-.354-.146l-3.5-3.5a.5.5 0 0 1 .708-.708L6 7.618l3.146-3.147a.5.5 0 0 1 .708.708l-3.5 3.5A.5.5 0 0 1 6 8.825z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.875rem center;
+        padding-right: 2.25rem;
+        cursor: pointer;
+    }
+
+    .participant-page .select-meeting:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(15,118,110,0.1);
+        background-color: #fff;
+    }
+
+    .participant-page .btn-add-manual {
+        width: 100%;
+        padding: 0.625rem 1rem;
+        background: var(--color-primary);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        font-size: 0.8125rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all var(--transition-base);
+        margin-top: 1rem;
+    }
+
+    .participant-page .btn-add-manual:hover {
+        background: #115E59;
+        box-shadow: 0 4px 12px rgba(15,118,110,0.25);
+        transform: translateY(-1px);
+    }
+
+    .participant-page .btn-add-manual:active {
+        transform: translateY(0);
+    }
+
+    /* Badge Count */
+    .participant-page .badge-count {
+        background: rgba(15,118,110,0.08);
+        color: var(--color-primary);
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+        border-radius: 100px;
+        letter-spacing: -0.01em;
+    }
+
+    /* Table */
+    .participant-page .p-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .participant-page .p-table thead th {
+        padding: 0.75rem 1rem;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        color: var(--color-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--color-border);
+        background: var(--color-surface);
+        white-space: nowrap;
+    }
+
+    .participant-page .p-table thead th:first-child { padding-left: 1.25rem; }
+    .participant-page .p-table thead th:last-child { padding-right: 1.25rem; }
+
+    .participant-page .p-table tbody td {
+        padding: 0.75rem 1rem;
+        font-size: 0.8125rem;
+        color: var(--color-text);
+        border-bottom: 1px solid var(--color-border);
+        vertical-align: middle;
+    }
+
+    .participant-page .p-table tbody td:first-child { padding-left: 1.25rem; }
+    .participant-page .p-table tbody td:last-child { padding-right: 1.25rem; }
+
+    .participant-page .p-table tbody tr {
+        transition: background var(--transition-fast);
+    }
+
+    .participant-page .p-table tbody tr:hover {
+        background: var(--color-surface);
+    }
+
+    .participant-page .p-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .participant-page .td-num {
+        color: var(--color-muted);
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        width: 48px;
+    }
+
+    .participant-page .td-name {
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .participant-page .td-barcode {
+        font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+        font-size: 0.75rem;
+        color: var(--color-muted);
+        background: var(--color-surface);
+        padding: 0.2rem 0.5rem;
+        border-radius: var(--radius-sm);
+        display: inline-block;
+    }
+
+    .participant-page .td-time {
+        font-size: 0.75rem;
+        color: var(--color-muted);
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Status Badges */
+    .participant-page .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.25rem 0.625rem;
+        border-radius: 100px;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+    }
+
+    .participant-page .status-badge.hadir {
+        background: rgba(5,150,105,0.08);
+        color: var(--color-success);
+    }
+
+    .participant-page .status-badge.belum {
+        background: rgba(100,116,139,0.08);
+        color: var(--color-muted);
+    }
+
+    /* Empty State */
+    .participant-page .empty-state {
+        text-align: center;
+        padding: 3rem 1.5rem;
+        color: var(--color-muted);
+    }
+
+    .participant-page .empty-state .empty-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--color-surface);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.75rem;
+        font-size: 1.125rem;
+        color: var(--color-muted);
+    }
+
+    .participant-page .empty-state p {
+        font-size: 0.8125rem;
+        margin: 0;
+    }
+
+    /* Modal Styling */
+    .participant-page .modal-content.p-modal {
+        border: none;
+        border-radius: var(--radius-xl);
+        box-shadow: 0 25px 50px -12px rgba(15,23,42,0.15);
+        overflow: hidden;
+    }
+
+    .participant-page .p-modal .modal-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .participant-page .p-modal .modal-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .participant-page .p-modal .modal-body {
+        padding: 1.5rem;
+    }
+
+    .participant-page .p-modal .modal-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .participant-page .p-input-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .participant-page .p-input-group:last-child {
+        margin-bottom: 0;
+    }
+
+    .participant-page .p-input-label {
+        display: block;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: 0.375rem;
+    }
+
+    .participant-page .p-input {
+        width: 100%;
+        padding: 0.625rem 0.875rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        font-size: 0.875rem;
+        color: var(--color-text);
+        background: var(--color-surface);
+        transition: all var(--transition-fast);
+    }
+
+    .participant-page .p-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(15,118,110,0.1);
+        background: #fff;
+    }
+
+    .participant-page .p-input::placeholder {
+        color: #94A3B8;
+    }
+
+    .participant-page .btn-cancel {
+        padding: 0.5rem 1rem;
+        background: var(--color-surface);
+        color: var(--color-muted);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        font-weight: 500;
+        font-size: 0.8125rem;
+        transition: all var(--transition-fast);
+    }
+
+    .participant-page .btn-cancel:hover {
+        background: #F1F5F9;
+        color: var(--color-text);
+    }
+
+    .participant-page .btn-save {
+        padding: 0.5rem 1.25rem;
+        background: var(--color-primary);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        font-size: 0.8125rem;
+        transition: all var(--transition-base);
+    }
+
+    .participant-page .btn-save:hover {
+        background: #115E59;
+    }
+
+    /* Scanner Modal */
+    .participant-page .scanner-area {
+        background: #000;
+        position: relative;
+        overflow: hidden;
+        min-height: 280px;
+    }
+
+    .participant-page .scanner-area #reader {
+        width: 100% !important;
+    }
+
+    .participant-page .scanner-area #reader video {
+        border-radius: 0 !important;
+    }
+
+    .participant-page .scan-status {
+        padding: 0.75rem 1rem;
+        background: rgba(15,118,110,0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: var(--color-primary);
+    }
+
+    .participant-page .scan-result {
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .participant-page .scan-result-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.75rem;
+        font-size: 1.25rem;
+    }
+
+    .participant-page .scan-result-icon.success {
+        background: rgba(5,150,105,0.1);
+        color: var(--color-success);
+    }
+
+    .participant-page .scan-result-icon.warning {
+        background: rgba(217,119,6,0.1);
+        color: var(--color-warning);
+    }
+
+    .participant-page .scan-result-icon.error {
+        background: rgba(220,38,38,0.1);
+        color: var(--color-danger);
+    }
+
+    .participant-page .scan-result-text {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin: 0;
+    }
+
+    .participant-page .scanner-footer {
+        padding: 0.875rem 1.25rem;
+        border-top: 1px solid var(--color-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    .participant-page .scanner-footer .info-text {
+        font-size: 0.75rem;
+        color: var(--color-muted);
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        margin: 0;
+    }
+
+    .participant-page .btn-rescan {
+        padding: 0.375rem 0.875rem;
+        background: rgba(5,150,105,0.08);
+        color: var(--color-success);
+        border: 1px solid rgba(5,150,105,0.2);
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        font-size: 0.75rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        transition: all var(--transition-fast);
+    }
+
+    .participant-page .btn-rescan:hover {
+        background: rgba(5,150,105,0.15);
+        border-color: rgba(5,150,105,0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 767.98px) {
+        .participant-page .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .participant-page .btn-scan-barcode {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .participant-page .p-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .participant-page .p-table {
+            min-width: 560px;
+        }
+    }
+
+    /* Spinner */
+    .participant-page .spinner-sm {
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: p-spin 0.6s linear infinite;
+    }
+
+    .participant-page .spinner-teal {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(15,118,110,0.2);
+        border-top-color: var(--color-primary);
+        border-radius: 50%;
+        animation: p-spin 0.6s linear infinite;
+    }
+
+    @keyframes p-spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+
+<!-- Toast Notification -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+    <div id="scanToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="scanToastBody">Pesan notifikasi</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+<div class="participant-page">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Participant Input</h2>
+            <p class="page-subtitle">Kelola peserta dan absensi meeting</p>
+        </div>
+        <button id="btnScan" class="btn-scan-barcode">
+            <i class="fas fa-qrcode"></i>
+            Scan Barcode
         </button>
     </div>
 
-    <div class="row">
-        <div class="col-md-4 mb-4">
-             <div class="card border-0 shadow-sm rounded-3 h-100">
-                <div class="card-header bg-white border-0 py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Pilih Meeting</h6>
+    <div class="row g-3">
+        <!-- Left Column: Meeting Selection -->
+        <div class="col-md-4">
+            <div class="p-card h-100">
+                <div class="p-card-header">
+                    <h6 class="p-card-title">
+                        <span class="title-icon teal"><i class="fas fa-calendar-check"></i></span>
+                        Pilih Meeting
+                    </h6>
                 </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold">MEETING AKTIF</label>
-                        <select id="meetingSelect" class="form-select shadow-sm border-0 bg-light p-3"></select>
-                    </div>
-                    <div class="d-grid">
-                        <button id="addParticipantBtn" class="btn btn-primary py-2 rounded-3 shadow-sm">
-                            <i class="fas fa-plus me-2"></i> Tambah Manual
-                        </button>
-                    </div>
+                <div class="p-card-body">
+                    <label class="form-label-sm">Meeting Aktif</label>
+                    <select id="meetingSelect" class="select-meeting"></select>
+                    <button id="addParticipantBtn" class="btn-add-manual">
+                        <i class="fas fa-plus" style="font-size:0.7rem"></i>
+                        Tambah Manual
+                    </button>
                 </div>
-             </div>
+            </div>
         </div>
 
-        <div class="col-md-8 mb-4">
-             <div class="card border-0 shadow-sm rounded-3 h-100">
-                <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">Daftar Peserta</h6>
-                    <span class="badge bg-primary bg-opacity-10 text-primary" id="participantCount">0 Peserta</span>
+        <!-- Right Column: Participant List -->
+        <div class="col-md-8">
+            <div class="p-card">
+                <div class="p-card-header">
+                    <h6 class="p-card-title">
+                        <span class="title-icon blue"><i class="fas fa-users"></i></span>
+                        Daftar Peserta
+                    </h6>
+                    <span class="badge-count" id="participantCount">0 Peserta</span>
                 </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="bg-light text-secondary">
-                                <tr>
-                                    <th class="ps-4 py-3 border-0 rounded-start">No</th>
-                                    <th class="py-3 border-0">Nama Peserta</th>
-                                    <th class="py-3 border-0">Barcode ID</th>
-                                    <th class="pe-4 py-3 border-0 rounded-end">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="participantTable"></tbody>
-                        </table>
-                    </div>
+                <div class="p-table-wrap">
+                    <table class="p-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Barcode ID</th>
+                                <th>Status</th>
+                                <th>Waktu Scan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="participantTable"></tbody>
+                    </table>
                 </div>
-             </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Modal Tambah Peserta -->
-<div class="modal fade" id="addParticipantModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-4">
-      <div class="modal-header border-0 pb-0">
-        <h5 class="modal-title fw-bold text-primary">Tambah Peserta Baru</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <div class="p-3 bg-light rounded-3">
-            <input type="hidden" id="meeting_id">
-            <div class="mb-3">
-              <label class="form-label fw-bold text-dark small">Nama Peserta</label>
-              <input type="text" id="nama" class="form-control border-0 shadow-sm" placeholder="Masukkan nama lengkap">
+<div class="modal fade participant-page" id="addParticipantModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-modal">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-plus" style="color:#0F766E"></i>
+                    Tambah Peserta Baru
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="mb-2">
-              <label class="form-label fw-bold text-dark small">Barcode ID / NIP</label>
-              <input type="text" id="barcode" class="form-control border-0 shadow-sm" placeholder="Scan atau ketik ID">
+            <div class="modal-body">
+                <input type="hidden" id="meeting_id">
+                <div class="p-input-group">
+                    <label class="p-input-label" for="nama">Nama Peserta</label>
+                    <input type="text" id="nama" class="p-input" placeholder="Masukkan nama lengkap">
+                </div>
+                <div class="p-input-group">
+                    <label class="p-input-label" for="barcode">Barcode ID / NIP</label>
+                    <input type="text" id="barcode" class="p-input" placeholder="Scan atau ketik ID barcode">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" data-bs-dismiss="modal">Batal</button>
+                <button id="saveParticipant" class="btn-save">Simpan Peserta</button>
             </div>
         </div>
-      </div>
-      <div class="modal-footer border-0 pt-0">
-        <button class="btn btn-light text-muted" data-bs-dismiss="modal">Batal</button>
-        <button id="saveParticipant" class="btn btn-primary px-4 rounded-pill">Simpan Peserta</button>
-      </div>
     </div>
-  </div>
 </div>
 
 <!-- Modal Scanner -->
-<div class="modal fade" id="modalScan" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-4">
-      <div class="modal-header border-0">
-        <h5 class="modal-title fw-bold text-dark">Scan Barcode Kehadiran</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body p-0">
-        <div id="reader" style="width: 100%; border-radius: 0 0 1rem 1rem; overflow: hidden;"></div>
-      </div>
-      <div class="modal-footer border-0 justify-content-center">
-          <p class="text-muted small mb-0">Arahkan kamera ke QR Code / Barcode peserta</p>
-      </div>
+<div class="modal fade participant-page" id="modalScan" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-modal">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-qrcode" style="color:#059669"></i>
+                    Scan Barcode Kehadiran
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <!-- Processing indicator -->
+                <div id="scanStatus" class="scan-status d-none">
+                    <span class="spinner-teal"></span>
+                    <span>Memproses...</span>
+                </div>
+                <!-- Scanner area -->
+                <div class="scanner-area">
+                    <div id="reader" style="width:100%;overflow:hidden;"></div>
+                </div>
+                <!-- Scan result feedback -->
+                <div id="scanResult" class="scan-result d-none">
+                    <div id="scanResultIcon"></div>
+                    <p id="scanResultText" class="scan-result-text"></p>
+                </div>
+            </div>
+            <div class="scanner-footer">
+                <p class="info-text"><i class="fas fa-info-circle"></i> Arahkan kamera ke QR Code / Barcode peserta</p>
+                <button id="btnRescan" class="btn-rescan d-none">
+                    <i class="fas fa-redo"></i> Scan Lagi
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
 <script>
 {
-    // Gunakan block scope dan global siteBaseUrl
     const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
-    
+    let html5QrCode = null;
+    let isScanning = false;
+
+    // ===== TOAST NOTIFICATION =====
+    function showToast(message, type) {
+        type = type || 'success';
+        const toast = document.getElementById('scanToast');
+        const toastBody = document.getElementById('scanToastBody');
+
+        toast.className = 'toast align-items-center border-0';
+
+        const config = {
+            success: { bg: 'text-bg-success', icon: 'fa-check-circle' },
+            warning: { bg: 'text-bg-warning', icon: 'fa-exclamation-triangle' },
+            error:   { bg: 'text-bg-danger text-white', icon: 'fa-times-circle' },
+            info:    { bg: 'text-bg-info text-white', icon: 'fa-info-circle' }
+        };
+
+        const c = config[type] || config.info;
+        toast.classList.add.apply(toast.classList, c.bg.split(' '));
+        toastBody.innerHTML = '<i class="fas ' + c.icon + ' me-2"></i>' + message;
+
+        const bsToast = new bootstrap.Toast(toast, { delay: 4000 });
+        bsToast.show();
+    }
+
+    // ===== LOAD MEETINGS =====
     function loadMeetings() {
-        // Tampilkan loading state
         $('#meetingSelect').html('<option>Memuat data...</option>');
 
         $.get(baseUrl + 'v1/meetings')
-            .done(function(data){
+            .done(function(data) {
                 $('#meetingSelect').empty();
-                
-                if(Array.isArray(data) && data.length === 0) {
-                     $('#meetingSelect').append('<option value="">Tidak ada meeting aktif</option>');
-                     $('#addParticipantBtn').prop('disabled', true);
-                     return;
+
+                if (Array.isArray(data) && data.length === 0) {
+                    $('#meetingSelect').append('<option value="">Tidak ada meeting aktif</option>');
+                    $('#addParticipantBtn').prop('disabled', true).css('opacity', '0.5');
+                    $('#btnScan').prop('disabled', true).css('opacity', '0.5');
+                    return;
                 }
-                
-                // Jika data bukan array (misal error object), handle gracefully
+
                 if (!Array.isArray(data)) {
                     console.error("Invalid data format:", data);
                     $('#meetingSelect').html('<option value="">Error memuat data</option>');
                     return;
                 }
 
-                $.each(data, function(i, meeting){
-                    $('#meetingSelect').append(`<option value="${meeting.id}">${meeting.nama_meeting}</option>`);
+                $.each(data, function(i, meeting) {
+                    $('#meetingSelect').append('<option value="' + meeting.id + '">' + meeting.nama_meeting + '</option>');
                 });
-                
-                $('#addParticipantBtn').prop('disabled', false);
-                // Load participant untuk meeting pertama
+
+                $('#addParticipantBtn').prop('disabled', false).css('opacity', '1');
+                $('#btnScan').prop('disabled', false).css('opacity', '1');
                 loadParticipants();
             })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                console.error("AJAX Error:", textStatus, errorThrown);
-                $('#meetingSelect').html('<option value="">Gagal memuat data (Cek Koneksi)</option>');
+            .fail(function(jqXHR) {
+                console.error("AJAX Error:", jqXHR.statusText);
+                if (jqXHR.status === 401) {
+                    window.location.href = baseUrl + 'auth/login';
+                    return;
+                }
+                $('#meetingSelect').html('<option value="">Gagal memuat data</option>');
             });
     }
 
+    // ===== LOAD PARTICIPANTS =====
     function loadParticipants() {
         const meetingId = $('#meetingSelect').val();
         if (!meetingId) return;
-        
-        $.get(baseUrl + 'v1/participants/' + meetingId, function(data){
+
+        $.get(baseUrl + 'v1/participants/' + meetingId, function(data) {
             $('#participantTable').empty();
             $('#participantCount').text(data.length + ' Peserta');
-            
-            if(data.length === 0) {
-                $('#participantTable').append('<tr><td colspan="4" class="text-center py-4 text-muted">Belum ada peserta terdaftar</td></tr>');
+
+            if (data.length === 0) {
+                $('#participantTable').append(
+                    '<tr><td colspan="5">' +
+                    '<div class="empty-state">' +
+                    '<div class="empty-icon"><i class="fas fa-users"></i></div>' +
+                    '<p>Belum ada peserta terdaftar</p>' +
+                    '</div></td></tr>'
+                );
                 return;
             }
-            $.each(data, function(i, participant){
-                const statusBadge = participant.status === 'Hadir' 
-                    ? '<span class="badge bg-success bg-opacity-10 text-success px-2 py-1 rounded">Hadir</span>'
-                    : '<span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1 rounded">Belum Hadir</span>';
-                    
-                $('#participantTable').append(`
-                    <tr>
-                        <td class="ps-4 text-muted fw-bold">${i+1}</td>
-                        <td class="fw-bold text-dark">${participant.name}</td>
-                        <td class="font-monospace text-muted">${participant.barcode_id}</td>
-                        <td class="pe-4">${statusBadge}</td>
-                    </tr>
-                `);
+
+            $.each(data, function(i, p) {
+                const isHadir = p.status === 'hadir';
+                const badge = isHadir
+                    ? '<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:0.6875rem;font-weight:600;background:#ECFDF5;color:#059669;"><i class="fas fa-check-circle"></i> Hadir</span>'
+                    : '<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:0.6875rem;font-weight:600;background:#F1F5F9;color:#64748B;"><i class="fas fa-clock"></i> Belum Hadir</span>';
+
+                const scanTime = p.scanned_at
+                    ? '<span class="td-time">' + new Date(p.scanned_at).toLocaleString('id-ID', {hour:'2-digit', minute:'2-digit', day:'2-digit', month:'short'}) + '</span>'
+                    : '<span class="td-time">-</span>';
+
+                $('#participantTable').append(
+                    '<tr>' +
+                    '<td class="td-num">' + (i + 1) + '</td>' +
+                    '<td class="td-name">' + p.name + '</td>' +
+                    '<td><span class="td-barcode">' + p.barcode_id + '</span></td>' +
+                    '<td>' + badge + '</td>' +
+                    '<td>' + scanTime + '</td>' +
+                    '</tr>'
+                );
             });
+        }).fail(function(jqXHR) {
+            if (jqXHR.status === 401) {
+                window.location.href = baseUrl + 'auth/login';
+            }
         });
     }
 
+    // ===== EVENT HANDLERS =====
     $('#meetingSelect').off('change').on('change', loadParticipants);
-    
-    $('#addParticipantBtn').off('click').click(function(){
+
+    $('#addParticipantBtn').off('click').click(function() {
         const mId = $('#meetingSelect').val();
-        if(!mId) {
-            alert('Silakan buat atau pilih meeting terlebih dahulu!');
+        if (!mId) {
+            showToast('Silakan buat atau pilih meeting terlebih dahulu!', 'warning');
             return;
         }
         $('#meeting_id').val(mId);
+        $('#nama').val('');
+        $('#barcode').val('');
         $('#addParticipantModal').modal('show');
     });
 
-    $('#saveParticipant').off('click').click(function(){
-        const nameVal = $('#nama').val();
-        const barcodeVal = $('#barcode').val();
-        
-        if(!nameVal || !barcodeVal) {
-            alert("Nama dan Barcode harus diisi!");
+    $('#saveParticipant').off('click').click(function() {
+        const nameVal = $('#nama').val().trim();
+        const barcodeVal = $('#barcode').val().trim();
+
+        if (!nameVal || !barcodeVal) {
+            showToast('Nama dan Barcode harus diisi!', 'warning');
             return;
         }
+
+        const btn = $(this);
+        btn.prop('disabled', true).html('<span class="spinner-sm d-inline-block me-2"></span>Menyimpan...');
 
         $.post(baseUrl + 'v1/participants', {
             meeting_id: $('#meeting_id').val(),
             name: nameVal,
             barcode_id: barcodeVal
-        }, function(){
-            $('#addParticipantModal').modal('hide');
-            $('#nama').val('');
-            $('#barcode').val('');
-            loadParticipants();
+        }, function(response) {
+            if (response.status === 'success') {
+                $('#addParticipantModal').modal('hide');
+                $('#nama').val('');
+                $('#barcode').val('');
+                showToast('Peserta berhasil ditambahkan!', 'success');
+                loadParticipants();
+            } else {
+                showToast(response.message || 'Gagal menambahkan peserta', 'error');
+            }
+        }, 'json')
+        .fail(function() {
+            showToast('Terjadi kesalahan server', 'error');
+        })
+        .always(function() {
+            btn.prop('disabled', false).html('Simpan Peserta');
         });
     });
 
-    // Scanner Logic
-    let html5QrCode;
-    
-    $('#btnScan').off('click').click(function () {
+    // ===== SCANNER LOGIC =====
+    $('#btnScan').off('click').click(function() {
+        const mId = $('#meetingSelect').val();
+        if (!mId) {
+            showToast('Pilih meeting terlebih dahulu sebelum scan!', 'warning');
+            return;
+        }
+        $('#scanStatus').addClass('d-none');
+        $('#scanResult').addClass('d-none');
+        $('#btnRescan').addClass('d-none');
+        $('#reader').show();
         $('#modalScan').modal('show');
+    });
+
+    $('#modalScan').on('shown.bs.modal', function() {
         startScanner();
     });
 
-    $('#modalScan').on('hidden.bs.modal', function () {
-        if (html5QrCode) {
-            html5QrCode.stop().then(() => {
-                html5QrCode.clear();
-            }).catch(err => console.error("Stop error", err));
-        }
+    $('#modalScan').on('hidden.bs.modal', function() {
+        stopScanner();
+    });
+
+    $('#btnRescan').off('click').click(function() {
+        $('#scanResult').addClass('d-none');
+        $('#btnRescan').addClass('d-none');
+        $('#reader').show();
+        startScanner();
     });
 
     function startScanner() {
+        if (isScanning) return;
+
         html5QrCode = new Html5Qrcode("reader");
-        const config = { fps: 10, qrbox: 250 };
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0
+        };
 
         html5QrCode.start(
             { facingMode: "environment" },
             config,
-            function (decodedText) {
-                html5QrCode.stop().then(() => {
-                    $('#modalScan').modal('hide');
+            function onScanSuccess(decodedText) {
+                isScanning = false;
+                html5QrCode.stop().then(function() {
+                    $('#reader').hide();
+                    showScanProcessing();
+                    submitAbsen(decodedText);
+                }).catch(function(err) {
+                    console.error("Stop error:", err);
                     submitAbsen(decodedText);
                 });
+            },
+            function onScanFailure(error) {
+                // Ignore - normal saat belum ada barcode terdeteksi
             }
-        ).catch(err => {
-             console.log("Scanner start error: ", err);
+        ).then(function() {
+            isScanning = true;
+        }).catch(function(err) {
+            console.error("Scanner start error:", err);
+            showScanResult('error', 'Gagal mengakses kamera. Pastikan izin kamera diberikan.');
         });
+    }
+
+    function stopScanner() {
+        if (html5QrCode && isScanning) {
+            html5QrCode.stop().then(function() {
+                html5QrCode.clear();
+                isScanning = false;
+            }).catch(function(err) {
+                console.error("Stop error:", err);
+                isScanning = false;
+            });
+        }
+    }
+
+    function showScanProcessing() {
+        $('#scanStatus').removeClass('d-none');
+    }
+
+    function showScanResult(type, message) {
+        $('#scanStatus').addClass('d-none');
+        $('#scanResult').removeClass('d-none');
+        $('#btnRescan').removeClass('d-none');
+
+        const icons = {
+            success: '<div class="scan-result-icon success"><i class="fas fa-check-circle"></i></div>',
+            warning: '<div class="scan-result-icon warning"><i class="fas fa-exclamation-circle"></i></div>',
+            error:   '<div class="scan-result-icon error"><i class="fas fa-times-circle"></i></div>'
+        };
+
+        $('#scanResultIcon').html(icons[type] || icons.error);
+        $('#scanResultText').text(message);
     }
 
     function submitAbsen(barcode) {
         const selectedMeetingId = $('#meetingSelect').val();
         if (!selectedMeetingId) {
-            alert("Pilih meeting terlebih dahulu!");
+            showScanResult('error', 'Pilih meeting terlebih dahulu!');
             return;
         }
 
         $.post(baseUrl + 'participant/absen', {
             barcode: barcode,
             meeting_id: selectedMeetingId
-        }, function (response) {
+        }, function(response) {
             if (response.success) {
-                alert("✅ Absen berhasil untuk: " + response.message); 
+                if (response.already_present) {
+                    showScanResult('warning', response.message);
+                    showToast(response.message, 'warning');
+                } else {
+                    showScanResult('success', response.message);
+                    showToast(response.message, 'success');
+                }
                 loadParticipants();
             } else {
-                alert("❌ Gagal: " + (response.message || "Barcode tidak ditemukan!"));
+                showScanResult('error', response.message || 'Barcode tidak ditemukan!');
+                showToast(response.message || 'Barcode tidak ditemukan!', 'error');
             }
         }, 'json')
-        .fail(function() {
-            alert("Terjadi kesalahan server saat absen.");
+        .fail(function(jqXHR) {
+            if (jqXHR.status === 401) {
+                window.location.href = baseUrl + 'auth/login';
+                return;
+            }
+            showScanResult('error', 'Terjadi kesalahan server');
+            showToast('Terjadi kesalahan server saat absen', 'error');
         });
     }
 
-    // Initialize
+    // ===== INITIALIZE =====
     loadMeetings();
 }
 </script>

@@ -9,6 +9,7 @@
 /writable/logs/*
 /writable/session/*
 /writable/debugbar/*
+/writable/uploads/*
 !/writable/cache/.gitkeep
 !/writable/logs/.gitkeep
 !/writable/session/.gitkeep
@@ -23,6 +24,7 @@
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Composer
 composer.lock
@@ -31,6 +33,7 @@ composer.lock
 /test_*.php
 /phpunit.xml
 /.phpunit.result.cache
+/phpunit.xml.dist
 
 # Build
 /build/
@@ -39,3 +42,16 @@ composer.lock
 # Temporary files
 *.tmp
 *.bak
+*.log
+
+# Migration helper scripts (not needed in production)
+/manual_migrate.php
+/verify_tables.php
+/hash.php
+
+# System framework (if using as project, not framework dev)
+# /system/
+
+# Uploads (user-generated content)
+/public/uploads/*
+!/public/uploads/.gitkeep

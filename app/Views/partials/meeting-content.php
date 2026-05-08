@@ -1,240 +1,767 @@
-<div class="container-fluid p-0">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="h3 mb-0 text-gray-800 fw-bold text-dark">Manage Meeting</h1>
-      <button class="btn btn-primary shadow-sm rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#createMeetingModal">
-          <i class="fas fa-plus me-2"></i> Buat Meeting
-      </button>
-  </div>
+<style>
+    /* ── Meeting Page Scoped Styles ── */
+    .meeting-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.75rem;
+    }
+    .meeting-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .meeting-header h2 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0F172A;
+        margin: 0;
+        letter-spacing: -0.025em;
+    }
+    .meeting-count-badge {
+        background: rgba(15, 118, 110, 0.08);
+        color: #0F766E;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+        white-space: nowrap;
+    }
 
-  <div class="card border-0 shadow-sm rounded-3">
-      <div class="card-header bg-white border-0 py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">Daftar Rapat</h6>
-      </div>
-      <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="bg-light text-secondary">
-                <tr>
-                  <th class="ps-4 py-3 border-0 rounded-start">No</th>
-                  <th class="py-3 border-0">Kegiatan</th>
-                  <th class="py-3 border-0">Waktu</th>
-                  <th class="py-3 border-0">Tempat</th>
-                  <th class="py-3 border-0">Status</th>
-                  <th class="pe-4 py-3 border-0 text-end rounded-end">Aksi</th> 
-                </tr>
-              </thead>
-              <tbody>
-                <?php if (empty($meetings)): ?>
-                    <tr><td colspan="6" class="text-center py-4 text-muted">Belum ada data rapat.</td></tr>
-                <?php else: ?>
-                    <?php foreach ($meetings as $i => $m): ?>
-                    <?php
-                      $meetingTime = strtotime($m['tanggal']);
-                      $now = time();
-                      $status = $meetingTime < $now
-                        ? '<span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">Selesai</span>'
-                        : '<span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill">Belum Mulai</span>';
-                    ?>
+    .btn-create-meeting {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: #0F766E;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        white-space: nowrap;
+    }
+    .btn-create-meeting:hover {
+        background: #0D9488;
+        box-shadow: 0 4px 16px rgba(15, 118, 110, 0.25);
+        transform: translateY(-1px);
+    }
+    .btn-create-meeting:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(15, 118, 110, 0.2);
+    }
+
+    /* Table Card */
+    .table-card {
+        background: #fff;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .table-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #F1F5F9;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .table-card-header h6 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #0F172A;
+        margin: 0;
+    }
+    .table-card-header .badge-count {
+        background: rgba(15, 118, 110, 0.08);
+        color: #0F766E;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
+
+    /* Table */
+    .mtg-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .mtg-table thead th {
+        padding: 14px 24px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #64748B;
+        background: #F8FAFC;
+        border-bottom: 1px solid #E2E8F0;
+        white-space: nowrap;
+    }
+    .mtg-table thead th:first-child {
+        padding-left: 24px;
+    }
+    .mtg-table thead th:last-child {
+        text-align: right;
+        padding-right: 24px;
+    }
+
+    .mtg-table tbody tr {
+        transition: background 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .mtg-table tbody tr:hover {
+        background: #F8FAFC;
+    }
+    .mtg-table tbody td {
+        padding: 16px 24px;
+        font-size: 0.88rem;
+        color: #334155;
+        border-bottom: 1px solid #F1F5F9;
+        vertical-align: middle;
+    }
+    .mtg-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    .mtg-table tbody td:first-child {
+        padding-left: 24px;
+    }
+    .mtg-table tbody td:last-child {
+        text-align: right;
+        padding-right: 24px;
+    }
+
+    .mtg-table .td-num {
+        font-weight: 600;
+        color: #94A3B8;
+        font-size: 0.82rem;
+        width: 50px;
+    }
+    .mtg-table .td-name {
+        font-weight: 600;
+        color: #0F172A;
+    }
+    .mtg-table .td-time .date-main {
+        font-weight: 600;
+        color: #0F172A;
+        font-size: 0.88rem;
+    }
+    .mtg-table .td-time .date-sub {
+        font-size: 0.78rem;
+        color: #94A3B8;
+        margin-top: 2px;
+    }
+    .mtg-table .td-place {
+        color: #64748B;
+        font-size: 0.85rem;
+    }
+    .mtg-table .td-place i {
+        color: #94A3B8;
+        margin-right: 6px;
+        font-size: 0.8rem;
+    }
+
+    /* Status Badges */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    .status-badge .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+        flex-shrink: 0;
+    }
+    .status-badge.done {
+        background: rgba(5, 150, 105, 0.08);
+        color: #059669;
+    }
+    .status-badge.pending {
+        background: rgba(217, 119, 6, 0.08);
+        color: #D97706;
+    }
+
+    /* Delete Button */
+    .btn-delete-row {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid #E2E8F0;
+        background: #fff;
+        color: #94A3B8;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        font-size: 0.78rem;
+    }
+    .btn-delete-row:hover {
+        background: #FEF2F2;
+        border-color: #FECACA;
+        color: #EF4444;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.12);
+    }
+    .btn-delete-row:active {
+        transform: translateY(0);
+    }
+
+    /* Empty State */
+    .empty-state {
+        padding: 48px 24px;
+        text-align: center;
+    }
+    .empty-state .empty-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: #F1F5F9;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #94A3B8;
+        margin-bottom: 16px;
+    }
+    .empty-state h6 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 4px;
+    }
+    .empty-state p {
+        font-size: 0.85rem;
+        color: #94A3B8;
+        margin: 0;
+    }
+
+    /* Modal Styles */
+    .modal-meeting .modal-content {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 24px 64px rgba(15, 23, 42, 0.12);
+    }
+    .modal-meeting .modal-header {
+        padding: 24px 28px 12px;
+        border: none;
+    }
+    .modal-meeting .modal-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0F172A;
+    }
+    .modal-meeting .modal-body {
+        padding: 12px 28px 16px;
+    }
+    .modal-meeting .modal-footer {
+        padding: 12px 28px 24px;
+        border: none;
+    }
+
+    .modal-meeting .form-section {
+        background: #F8FAFC;
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid #F1F5F9;
+    }
+    .modal-meeting .form-section .section-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #94A3B8;
+        margin-bottom: 14px;
+    }
+    .modal-meeting .form-label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 6px;
+    }
+    .modal-meeting .form-control {
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 0.88rem;
+        background: #fff;
+        transition: border-color 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+                    box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .modal-meeting .form-control:focus {
+        border-color: #0F766E;
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.08);
+    }
+    .modal-meeting .form-control::placeholder {
+        color: #94A3B8;
+    }
+
+    .btn-modal-cancel {
+        padding: 9px 20px;
+        border-radius: 10px;
+        border: 1px solid #E2E8F0;
+        background: #fff;
+        color: #64748B;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .btn-modal-cancel:hover {
+        background: #F8FAFC;
+        border-color: #CBD5E1;
+    }
+
+    .btn-modal-save {
+        padding: 9px 24px;
+        border-radius: 10px;
+        border: none;
+        background: #0F766E;
+        color: #fff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .btn-modal-save:hover {
+        background: #0D9488;
+        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);
+    }
+
+    /* Delete Modal */
+    .delete-modal-body {
+        padding: 32px 28px;
+        text-align: center;
+    }
+    .delete-modal-body .delete-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: #FEF2F2;
+        color: #EF4444;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 16px;
+    }
+    .delete-modal-body h5 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #0F172A;
+        margin-bottom: 8px;
+    }
+    .delete-modal-body p {
+        font-size: 0.88rem;
+        color: #64748B;
+        margin-bottom: 24px;
+    }
+    .delete-modal-body p strong {
+        color: #0F172A;
+    }
+
+    .btn-modal-delete {
+        padding: 9px 24px;
+        border-radius: 10px;
+        border: none;
+        background: #EF4444;
+        color: #fff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .btn-modal-delete:hover {
+        background: #DC2626;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    }
+
+    /* Toast */
+    .toast-meeting {
+        position: fixed;
+        top: 24px;
+        right: 24px;
+        z-index: 9999;
+        min-width: 300px;
+        max-width: 420px;
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
+        animation: toastSlideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .toast-meeting.show {
+        display: flex;
+    }
+    .toast-meeting.toast-success {
+        background: #ECFDF5;
+        color: #059669;
+        border: 1px solid #A7F3D0;
+    }
+    .toast-meeting.toast-error {
+        background: #FEF2F2;
+        color: #EF4444;
+        border: 1px solid #FECACA;
+    }
+    .toast-meeting .toast-close {
+        margin-left: auto;
+        background: none;
+        border: none;
+        color: inherit;
+        opacity: 0.5;
+        cursor: pointer;
+        font-size: 1.1rem;
+        padding: 0;
+        line-height: 1;
+        transition: opacity 0.2s ease;
+    }
+    .toast-meeting .toast-close:hover {
+        opacity: 1;
+    }
+
+    @keyframes toastSlideIn {
+        from {
+            opacity: 0;
+            transform: translateX(24px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .meeting-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .btn-create-meeting {
+            width: 100%;
+            justify-content: center;
+        }
+        .mtg-table thead th,
+        .mtg-table tbody td {
+            padding: 12px 16px;
+        }
+        .mtg-table thead th:first-child,
+        .mtg-table tbody td:first-child {
+            padding-left: 16px;
+        }
+        .mtg-table thead th:last-child,
+        .mtg-table tbody td:last-child {
+            padding-right: 16px;
+        }
+        .table-card-header {
+            padding: 16px;
+        }
+        .toast-meeting {
+            left: 16px;
+            right: 16px;
+            min-width: auto;
+        }
+    }
+</style>
+
+<!-- Header -->
+<div class="container-fluid p-0">
+    <div class="meeting-header">
+        <div class="meeting-header-left">
+            <h2>Manage Meeting</h2>
+            <?php if (!empty($meetings)): ?>
+                <span class="meeting-count-badge"><?= count($meetings) ?> rapat</span>
+            <?php endif; ?>
+        </div>
+        <button class="btn-create-meeting" data-bs-toggle="modal" data-bs-target="#createMeetingModal">
+            <i class="fas fa-plus"></i> Buat Meeting
+        </button>
+    </div>
+
+    <!-- Table Card -->
+    <div class="table-card">
+        <div class="table-card-header">
+            <h6>Daftar Rapat</h6>
+            <?php if (!empty($meetings)): ?>
+                <span class="badge-count"><?= count($meetings) ?> rapat</span>
+            <?php endif; ?>
+        </div>
+        <div class="table-responsive">
+            <table class="mtg-table">
+                <thead>
                     <tr>
-                      <td class="ps-4 fw-bold text-muted"><?= $i + 1 ?></td>
-                      <td class="fw-bold text-dark"><?= esc($m['nama_meeting']) ?></td>
-                      <td>
-                          <div class="d-flex flex-column">
-                              <span class="fw-bold text-dark"><?= date('d M Y', strtotime($m['tanggal'])) ?></span>
-                              <span class="small text-muted"><?= date('H:i', strtotime($m['tanggal'])) ?> WIB</span>
-                          </div>
-                      </td>
-                      <td class="text-muted"><i class="fas fa-map-marker-alt me-1 text-secondary"></i> <?= esc($m['tempat']) ?></td>
-                      <td><?= $status ?></td>
-                      <td class="text-end pe-4">
-                        <button class="btn btn-outline-danger btn-sm rounded-circle btn-delete shadow-sm" data-id="<?= $m['id'] ?>" data-name="<?= esc($m['nama_meeting']) ?>" title="Hapus">
-                          <i class="fa fa-trash"></i>
-                        </button>
-                      </td>
+                        <th>No</th>
+                        <th>Kegiatan</th>
+                        <th>Waktu</th>
+                        <th>Tempat</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-              </tbody>
+                </thead>
+                <tbody>
+                    <?php if (empty($meetings)): ?>
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-icon"><i class="fas fa-calendar-plus"></i></div>
+                                    <h6>Belum ada rapat terjadwal</h6>
+                                    <p>Klik "Buat Meeting" untuk menambahkan jadwal rapat baru.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($meetings as $i => $m): ?>
+                        <?php
+                            $meetingTime = strtotime($m['tanggal']);
+                            $now = time();
+                            $isDone = $meetingTime < $now;
+                        ?>
+                        <tr>
+                            <td class="td-num"><?= $i + 1 ?></td>
+                            <td class="td-name"><?= esc($m['nama_meeting']) ?></td>
+                            <td class="td-time">
+                                <div class="date-main"><?= date('d M Y', strtotime($m['tanggal'])) ?></div>
+                                <div class="date-sub"><?= date('H:i', strtotime($m['tanggal'])) ?> WIB</div>
+                            </td>
+                            <td class="td-place">
+                                <i class="fas fa-map-marker-alt"></i><?= esc($m['tempat']) ?>
+                            </td>
+                            <td>
+                                <?php if ($isDone): ?>
+                                    <span class="status-badge done"><span class="dot"></span> Selesai</span>
+                                <?php else: ?>
+                                    <span class="status-badge pending"><span class="dot"></span> Belum Mulai</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <button class="btn-delete-row btn-delete"
+                                        data-id="<?= $m['id'] ?>"
+                                        data-name="<?= esc($m['nama_meeting']) ?>"
+                                        title="Hapus rapat">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
             </table>
-          </div>
-      </div>
-  </div>
+        </div>
+    </div>
 </div>
 
-<!-- Modal Form Create Meeting -->
-<div class="modal fade" id="createMeetingModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-4">
-      <form id="form-meeting">
-        <div class="modal-header border-0 pb-0">
-          <h5 class="modal-title fw-bold text-primary">Jadwalkan Rapat Baru</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-            <div class="p-3 bg-light rounded-3 mb-3">
-                <small class="text-muted d-block mb-2">Informasi Dasar</small>
-                <div class="mb-3">
-                    <label class="form-label fw-bold text-dark small">Nama Kegiatan</label>
-                    <input type="text" name="nama_meeting" class="form-control border-0 shadow-sm" placeholder="Contoh: Rapat Evaluasi Q1" required>
+<!-- Modal Create Meeting -->
+<div class="modal fade modal-meeting" id="createMeetingModal" tabindex="-1" aria-labelledby="createMeetingLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="form-meeting">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createMeetingLabel">Jadwalkan Rapat Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold text-dark small">Waktu Pelaksanaan</label>
-                        <input type="datetime-local" name="tanggal" class="form-control border-0 shadow-sm" required>
+                <div class="modal-body">
+                    <div class="form-section">
+                        <div class="section-label">Informasi Rapat</div>
+                        <div class="mb-3">
+                            <label class="form-label" for="input-nama-meeting">Nama Kegiatan</label>
+                            <input type="text"
+                                   id="input-nama-meeting"
+                                   name="nama_meeting"
+                                   class="form-control"
+                                   placeholder="Contoh: Rapat Evaluasi Q1"
+                                   required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label" for="input-tanggal">Waktu Pelaksanaan</label>
+                                <input type="datetime-local"
+                                       id="input-tanggal"
+                                       name="tanggal"
+                                       class="form-control"
+                                       required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label" for="input-tempat">Tempat / Link</label>
+                                <input type="text"
+                                       id="input-tempat"
+                                       name="tempat"
+                                       class="form-control"
+                                       placeholder="R. Meeting 1 / Zoom"
+                                       required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold text-dark small">Tempat / Link</label>
-                        <input type="text" name="tempat" class="form-control border-0 shadow-sm" placeholder="R. Meeting 1 / Zoom" required>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn-modal-save">
+                        <i class="fas fa-check me-1"></i> Simpan Jadwal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete Confirm -->
+<div class="modal fade modal-meeting" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="delete-modal-body">
+                <div class="delete-icon"><i class="fas fa-trash-alt"></i></div>
+                <h5 id="deleteConfirmLabel">Hapus Rapat?</h5>
+                <p>Data meeting <strong id="deleteMeetingName"></strong> akan dihapus permanen.</p>
+                <input type="hidden" id="deleteMeetingId">
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn-modal-cancel" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn-modal-delete" id="confirmDeleteBtn">
+                        <i class="fas fa-trash-alt me-1"></i> Ya, Hapus
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="modal-footer border-0 pt-0">
-          <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary px-4 rounded-pill">Simpan Jadwal</button>
-        </div>
-      </form>
     </div>
-  </div>
-</div>
-
-<!-- Modal Konfirmasi Delete -->
-<div class="modal fade" id="deleteConfirmModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-4">
-      <div class="modal-body text-center p-4">
-        <div class="mb-3">
-          <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-inline-flex p-3">
-            <i class="fas fa-trash-alt fa-2x"></i>
-          </div>
-        </div>
-        <h5 class="mb-2 fw-bold">Hapus Rapat?</h5>
-        <p class="text-muted mb-4">Anda akan menghapus data meeting: <br><strong id="deleteMeetingName" class="text-dark"></strong></p>
-        
-        <input type="hidden" id="deleteMeetingId">
-        
-        <div class="d-flex justify-content-center gap-2">
-          <button type="button" class="btn btn-light px-4 rounded-pill" data-bs-dismiss="modal">Batal</button>
-          <button type="button" class="btn btn-danger px-4 rounded-pill" id="confirmDeleteBtn">
-            Ya, Hapus
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Toast Notification -->
-<div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
-  <div id="toastNotif" class="toast align-items-center border-0 shadow-lg" role="alert">
-    <div class="d-flex">
-      <div class="toast-body d-flex align-items-center fw-bold">
-        <i id="toastIcon" class="me-2" style="font-size: 1.2rem;"></i>
-        <span id="toastMessage"></span>
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-    </div>
-  </div>
+<div class="toast-meeting" id="toastMeeting">
+    <i id="toastMeetingIcon"></i>
+    <span id="toastMeetingMsg"></span>
+    <button class="toast-close" onclick="this.parentElement.classList.remove('show')">&times;</button>
 </div>
 
 <script>
 {
-  // Gunakan block scope agar variabel tidak bentrok saat diload ulang
-  // Gunakan siteBaseUrl dari main layout, jangan deklarasi ulang const baseUrl
+    const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
 
-  function showToast(message, type = 'success') {
-    const toast = document.getElementById('toastNotif');
-    const toastMessage = document.getElementById('toastMessage');
-    const toastIcon = document.getElementById('toastIcon');
-    
-    if (!toast) return; // Safety check
+    /**
+     * Show toast notification
+     * @param {string} message - Message to display
+     * @param {string} type - 'success' or 'error'
+     */
+    function showToast(message, type) {
+        var toast = document.getElementById('toastMeeting');
+        var icon = document.getElementById('toastMeetingIcon');
+        var msg = document.getElementById('toastMeetingMsg');
+        if (!toast) return;
 
-    toast.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'text-white');
-    
-    if (type === 'success') {
-      toast.classList.add('bg-success', 'text-white');
-      toastIcon.className = 'fas fa-check-circle me-2';
-    } else if (type === 'error') {
-      toast.classList.add('bg-danger', 'text-white');
-      toastIcon.className = 'fas fa-times-circle me-2';
-    } else {
-      toast.classList.add('bg-warning');
-      toastIcon.className = 'fas fa-exclamation-circle me-2';
+        toast.classList.remove('toast-success', 'toast-error', 'show');
+        void toast.offsetWidth; // Force reflow for re-animation
+
+        if (type === 'success') {
+            toast.classList.add('toast-success');
+            icon.className = 'fas fa-check-circle';
+        } else {
+            toast.classList.add('toast-error');
+            icon.className = 'fas fa-exclamation-circle';
+        }
+
+        msg.textContent = message;
+        toast.classList.add('show');
+
+        setTimeout(function() {
+            toast.classList.remove('show');
+        }, 3500);
     }
-    
-    toastMessage.textContent = message;
-    const bsToast = new bootstrap.Toast(toast, { delay: 3000 });
-    bsToast.show();
-  }
 
-  const deleteModalEl = document.getElementById('deleteConfirmModal');
-  const deleteModal = new bootstrap.Modal(deleteModalEl);
-  
-  // Tombol delete - buka modal konfirmasi
-  document.querySelectorAll('.btn-delete').forEach(button => {
-    button.addEventListener('click', () => {
-      const id = button.dataset.id;
-      const name = button.dataset.name;
-      document.getElementById('deleteMeetingId').value = id;
-      document.getElementById('deleteMeetingName').textContent = name;
-      deleteModal.show();
-    });
-  });
+    // ── Delete Modal Logic ──
+    var deleteModalEl = document.getElementById('deleteConfirmModal');
+    var deleteModal = new bootstrap.Modal(deleteModalEl);
 
-  // Konfirmasi hapus
-  const confirmBtn = document.getElementById('confirmDeleteBtn');
-  
-  confirmBtn.addEventListener('click', () => {
-    const id = document.getElementById('deleteMeetingId').value;
-    
-    // Gunakan siteBaseUrl yang didefinisikan di main.php
-    fetch(siteBaseUrl + 'meeting/delete', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: 'id=' + id
-    })
-    .then(res => res.json())
-    .then(data => {
-      deleteModal.hide();
-      if (data.success) {
-        showToast('Meeting berhasil dihapus!', 'success');
-        // Reload content partial instead of full page reload for smoother UX
-        loadContent('meeting'); 
-      } else {
-        showToast(data.message || 'Gagal menghapus meeting', 'error');
-      }
-    })
-    .catch(err => {
-      deleteModal.hide();
-      showToast('Terjadi kesalahan!', 'error');
-      console.error(err);
+    document.querySelectorAll('.btn-delete').forEach(function(button) {
+        button.addEventListener('click', function() {
+            document.getElementById('deleteMeetingId').value = this.dataset.id;
+            document.getElementById('deleteMeetingName').textContent = this.dataset.name;
+            deleteModal.show();
+        });
     });
-  });
 
-  // Form create meeting
-  const formMeeting = document.getElementById('form-meeting');
-  formMeeting.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-    
-    fetch(siteBaseUrl + 'meeting/save', {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-      // Tutup modal create
-      const createModalEl = document.getElementById('createMeetingModal');
-      const createModal = bootstrap.Modal.getInstance(createModalEl) || new bootstrap.Modal(createModalEl);
-      createModal.hide();
-      
-      showToast('Meeting berhasil dibuat!', 'success');
-      loadContent('meeting'); // Reload content partial
-    })
-    .catch(err => {
-      showToast('Gagal membuat meeting', 'error');
-      console.error(err);
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+        var id = document.getElementById('deleteMeetingId').value;
+        var btn = this;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Menghapus...';
+
+        fetch(baseUrl + 'meeting/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'id=' + encodeURIComponent(id)
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            deleteModal.hide();
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-trash-alt me-1"></i> Ya, Hapus';
+
+            if (data.success) {
+                showToast('Meeting berhasil dihapus!', 'success');
+                setTimeout(function() { loadContent('meeting'); }, 400);
+            } else {
+                showToast(data.message || 'Gagal menghapus meeting', 'error');
+            }
+        })
+        .catch(function(err) {
+            deleteModal.hide();
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-trash-alt me-1"></i> Ya, Hapus';
+            showToast('Terjadi kesalahan jaringan!', 'error');
+            console.error('Delete error:', err);
+        });
     });
-  });
+
+    // ── Create Form Logic ──
+    document.getElementById('form-meeting').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var form = this;
+        var formData = new FormData(form);
+        var submitBtn = form.querySelector('.btn-modal-save');
+        var originalText = submitBtn.innerHTML;
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Menyimpan...';
+
+        fetch(baseUrl + 'meeting/save', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            var createModalEl = document.getElementById('createMeetingModal');
+            var createModal = bootstrap.Modal.getInstance(createModalEl) || new bootstrap.Modal(createModalEl);
+            createModal.hide();
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            form.reset();
+
+            if (data.success !== false) {
+                showToast('Meeting berhasil dibuat!', 'success');
+                setTimeout(function() { loadContent('meeting'); }, 400);
+            } else {
+                showToast(data.message || 'Gagal membuat meeting', 'error');
+            }
+        })
+        .catch(function(err) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            showToast('Gagal membuat meeting. Periksa koneksi Anda.', 'error');
+            console.error('Create error:', err);
+        });
+    });
 }
 </script>

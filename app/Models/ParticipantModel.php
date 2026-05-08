@@ -8,6 +8,16 @@ class ParticipantModel extends Model
 {
     protected $table = 'participants';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['meeting_id', 'name', 'barcode_id', 'status', 'scanned_at'];
+    protected $allowedFields = ['user_id', 'meeting_id', 'name', 'barcode_id', 'status', 'scanned_at'];
     protected $useTimestamps = true;
+
+    /**
+     * Get participants milik user tertentu per meeting
+     */
+    public function getByUserAndMeeting(int $userId, int $meetingId)
+    {
+        return $this->where('user_id', $userId)
+                    ->where('meeting_id', $meetingId)
+                    ->findAll();
+    }
 }

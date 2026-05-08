@@ -1,219 +1,480 @@
-<div class="container-fluid p-0">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800 fw-bold text-dark">Dashboard</h1>
-    </div>
-
-    <!-- Welcome Banner -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card border-left-primary shadow h-100 py-2 border-0 rounded-3" style="background: linear-gradient(45deg, #4e73df, #224abe);">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2 text-white">
-                            <div class="h5 font-weight-bold text-uppercase mb-1">Selamat Datang di Minutes of Meeting</div>
-                            <div class="mb-0">Kelola rapat, absensi, dan notulensi dengan mudah dan efisien dalam satu platform.</div>
-                        </div>
-                        <div class="col-auto text-white-50">
-                            <i class="fas fa-clipboard-list fa-2x text-white"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cards Row -->
-    <div class="row">
-        <!-- Manage Meeting -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100 py-2 hover-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Manage Meeting</div>
-                            <div class="h6 mb-0 font-weight-bold text-gray-800">Jadwal & Rapat</div>
-                            <small class="text-muted">Buat dan atur jadwal</small>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon-circle bg-primary bg-opacity-10 text-primary p-3 rounded-circle">
-                                <i class="fas fa-calendar-alt fa-lg"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Participant Input -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100 py-2 hover-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Participant</div>
-                            <div class="h6 mb-0 font-weight-bold text-gray-800">Absensi Peserta</div>
-                            <small class="text-muted">Scan & Input kehadiran</small>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon-circle bg-success bg-opacity-10 text-success p-3 rounded-circle">
-                                <i class="fas fa-users fa-lg"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Add Discussion -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100 py-2 hover-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Discussion</div>
-                            <div class="h6 mb-0 font-weight-bold text-gray-800">Notulensi</div>
-                            <small class="text-muted">Catat poin pembahasan</small>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon-circle bg-info bg-opacity-10 text-info p-3 rounded-circle">
-                                <i class="fas fa-comments fa-lg"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Export PDF -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100 py-2 hover-card">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Export</div>
-                            <div class="h6 mb-0 font-weight-bold text-gray-800">Laporan PDF</div>
-                            <small class="text-muted">Unduh hasil rapat</small>
-                        </div>
-                        <div class="col-auto">
-                             <div class="icon-circle bg-warning bg-opacity-10 text-warning p-3 rounded-circle">
-                                <i class="fas fa-file-pdf fa-lg"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Upcoming Meeting Alert -->
-    <div class="row" id="upcoming-meeting" style="display:none;">
-        <div class="col-12">
-             <div class="card shadow-sm border-0 border-start border-4 border-info">
-                <div class="card-body">
-                    <h5 class="card-title text-info"><i class="fas fa-bell me-2"></i> Meeting Akan Datang</h5>
-                    <div id="meeting-detail" class="text-dark"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Floating Help Button -->
-<a href="https://wa.me/6285702444966" target="_blank" class="btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center whatsapp-float" 
-   title="Hubungi CS via WhatsApp">
-  <i class="fab fa-whatsapp fa-2x"></i>
-</a>
-
 <style>
-    .hover-card {
-        transition: transform 0.2s;
+    /* ── Dashboard Scoped Styles ── */
+    .dash-welcome {
+        margin-bottom: 2rem;
+    }
+    .dash-welcome h2 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0F172A;
+        margin-bottom: 4px;
+        letter-spacing: -0.025em;
+    }
+    .dash-welcome p {
+        color: #64748B;
+        font-size: 0.9rem;
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    /* Feature Cards Grid */
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+    @media (max-width: 768px) {
+        .feature-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px;
+        }
+    }
+
+    .feature-card {
+        background: #fff;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 20px;
         cursor: pointer;
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                    border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        position: relative;
+        overflow: hidden;
     }
-    .hover-card:hover {
-        transform: translateY(-5px);
+    .feature-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--card-accent, #0F766E);
+        opacity: 0;
+        transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        border-color: transparent;
+    }
+    .feature-card:hover::after {
+        opacity: 1;
+    }
+    .feature-card:active {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
 
-    .whatsapp-float {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 60px;
-        height: 60px;
-        z-index: 999;
-        background-color: #25d366;
-        border: none;
-        animation: pulse-green 2s infinite;
+    .feature-card .card-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
-
-    .whatsapp-float:hover {
-        background-color: #128c7e;
+    .feature-card:hover .card-icon {
         transform: scale(1.1);
-        transition: all 0.3s ease;
     }
 
-    @keyframes pulse-green {
-        0% {
-            box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    .feature-card .card-text h6 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: #0F172A;
+        margin-bottom: 3px;
+    }
+    .feature-card .card-text p {
+        font-size: 0.8rem;
+        color: #64748B;
+        margin: 0;
+        line-height: 1.45;
+    }
+
+    /* Card accent colors */
+    .feature-card.card-meeting    { --card-accent: #0F766E; }
+    .feature-card.card-participant { --card-accent: #059669; }
+    .feature-card.card-discussion { --card-accent: #0369A1; }
+    .feature-card.card-export     { --card-accent: #D97706; }
+
+    .icon-meeting     { background: rgba(15, 118, 110, 0.08); color: #0F766E; }
+    .icon-participant { background: rgba(5, 150, 105, 0.08);  color: #059669; }
+    .icon-discussion  { background: rgba(3, 105, 161, 0.08);  color: #0369A1; }
+    .icon-export      { background: rgba(217, 119, 6, 0.08);  color: #D97706; }
+
+    /* Upcoming Meeting Section */
+    .upcoming-section {
+        background: #fff;
+        border: 1px solid #E2E8F0;
+        border-left: 3px solid #0F766E;
+        border-radius: 12px;
+        padding: 24px;
+        display: none;
+        animation: dashSlideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .upcoming-section.show {
+        display: block;
+    }
+
+    .upcoming-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #F1F5F9;
+    }
+    .upcoming-header .icon-bell {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: rgba(15, 118, 110, 0.08);
+        color: #0F766E;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+    }
+    .upcoming-header h5 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #0F172A;
+        margin: 0;
+    }
+
+    .upcoming-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    @media (max-width: 768px) {
+        .upcoming-body {
+            flex-direction: column;
         }
-        70% {
-            box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+    }
+
+    .upcoming-info h4 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0F172A;
+        margin-bottom: 8px;
+    }
+    .upcoming-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    .upcoming-meta span {
+        font-size: 0.85rem;
+        color: #64748B;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .upcoming-meta span i {
+        width: 16px;
+        text-align: center;
+        color: #94A3B8;
+        font-size: 0.82rem;
+    }
+
+    .upcoming-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 12px;
+        flex-shrink: 0;
+    }
+    @media (max-width: 768px) {
+        .upcoming-actions {
+            align-items: flex-start;
+            width: 100%;
         }
-        100% {
-            box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
+
+    .countdown-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    .countdown-badge.live {
+        background: rgba(15, 118, 110, 0.08);
+        color: #0F766E;
+    }
+    .countdown-badge.done {
+        background: rgba(100, 116, 139, 0.08);
+        color: #64748B;
+    }
+
+    .upcoming-btns {
+        display: flex;
+        gap: 8px;
+    }
+    @media (max-width: 768px) {
+        .upcoming-btns {
+            width: 100%;
+        }
+        .upcoming-btns .btn-upcoming {
+            flex: 1;
+            justify-content: center;
+        }
+    }
+
+    .btn-upcoming {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .btn-upcoming.btn-absensi {
+        background: #0F766E;
+        color: #fff;
+    }
+    .btn-upcoming.btn-absensi:hover {
+        background: #0D9488;
+        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);
+        transform: translateY(-1px);
+    }
+    .btn-upcoming.btn-notulensi {
+        background: rgba(3, 105, 161, 0.1);
+        color: #0369A1;
+    }
+    .btn-upcoming.btn-notulensi:hover {
+        background: rgba(3, 105, 161, 0.18);
+        transform: translateY(-1px);
+    }
+
+    /* WhatsApp Float */
+    .wa-float {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #25D366;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        text-decoration: none;
+        z-index: 999;
+        box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        animation: waPulse 2.5s ease-in-out infinite;
+    }
+    .wa-float:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45);
+        color: #fff;
+    }
+    .wa-float:active {
+        transform: scale(1.05);
+    }
+
+    @keyframes waPulse {
+        0%, 100% {
+            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+        }
+        50% {
+            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35),
+                        0 0 0 12px rgba(37, 211, 102, 0.08);
+        }
+    }
+
+    @keyframes dashSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
     }
 </style>
 
+<!-- Welcome Section -->
+<div class="container-fluid p-0">
+    <div class="dash-welcome mb-5">
+        <h2>Selamat Datang, <?= esc(session()->get('user')['username'] ?? 'User') ?></h2>
+        <p>Kelola rapat, absensi, dan notulensi dalam satu platform.</p>
+    </div>
+
+    <!-- Feature Cards Grid -->
+    <div class="feature-grid">
+        <!-- Card: Meeting -->
+        <div class="feature-card card-meeting"
+             onclick="loadContent('meeting'); setActive(document.querySelector('a[onclick*=meeting]'))">
+            <div class="card-icon icon-meeting">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="card-text">
+                <h6>Manage Meeting</h6>
+                <p>Buat dan atur jadwal rapat dengan mudah</p>
+            </div>
+        </div>
+
+        <!-- Card: Participant -->
+        <div class="feature-card card-participant"
+             onclick="loadContent('participant'); setActive(document.querySelector('a[onclick*=participant]'))">
+            <div class="card-icon icon-participant">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="card-text">
+                <h6>Participant</h6>
+                <p>Scan dan input kehadiran peserta rapat</p>
+            </div>
+        </div>
+
+        <!-- Card: Discussion -->
+        <div class="feature-card card-discussion"
+             onclick="loadContent('discussion'); setActive(document.querySelector('a[onclick*=discussion]'))">
+            <div class="card-icon icon-discussion">
+                <i class="fas fa-comments"></i>
+            </div>
+            <div class="card-text">
+                <h6>Discussion</h6>
+                <p>Catat poin pembahasan dan notulensi rapat</p>
+            </div>
+        </div>
+
+        <!-- Card: Export -->
+        <div class="feature-card card-export"
+             onclick="loadContent('export'); setActive(document.querySelector('a[onclick*=export]'))">
+            <div class="card-icon icon-export">
+                <i class="fas fa-file-pdf"></i>
+            </div>
+            <div class="card-text">
+                <h6>Export PDF</h6>
+                <p>Unduh laporan hasil rapat dalam format PDF</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Meeting Section -->
+    <div class="upcoming-section" id="upcoming-meeting">
+        <div class="upcoming-header">
+            <div class="icon-bell"><i class="fas fa-bell"></i></div>
+            <h5>Meeting Akan Datang</h5>
+        </div>
+        <div class="upcoming-body" id="meeting-detail"></div>
+    </div>
+</div>
+
+<!-- WhatsApp Float -->
+<a href="https://wa.me/6285702444966"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="wa-float"
+   title="Hubungi via WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
 <script>
 {
-  const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
+    const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
 
-  function getTimeRemaining(meetingTime) {
-    const now = new Date().getTime();
-    const target = new Date(meetingTime).getTime();
-    const diff = target - now;
+    /**
+     * Calculate time remaining until meeting and return formatted badge HTML
+     * @param {string} meetingTime - ISO datetime string of the meeting
+     * @returns {string} HTML string for countdown badge
+     */
+    function getTimeRemaining(meetingTime) {
+        const now = new Date().getTime();
+        const target = new Date(meetingTime).getTime();
+        const diff = target - now;
 
-    if (diff <= 0) return '<span class="badge bg-secondary">Sedang berlangsung / Selesai</span>';
+        if (diff <= 0) {
+            return '<span class="countdown-badge done"><i class="fas fa-check-circle"></i> Sedang berlangsung / Selesai</span>';
+        }
 
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
-    return `<span class="badge bg-info text-white">Dimulai dalam ${hours} jam ${minutes} menit</span>`;
-  }
+        let text = '';
+        if (days > 0) text += days + ' hari ';
+        text += hours + ' jam ' + minutes + ' menit';
 
-  fetch(baseUrl + 'v1/reminder')
-    .then(res => res.json())
-    .then(data => {
-      if (data.length > 0) {
-        const meeting = data[0]; 
-        const detail = `
-          <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-              <div>
-                  <h4 class="fw-bold mb-1">${meeting.nama_meeting}</h4>
-                  <p class="mb-1 text-muted"><i class="fas fa-map-marker-alt me-2"></i>${meeting.tempat}</p>
-                  <p class="mb-0 text-muted"><i class="far fa-clock me-2"></i>${new Date(meeting.tanggal).toLocaleString()}</p>
-              </div>
-              <div class="mt-3 mt-md-0 text-md-end">
-                  <div class="mb-2">${getTimeRemaining(meeting.tanggal)}</div>
-                  <div class="d-flex gap-2 justify-content-md-end">
-                      <button onclick="location.hash='#participant-content'" class="btn btn-sm btn-success rounded-pill px-3 shadow-sm">
-                        <i class="fas fa-user-check me-1"></i> Absensi
-                      </button>
-                      <button onclick="location.hash='#discussion-content'" class="btn btn-sm btn-info text-white rounded-pill px-3 shadow-sm">
-                        <i class="fas fa-edit me-1"></i> Notulensi
-                      </button>
-                  </div>
-              </div>
-          </div>
-        `;
-        document.getElementById('meeting-detail').innerHTML = detail;
-        document.getElementById('upcoming-meeting').style.display = 'block';
-      }
-    })
-    .catch(err => console.error('Error loading reminder:', err));
+        return '<span class="countdown-badge live"><i class="fas fa-clock"></i> Dimulai dalam ' + text + '</span>';
+    }
+
+    /**
+     * Fetch upcoming meeting reminder from API and render if available
+     */
+    fetch(baseUrl + 'v1/reminder')
+        .then(function(res) {
+            if (!res.ok) throw new Error('Network response was not ok');
+            return res.json();
+        })
+        .then(function(data) {
+            if (data.length > 0) {
+                var meeting = data[0];
+                var dateObj = new Date(meeting.tanggal);
+                var formattedDate = dateObj.toLocaleDateString('id-ID', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                var formattedTime = dateObj.toLocaleTimeString('id-ID', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }) + ' WIB';
+
+                var detail = '' +
+                    '<div class="upcoming-info">' +
+                        '<h4>' + meeting.nama_meeting + '</h4>' +
+                        '<div class="upcoming-meta">' +
+                            '<span><i class="fas fa-map-marker-alt"></i> ' + meeting.tempat + '</span>' +
+                            '<span><i class="fas fa-calendar-day"></i> ' + formattedDate + '</span>' +
+                            '<span><i class="fas fa-clock"></i> ' + formattedTime + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="upcoming-actions">' +
+                        '<div>' + getTimeRemaining(meeting.tanggal) + '</div>' +
+                        '<div class="upcoming-btns">' +
+                            '<button class="btn-upcoming btn-absensi" onclick="loadContent(\'participant\'); setActive(document.querySelector(\'a[onclick*=participant]\'))">' +
+                                '<i class="fas fa-user-check"></i> Absensi' +
+                            '</button>' +
+                            '<button class="btn-upcoming btn-notulensi" onclick="loadContent(\'discussion\'); setActive(document.querySelector(\'a[onclick*=discussion]\'))">' +
+                                '<i class="fas fa-edit"></i> Notulensi' +
+                            '</button>' +
+                        '</div>' +
+                    '</div>';
+
+                document.getElementById('meeting-detail').innerHTML = detail;
+                document.getElementById('upcoming-meeting').classList.add('show');
+            }
+        })
+        .catch(function(err) {
+            console.error('Error loading reminder:', err);
+        });
 }
 </script>

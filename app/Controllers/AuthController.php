@@ -37,6 +37,7 @@ class AuthController extends Controller
                     'username' => $user['username'],
                     'email' => $user['email'],
                     'role' => $user['role'],
+                    'foto' => $user['foto'] ?? 'default.png',
                     'mode' => $user['mode'] ?? 'light', 
                     'created_at' => $user['created_at'], 
                     'isLoggedIn' => true

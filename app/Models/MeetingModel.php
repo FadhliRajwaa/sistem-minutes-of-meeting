@@ -14,10 +14,18 @@ class MeetingModel extends Model
     protected $returnType     = 'array';
     protected $useSoftDeletes = false; 
 
-    protected $allowedFields = ['nama_meeting', 'tanggal', 'tempat', 'status']; 
+    protected $allowedFields = ['user_id', 'nama_meeting', 'tanggal', 'tempat', 'status']; 
 
     protected $useTimestamps = false; 
     protected $validationRules    = [];
     protected $validationMessages = [];
     protected $skipValidation     = false;
+
+    /**
+     * Get meetings milik user tertentu
+     */
+    public function getByUser(int $userId)
+    {
+        return $this->where('user_id', $userId)->findAll();
+    }
 }
