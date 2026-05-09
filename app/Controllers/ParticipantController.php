@@ -7,9 +7,6 @@ use App\Models\MeetingModel;
 
 class ParticipantController extends BaseController
 {
-    /**
-     * Helper: ambil user_id dari session
-     */
     private function getUserId(): int
     {
         return (int) session()->get('user')['id'];
@@ -24,37 +21,52 @@ class ParticipantController extends BaseController
     {
         $userId = $this->getUserId();
 
-        // Verifikasi meeting milik user ini
+        // Verifikasi meeting milik user
         $meetingModel = new MeetingModel();
-        $meeting = $meetingModel->where('id', $meetingId)->where('user_id', $userId)->first();
+        $meeting = $meetingModel->select('id')
+            ->where('id', $meetingId)
+            ->where('user_id', $userId)
+            ->first();
         
         if (!$meeting) {
             return $this->response->setJSON([]);
         }
 
         $model = new ParticipantModel();
-        return $this->response->setJSON(
-            $model->where('meeting_id', $meetingId)->where('user_id', $userId)->findAll()
-        );
+        $participants = $model->select('id, name, barcode_id, status, scanned_at')
+            ->where('meeting_id', $meetingId)
+            ->where('user_id', $userId)
+            ->orderBy('name', 'ASC')
+            ->findAll();
+
+        return $this->response
+            ->setHeader('Cache-Control', 'private, max-age=3')
+            ->setJSON($participants);
     }
 
     public function addParticipant()
     {
         $userId = $this->getUserId();
         $meetingId = $this->request->getPost('meeting_id');
+        $name = trim($this->request->getPost('name') ?? '');
+        $barcodeId = trim($this->request->getPost('barcode_id') ?? '');
 
-        // Verifikasi meeting milik user ini
+        // Validasi input
+        if (empty($meetingId) || empty($name) || empty($barcodeId)) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Semua field harus diisi']);
+        }
+
+        // Verifikasi meeting milik user
         $meetingModel = new MeetingModel();
-        $meeting = $meetingModel->where('id', $meetingId)->where('user_id', $userId)->first();
-        
+        $meeting = $meetingModel->select('id')->where('id', $meetingId)->where('user_id', $userId)->first();
         if (!$meeting) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Meeting tidak ditemukan']);
         }
 
         $model = new ParticipantModel();
         
-        // Cek apakah barcode_id sudah ada di meeting yang sama
-        $existing = $model->where('barcode_id', $this->request->getPost('barcode_id'))
+        // Cek duplikasi barcode di meeting yang sama
+        $existing = $model->where('barcode_id', $barcodeId)
                           ->where('meeting_id', $meetingId)
                           ->first();
         
@@ -62,14 +74,14 @@ class ParticipantController extends BaseController
             return $this->response->setJSON(['status' => 'error', 'message' => 'Barcode ID sudah terdaftar di meeting ini']);
         }
 
-        $data = [
+        $model->insert([
             'user_id'    => $userId,
             'meeting_id' => $meetingId,
-            'name'       => $this->request->getPost('name'),
-            'barcode_id' => $this->request->getPost('barcode_id'),
+            'name'       => $name,
+            'barcode_id' => $barcodeId,
             'status'     => 'belum_hadir'
-        ];
-        $model->insert($data);
+        ]);
+
         return $this->response->setJSON(['status' => 'success', 'message' => 'Peserta berhasil ditambahkan']);
     }
 
@@ -77,9 +89,12 @@ class ParticipantController extends BaseController
     {
         $model = new ParticipantModel();
         $userId = $this->getUserId();
-        $barcode = $this->request->getPost('barcode');
+        $barcode = trim($this->request->getPost('barcode') ?? '');
         
-        // Cari peserta berdasarkan barcode DAN user_id
+        if (empty($barcode)) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Barcode tidak valid']);
+        }
+
         $participant = $model->where('barcode_id', $barcode)
                             ->where('user_id', $userId)
                             ->first();
@@ -91,11 +106,10 @@ class ParticipantController extends BaseController
             ]);
         }
 
-        // Cek apakah sudah hadir
         if ($participant['status'] === 'hadir') {
             return $this->response->setJSON([
                 'status' => 'already_present',
-                'message' => $participant['name'] . ' sudah tercatat hadir sebelumnya'
+                'message' => $participant['name'] . ' sudah tercatat hadir'
             ]);
         }
 
@@ -112,19 +126,19 @@ class ParticipantController extends BaseController
 
     public function absen()
     {
-        $barcode = $this->request->getPost('barcode');
+        $barcode = trim($this->request->getPost('barcode') ?? '');
         $meetingId = $this->request->getPost('meeting_id');
         $userId = $this->getUserId();
 
-        // Verifikasi meeting milik user ini
+        if (empty($barcode) || empty($meetingId)) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Data tidak lengkap']);
+        }
+
+        // Verifikasi meeting milik user
         $meetingModel = new MeetingModel();
-        $meeting = $meetingModel->where('id', $meetingId)->where('user_id', $userId)->first();
-        
+        $meeting = $meetingModel->select('id')->where('id', $meetingId)->where('user_id', $userId)->first();
         if (!$meeting) {
-            return $this->response->setJSON([
-                'success' => false, 
-                'message' => 'Meeting tidak ditemukan'
-            ]);
+            return $this->response->setJSON(['success' => false, 'message' => 'Meeting tidak ditemukan']);
         }
 
         $model = new ParticipantModel();
@@ -140,11 +154,10 @@ class ParticipantController extends BaseController
             ]);
         }
 
-        // Cek apakah sudah hadir
         if ($participant['status'] === 'hadir') {
             return $this->response->setJSON([
                 'success' => true, 
-                'message' => $participant['name'] . ' sudah tercatat hadir sebelumnya',
+                'message' => $participant['name'] . ' sudah tercatat hadir',
                 'already_present' => true
             ]);
         }

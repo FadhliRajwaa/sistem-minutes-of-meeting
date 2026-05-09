@@ -7,9 +7,6 @@ use App\Models\MeetingModel;
 
 class DiscussionController extends BaseController
 {
-    /**
-     * Helper: ambil user_id dari session
-     */
     private function getUserId(): int
     {
         return (int) session()->get('user')['id'];
@@ -18,69 +15,97 @@ class DiscussionController extends BaseController
     public function index()
     {
         $meetingModel = new MeetingModel();
-
-        // Hanya tampilkan meeting milik user ini
-        $data['meetings'] = $meetingModel->where('user_id', $this->getUserId())->findAll();
+        $data['meetings'] = $meetingModel
+            ->select('id, nama_meeting')
+            ->where('user_id', $this->getUserId())
+            ->orderBy('tanggal', 'DESC')
+            ->findAll();
 
         return view('partials/discussion-content', $data);
     }
 
     public function save()
     {
-        $discussionModel = new DiscussionModel();
         $userId = $this->getUserId();
-
-        // Verifikasi meeting milik user ini
-        $meetingModel = new MeetingModel();
         $meetingId = $this->request->getPost('meeting_id');
+        $topik = trim($this->request->getPost('topik') ?? '');
+        $pembahasan = $this->request->getPost('pembahasan');
+        $tanggal = $this->request->getPost('tanggal');
+        $namaNotulis = trim($this->request->getPost('nama_notulis') ?? '');
+
+        // Validasi
+        if (empty($meetingId) || empty($topik) || empty($tanggal) || empty($namaNotulis)) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Semua field wajib diisi']);
+        }
+
+        // Verifikasi meeting milik user
+        $meetingModel = new MeetingModel();
         $meeting = $meetingModel->where('id', $meetingId)->where('user_id', $userId)->first();
-        
         if (!$meeting) {
             return $this->response->setJSON(['success' => false, 'message' => 'Meeting tidak ditemukan']);
         }
 
-        $pembahasan = $this->request->getPost('pembahasan');
-        $pembahasanJson = json_encode($pembahasan);
+        // Filter pembahasan kosong
+        if (is_array($pembahasan)) {
+            $pembahasan = array_values(array_filter($pembahasan, fn($p) => trim($p) !== ''));
+        }
 
+        $discussionModel = new DiscussionModel();
         $discussionModel->save([
             'user_id'      => $userId,
             'meeting_id'   => $meetingId,
-            'topik'        => $this->request->getPost('topik'),
-            'pembahasan'   => $pembahasanJson,
-            'tanggal'      => $this->request->getPost('tanggal'),
-            'nama_notulis' => $this->request->getPost('nama_notulis')
+            'topik'        => $topik,
+            'pembahasan'   => json_encode($pembahasan),
+            'tanggal'      => $tanggal,
+            'nama_notulis' => $namaNotulis
         ]);
 
-        return $this->response->setJSON(['success' => true, 'message' => 'Berhasil disimpan!']);
+        return $this->response->setJSON(['success' => true, 'message' => 'Notulensi berhasil disimpan!']);
     }
 
     public function search()
     {
-        $keyword = $this->request->getGet('keyword');
+        $keyword = trim($this->request->getGet('keyword') ?? '');
         $userId = $this->getUserId();
 
-        $model = new DiscussionModel();
+        if (empty($keyword)) {
+            // Return semua data user jika keyword kosong
+            $model = new DiscussionModel();
+            $data = $model->select('id, topik, nama_notulis, tanggal')
+                          ->where('user_id', $userId)
+                          ->orderBy('tanggal', 'DESC')
+                          ->findAll();
+            return $this->response->setJSON($data);
+        }
 
-        $data = $model->where('user_id', $userId)
+        $model = new DiscussionModel();
+        $data = $model->select('id, topik, nama_notulis, tanggal')
+                    ->where('user_id', $userId)
                     ->groupStart()
                         ->like('topik', $keyword)
                         ->orLike('nama_notulis', $keyword)
                         ->orLike('tanggal', $keyword)
                     ->groupEnd()
+                    ->orderBy('tanggal', 'DESC')
                     ->findAll();
 
-        return $this->response->setJSON($data);
+        return $this->response
+            ->setHeader('Cache-Control', 'private, max-age=5')
+            ->setJSON($data);
     }
 
     public function delete()
     {
         $json = $this->request->getJSON();
-        $id = $json->id;
-        $userId = $this->getUserId();
+        $id = $json->id ?? null;
+        
+        if (!$id) {
+            return $this->response->setJSON(['success' => false, 'message' => 'ID tidak valid']);
+        }
 
+        $userId = $this->getUserId();
         $model = new DiscussionModel();
         
-        // Pastikan discussion milik user ini
         $discussion = $model->where('id', $id)->where('user_id', $userId)->first();
         if (!$discussion) {
             return $this->response->setJSON(['success' => false, 'message' => 'Data tidak ditemukan']);
@@ -88,8 +113,8 @@ class DiscussionController extends BaseController
 
         if ($model->delete($id)) {
             return $this->response->setJSON(['success' => true]);
-        } else {
-            return $this->response->setJSON(['success' => false, 'message' => 'Gagal menghapus data']);
         }
+
+        return $this->response->setJSON(['success' => false, 'message' => 'Gagal menghapus data']);
     }
 }

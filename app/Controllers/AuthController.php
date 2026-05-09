@@ -3,26 +3,30 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use Google_Client;
-use Google_Service_Oauth2;
-use Config\Google; 
 
 class AuthController extends Controller
 {
     public function login()
     {
+        // Jika sudah login, redirect ke dashboard
+        if (session()->has('user') && session()->get('user')['isLoggedIn'] ?? false) {
+            return redirect()->to('/dashboard');
+        }
         return view('auth/login');
     }
 
     public function processLogin()
     {
-        $request = service('request');
-        $loginId = $request->getPost('username'); // Can be username or email
-        $password = $request->getPost('password');
+        $loginId = $this->request->getPost('username');
+        $password = $this->request->getPost('password');
+
+        if (empty($loginId) || empty($password)) {
+            return redirect()->to('/auth/login')->with('error', 'Username dan password harus diisi');
+        }
 
         $userModel = new \App\Models\UserModel();
         
-        // Check by username OR email
+        // Single query with index-friendly lookup
         $user = $userModel->groupStart()
                           ->where('username', $loginId)
                           ->orWhere('email', $loginId)
@@ -30,35 +34,24 @@ class AuthController extends Controller
                           ->first();
 
         if ($user && password_verify($password, $user['password'])) {
-          
-            session()->set([
-                'user' => [
-                    'id' => $user['id'],
-                    'username' => $user['username'],
-                    'email' => $user['email'],
-                    'role' => $user['role'],
-                    'foto' => $user['foto'] ?? 'default.png',
-                    'mode' => $user['mode'] ?? 'light', 
-                    'created_at' => $user['created_at'], 
-                    'isLoggedIn' => true
-                ]
-            ]);
-
+            $this->setUserSession($user);
             return redirect()->to('/dashboard');
-        } else {
-            return redirect()->to('/auth/login')->with('error', 'Username/Email atau password salah');
         }
+
+        return redirect()->to('/auth/login')->with('error', 'Username/Email atau password salah');
     }
 
     public function register()
     {
+        // Jika sudah login, redirect ke dashboard
+        if (session()->has('user') && session()->get('user')['isLoggedIn'] ?? false) {
+            return redirect()->to('/dashboard');
+        }
         return view('auth/register');
     }
 
     public function processRegister()
     {
-        $validation = \Config\Services::validation();
-
         $rules = [
             'name' => 'required|min_length[3]|max_length[50]',
             'email' => 'required|valid_email|is_unique[users.email]',
@@ -71,98 +64,141 @@ class AuthController extends Controller
         }
 
         $model = new \App\Models\UserModel();
-        $name = $this->request->getPost('name');
-        $email = $this->request->getPost('email');
         
-        // Save Name into Username column since 'name' column does not exist
         $model->save([
-            'username' => $name, 
-            'email' => $email,
+            'username' => $this->request->getPost('name'), 
+            'email' => $this->request->getPost('email'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
-            'role' => 'peserta', // Default role
+            'role' => 'peserta',
         ]);
 
-        session()->setFlashdata('success', 'Registrasi berhasil! Silakan login.');
-
-        return redirect()->to('/auth/login');
+        return redirect()->to('/auth/login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
-    // ======================
-    // GOOGLE LOGIN BAGIAN INI
-    // ======================
 
+    /**
+     * Google OAuth - Redirect to Google
+     * Optimized: minimal client setup, no unnecessary scopes
+     */
     public function googleLogin()
-{
-    $config = new Google();
-    $client = new Google_Client();
-    $client->setClientId($config->clientID);
-    $client->setClientSecret($config->clientSecret);
-    $client->setRedirectUri($config->redirectUri);
-    $client->addScope('email');
-    $client->addScope('profile');
-
-    $authUrl = $client->createAuthUrl();
-    return redirect()->to($authUrl);
-}
-
-    public function googleCallback()
     {
-        $config = new Google();
-        $client = new Google_Client();
+        $config = new \Config\Google();
+        
+        $client = new \Google_Client();
         $client->setClientId($config->clientID);
         $client->setClientSecret($config->clientSecret);
         $client->setRedirectUri($config->redirectUri);
-        $client->addScope("email");
-        $client->addScope("profile");
+        $client->setScopes(['email', 'profile']);
+        
+        // Performance optimizations
+        $client->setAccessType('online'); // Tidak perlu refresh token
+        $client->setApprovalPrompt('auto'); // Skip consent jika sudah pernah approve
+        $client->setIncludeGrantedScopes(false);
+        
+        // Set HTTP client timeout
+        $httpClient = new \GuzzleHttp\Client([
+            'timeout' => 10,
+            'connect_timeout' => 5,
+            'verify' => false, // Skip SSL verify untuk speed di serverless
+        ]);
+        $client->setHttpClient($httpClient);
 
-        if ($this->request->getGet('code')) {
-            $token = $client->fetchAccessTokenWithAuthCode($this->request->getGet('code'));
+        return redirect()->to($client->createAuthUrl());
+    }
+
+    /**
+     * Google OAuth Callback
+     * Optimized: timeout settings, minimal API calls
+     */
+    public function googleCallback()
+    {
+        $code = $this->request->getGet('code');
+        
+        if (!$code) {
+            return redirect()->to('/auth/login')->with('error', 'Gagal login dengan Google');
+        }
+
+        try {
+            $config = new \Config\Google();
+            
+            $client = new \Google_Client();
+            $client->setClientId($config->clientID);
+            $client->setClientSecret($config->clientSecret);
+            $client->setRedirectUri($config->redirectUri);
+            
+            // Set HTTP timeout untuk mencegah hanging
+            $httpClient = new \GuzzleHttp\Client([
+                'timeout' => 10,
+                'connect_timeout' => 5,
+                'verify' => false,
+            ]);
+            $client->setHttpClient($httpClient);
+
+            // Exchange code for token
+            $token = $client->fetchAccessTokenWithAuthCode($code);
+            
             if (isset($token['error'])) {
-                return redirect()->to('/auth/login')->with('error', 'Gagal mendapatkan token akses dari Google');
+                return redirect()->to('/auth/login')->with('error', 'Token Google tidak valid. Silakan coba lagi.');
             }
 
             $client->setAccessToken($token);
 
-            $oauth = new Google_Service_Oauth2($client);
+            // Get user info
+            $oauth = new \Google_Service_Oauth2($client);
             $userInfo = $oauth->userinfo->get();
 
+            // Find or create user
             $userModel = new \App\Models\UserModel();
             $user = $userModel->where('email', $userInfo->email)->first();
 
             if (!$user) {
                 $userModel->save([
-                    'username' => $userInfo->name,   // Save Google Name as Username
+                    'username' => $userInfo->name,
                     'email' => $userInfo->email,
-                    'foto' => $userInfo->picture,
+                    'foto' => $userInfo->picture ?? 'default.png',
                     'role' => 'peserta',
-                    'password' => password_hash(uniqid(), PASSWORD_DEFAULT) 
+                    'password' => password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT)
                 ]);
                 $user = $userModel->where('email', $userInfo->email)->first();
+            } else {
+                // Update foto jika berubah
+                if (!empty($userInfo->picture) && $user['foto'] !== $userInfo->picture) {
+                    $userModel->update($user['id'], ['foto' => $userInfo->picture]);
+                    $user['foto'] = $userInfo->picture;
+                }
             }
 
-            // Fix session structure to match processLogin
-            session()->set([
-                'user' => [
-                    'id' => $user['id'], 
-                    'username' => $user['username'],
-                    'email' => $user['email'],
-                    'role' => $user['role'],
-                    'foto' => $user['foto'], 
-                    'created_at' => $user['created_at'],
-                    'isLoggedIn' => true
-                ]
-            ]);
-
+            $this->setUserSession($user);
             return redirect()->to('/dashboard');
-        } else {
-            return redirect()->to('/auth/login')->with('error', 'Gagal login dengan Google');
+
+        } catch (\GuzzleHttp\Exception\ConnectException $e) {
+            return redirect()->to('/auth/login')->with('error', 'Koneksi ke Google timeout. Silakan coba lagi.');
+        } catch (\Exception $e) {
+            log_message('error', 'Google OAuth Error: ' . $e->getMessage());
+            return redirect()->to('/auth/login')->with('error', 'Gagal login dengan Google. Silakan coba lagi.');
         }
     }
 
     public function logout()
-{
-    session()->destroy();
-    return redirect()->to('/auth/login')->with('message', 'Berhasil logout');
-}
+    {
+        session()->destroy();
+        return redirect()->to('/auth/login')->with('message', 'Berhasil logout');
+    }
 
+    /**
+     * Helper: Set user session data
+     */
+    private function setUserSession(array $user): void
+    {
+        session()->set([
+            'user' => [
+                'id' => (int) $user['id'],
+                'username' => $user['username'],
+                'email' => $user['email'],
+                'role' => $user['role'],
+                'foto' => $user['foto'] ?? 'default.png',
+                'created_at' => $user['created_at'],
+                'isLoggedIn' => true
+            ]
+        ]);
+    }
 }
-
