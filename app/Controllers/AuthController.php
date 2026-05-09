@@ -8,8 +8,7 @@ class AuthController extends Controller
 {
     public function login()
     {
-        // Jika sudah login, redirect ke dashboard
-        if (session()->has('user') && session()->get('user')['isLoggedIn'] ?? false) {
+        if (session()->has('user') && (session()->get('user')['isLoggedIn'] ?? false)) {
             return redirect()->to('/dashboard');
         }
         return view('auth/login');
@@ -26,7 +25,6 @@ class AuthController extends Controller
 
         $userModel = new \App\Models\UserModel();
         
-        // Single query with index-friendly lookup
         $user = $userModel->groupStart()
                           ->where('username', $loginId)
                           ->orWhere('email', $loginId)
@@ -43,8 +41,7 @@ class AuthController extends Controller
 
     public function register()
     {
-        // Jika sudah login, redirect ke dashboard
-        if (session()->has('user') && session()->get('user')['isLoggedIn'] ?? false) {
+        if (session()->has('user') && (session()->get('user')['isLoggedIn'] ?? false)) {
             return redirect()->to('/dashboard');
         }
         return view('auth/register');
@@ -76,38 +73,30 @@ class AuthController extends Controller
     }
 
     /**
-     * Google OAuth - Redirect to Google
-     * Optimized: minimal client setup, no unnecessary scopes
+     * Google OAuth - Redirect to Google (LIGHTWEIGHT - no library needed)
+     * Menggunakan direct URL construction, bukan Google_Client library
      */
     public function googleLogin()
     {
         $config = new \Config\Google();
         
-        $client = new \Google_Client();
-        $client->setClientId($config->clientID);
-        $client->setClientSecret($config->clientSecret);
-        $client->setRedirectUri($config->redirectUri);
-        $client->setScopes(['email', 'profile']);
-        
-        // Performance optimizations
-        $client->setAccessType('online'); // Tidak perlu refresh token
-        $client->setApprovalPrompt('auto'); // Skip consent jika sudah pernah approve
-        $client->setIncludeGrantedScopes(false);
-        
-        // Set HTTP client timeout
-        $httpClient = new \GuzzleHttp\Client([
-            'timeout' => 10,
-            'connect_timeout' => 5,
-            'verify' => false, // Skip SSL verify untuk speed di serverless
-        ]);
-        $client->setHttpClient($httpClient);
+        $params = [
+            'client_id'     => $config->clientID,
+            'redirect_uri'  => $config->redirectUri,
+            'response_type' => 'code',
+            'scope'         => 'email profile',
+            'access_type'   => 'online',
+            'prompt'        => 'select_account',
+        ];
 
-        return redirect()->to($client->createAuthUrl());
+        $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query($params);
+        
+        return redirect()->to($authUrl);
     }
 
     /**
-     * Google OAuth Callback
-     * Optimized: timeout settings, minimal API calls
+     * Google OAuth Callback (LIGHTWEIGHT - using cURL instead of Google_Client)
+     * Menghindari load library google/apiclient yang 30MB+
      */
     public function googleCallback()
     {
@@ -117,65 +106,51 @@ class AuthController extends Controller
             return redirect()->to('/auth/login')->with('error', 'Gagal login dengan Google');
         }
 
-        try {
-            $config = new \Config\Google();
-            
-            $client = new \Google_Client();
-            $client->setClientId($config->clientID);
-            $client->setClientSecret($config->clientSecret);
-            $client->setRedirectUri($config->redirectUri);
-            
-            // Set HTTP timeout untuk mencegah hanging
-            $httpClient = new \GuzzleHttp\Client([
-                'timeout' => 10,
-                'connect_timeout' => 5,
-                'verify' => false,
-            ]);
-            $client->setHttpClient($httpClient);
+        $config = new \Config\Google();
 
-            // Exchange code for token
-            $token = $client->fetchAccessTokenWithAuthCode($code);
-            
-            if (isset($token['error'])) {
-                return redirect()->to('/auth/login')->with('error', 'Token Google tidak valid. Silakan coba lagi.');
-            }
-
-            $client->setAccessToken($token);
-
-            // Get user info
-            $oauth = new \Google_Service_Oauth2($client);
-            $userInfo = $oauth->userinfo->get();
-
-            // Find or create user
-            $userModel = new \App\Models\UserModel();
-            $user = $userModel->where('email', $userInfo->email)->first();
-
-            if (!$user) {
-                $userModel->save([
-                    'username' => $userInfo->name,
-                    'email' => $userInfo->email,
-                    'foto' => $userInfo->picture ?? 'default.png',
-                    'role' => 'peserta',
-                    'password' => password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT)
-                ]);
-                $user = $userModel->where('email', $userInfo->email)->first();
-            } else {
-                // Update foto jika berubah
-                if (!empty($userInfo->picture) && $user['foto'] !== $userInfo->picture) {
-                    $userModel->update($user['id'], ['foto' => $userInfo->picture]);
-                    $user['foto'] = $userInfo->picture;
-                }
-            }
-
-            $this->setUserSession($user);
-            return redirect()->to('/dashboard');
-
-        } catch (\GuzzleHttp\Exception\ConnectException $e) {
-            return redirect()->to('/auth/login')->with('error', 'Koneksi ke Google timeout. Silakan coba lagi.');
-        } catch (\Exception $e) {
-            log_message('error', 'Google OAuth Error: ' . $e->getMessage());
-            return redirect()->to('/auth/login')->with('error', 'Gagal login dengan Google. Silakan coba lagi.');
+        // Step 1: Exchange code for access token via cURL
+        $tokenData = $this->googleExchangeCode($code, $config);
+        
+        if (!$tokenData || isset($tokenData['error'])) {
+            $errorMsg = $tokenData['error_description'] ?? 'Gagal mendapatkan token dari Google';
+            return redirect()->to('/auth/login')->with('error', $errorMsg);
         }
+
+        $accessToken = $tokenData['access_token'] ?? null;
+        if (!$accessToken) {
+            return redirect()->to('/auth/login')->with('error', 'Token tidak valid');
+        }
+
+        // Step 2: Get user info via cURL
+        $userInfo = $this->googleGetUserInfo($accessToken);
+        
+        if (!$userInfo || !isset($userInfo['email'])) {
+            return redirect()->to('/auth/login')->with('error', 'Gagal mendapatkan info akun Google');
+        }
+
+        // Step 3: Find or create user
+        $userModel = new \App\Models\UserModel();
+        $user = $userModel->where('email', $userInfo['email'])->first();
+
+        if (!$user) {
+            $userModel->save([
+                'username' => $userInfo['name'] ?? $userInfo['email'],
+                'email'    => $userInfo['email'],
+                'foto'     => $userInfo['picture'] ?? 'default.png',
+                'role'     => 'peserta',
+                'password' => password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT)
+            ]);
+            $user = $userModel->where('email', $userInfo['email'])->first();
+        } else {
+            // Update foto jika berubah
+            if (!empty($userInfo['picture']) && ($user['foto'] ?? '') !== $userInfo['picture']) {
+                $userModel->update($user['id'], ['foto' => $userInfo['picture']]);
+                $user['foto'] = $userInfo['picture'];
+            }
+        }
+
+        $this->setUserSession($user);
+        return redirect()->to('/dashboard');
     }
 
     public function logout()
@@ -184,18 +159,86 @@ class AuthController extends Controller
         return redirect()->to('/auth/login')->with('message', 'Berhasil logout');
     }
 
+    // ========================================
+    // PRIVATE HELPERS
+    // ========================================
+
     /**
-     * Helper: Set user session data
+     * Exchange authorization code for access token (pure cURL, no library)
+     */
+    private function googleExchangeCode(string $code, $config): ?array
+    {
+        $postFields = [
+            'code'          => $code,
+            'client_id'     => $config->clientID,
+            'client_secret' => $config->clientSecret,
+            'redirect_uri'  => $config->redirectUri,
+            'grant_type'    => 'authorization_code',
+        ];
+
+        $ch = curl_init('https://oauth2.googleapis.com/token');
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => http_build_query($postFields),
+            CURLOPT_HTTPHEADER     => ['Content-Type: application/x-www-form-urlencoded'],
+            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_SSL_VERIFYPEER => true,
+        ]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+        curl_close($ch);
+
+        if ($error || $httpCode !== 200) {
+            log_message('error', "Google token exchange failed: HTTP $httpCode, Error: $error");
+            return null;
+        }
+
+        return json_decode($response, true);
+    }
+
+    /**
+     * Get Google user info from access token (pure cURL, no library)
+     */
+    private function googleGetUserInfo(string $accessToken): ?array
+    {
+        $ch = curl_init('https://www.googleapis.com/oauth2/v2/userinfo');
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER     => ["Authorization: Bearer $accessToken"],
+            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_SSL_VERIFYPEER => true,
+        ]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+        curl_close($ch);
+
+        if ($error || $httpCode !== 200) {
+            log_message('error', "Google userinfo failed: HTTP $httpCode, Error: $error");
+            return null;
+        }
+
+        return json_decode($response, true);
+    }
+
+    /**
+     * Set user session data
      */
     private function setUserSession(array $user): void
     {
         session()->set([
             'user' => [
-                'id' => (int) $user['id'],
-                'username' => $user['username'],
-                'email' => $user['email'],
-                'role' => $user['role'],
-                'foto' => $user['foto'] ?? 'default.png',
+                'id'         => (int) $user['id'],
+                'username'   => $user['username'],
+                'email'      => $user['email'],
+                'role'       => $user['role'],
+                'foto'       => $user['foto'] ?? 'default.png',
                 'created_at' => $user['created_at'],
                 'isLoggedIn' => true
             ]
