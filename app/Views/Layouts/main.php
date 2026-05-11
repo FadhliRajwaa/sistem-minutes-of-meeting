@@ -1054,30 +1054,69 @@
 
         // Load new content after brief fade-out
         setTimeout(function () {
-            $mainContent.load(siteBaseUrl + 'partials/' + page + '-content', function (response, status) {
-                if (status === 'error') {
+            $.ajax({
+                url: siteBaseUrl + 'partials/' + page + '-content',
+                type: 'GET',
+                dataType: 'html',
+                success: function (response) {
+                    $mainContent.html(response);
+
+                    // Force reflow then fade in (opacity only)
+                    void $mainContent[0].offsetWidth;
+                    $mainContent.css({
+                        transition: 'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                        opacity: 1
+                    });
+
+                    // Move any modal inside loaded content to body to avoid transform/z-index issues
+                    $mainContent.find('.modal').each(function () {
+                        $(this).appendTo('body');
+                    });
+                },
+                error: function (xhr) {
+                    // Handle 401 Unauthorized (session expired)
+                    if (xhr.status === 401) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            if (data.redirect) {
+                                window.location.href = siteBaseUrl + data.redirect.replace(/^\//, '');
+                                return;
+                            }
+                        } catch (e) {}
+                        window.location.href = siteBaseUrl + 'auth/login';
+                        return;
+                    }
+
+                    // Other errors: show retry UI
                     $mainContent.html(
                         '<div class="content-loading">' +
                         '<i class="fas fa-exclamation-triangle me-2" style="color:var(--color-danger)"></i>' +
-                        'Gagal memuat konten. Silakan coba lagi.' +
+                        'Gagal memuat konten. <a href="#" onclick="loadContent(\'' + page + '\'); return false;" style="color:var(--color-primary); font-weight:600;">Coba lagi</a>' +
                         '</div>'
                     );
+                    $mainContent.css({
+                        transition: 'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                        opacity: 1
+                    });
                 }
-
-                // Force reflow then fade in (opacity only)
-                void $mainContent[0].offsetWidth;
-                $mainContent.css({
-                    transition: 'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                    opacity: 1
-                });
-
-                // Move any modal inside loaded content to body to avoid transform/z-index issues
-                $mainContent.find('.modal').each(function () {
-                    $(this).appendTo('body');
-                });
             });
         }, 150);
     };
+
+    // ── Global AJAX error handler for 401 (session expired) ──
+    $(document).ajaxError(function (event, xhr) {
+        if (xhr.status === 401) {
+            // Show message and redirect to login
+            try {
+                var data = JSON.parse(xhr.responseText);
+                if (data.redirect) {
+                    window.location.href = siteBaseUrl + data.redirect.replace(/^\//, '');
+                    return;
+                }
+            } catch (e) {}
+            window.location.href = siteBaseUrl + 'auth/login';
+        }
+    });
 
     // ── setActive(element) ──
     // Removes .active from all nav-links, adds to clicked
