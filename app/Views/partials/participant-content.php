@@ -574,7 +574,7 @@
 </style>
 
 <!-- Toast Notification -->
-<div class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+<div class="participant-toast-container">
     <div id="scanToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
             <div class="toast-body" id="scanToastBody">Pesan notifikasi</div>
@@ -582,6 +582,28 @@
         </div>
     </div>
 </div>
+<style>
+    .participant-toast-container {
+        position: fixed;
+        top: 84px;
+        right: 24px;
+        z-index: 1090;
+        padding: 0;
+        max-width: 420px;
+    }
+    .participant-toast-container .toast {
+        box-shadow: 0 10px 40px rgba(15, 23, 42, 0.15), 0 4px 12px rgba(15, 23, 42, 0.08);
+        border-radius: 12px;
+    }
+    @media (max-width: 768px) {
+        .participant-toast-container {
+            top: 72px;
+            left: 12px;
+            right: 12px;
+            max-width: none;
+        }
+    }
+</style>
 
 <div class="participant-page">
     <!-- Page Header -->

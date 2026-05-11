@@ -312,9 +312,9 @@
     /* Toast */
     .toast-disc {
         position: fixed;
-        top: 24px;
+        top: 84px;
         right: 24px;
-        z-index: 9999;
+        z-index: 1090;
         min-width: 300px;
         max-width: 420px;
         padding: 14px 20px;
@@ -324,7 +324,7 @@
         display: none;
         align-items: center;
         gap: 10px;
-        box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
+        box-shadow: 0 10px 40px rgba(15, 23, 42, 0.15), 0 4px 12px rgba(15, 23, 42, 0.08);
         animation: discToastIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     .toast-disc.show {
@@ -386,9 +386,11 @@
             padding: 16px;
         }
         .toast-disc {
-            left: 16px;
-            right: 16px;
+            top: 72px;
+            left: 12px;
+            right: 12px;
             min-width: auto;
+            max-width: none;
         }
     }
 </style>
