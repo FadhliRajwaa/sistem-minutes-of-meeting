@@ -282,7 +282,7 @@
         justify-content: center;
         font-size: 1.6rem;
         text-decoration: none;
-        z-index: 999;
+        z-index: 990;
         box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
         transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
                     box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
@@ -295,6 +295,24 @@
     }
     .wa-float:active {
         transform: scale(1.05);
+    }
+
+    /* Mobile: smaller and adjusted position */
+    @media (max-width: 768px) {
+        .wa-float {
+            width: 48px;
+            height: 48px;
+            font-size: 1.35rem;
+            bottom: 20px;
+            right: 20px;
+            box-shadow: 0 3px 12px rgba(37, 211, 102, 0.4);
+        }
+    }
+
+    /* Extra spacing at bottom of dashboard to prevent WA button overlap with last card */
+    .feature-grid + .upcoming-section,
+    .feature-grid:last-child {
+        margin-bottom: 90px;
     }
 
     @keyframes waPulse {

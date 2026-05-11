@@ -97,6 +97,21 @@
         }
 
         /* =============================================
+           BOOTSTRAP MODAL Z-INDEX OVERRIDE
+           Ensure modals always appear above sidebar
+           ============================================= */
+        .modal-backdrop {
+            z-index: 1050 !important;
+        }
+        .modal {
+            z-index: 1055 !important;
+        }
+        .toast-container,
+        .position-fixed.top-0.end-0 {
+            z-index: 1090 !important;
+        }
+
+        /* =============================================
            SIDEBAR — Fixed Left, Light Theme
            ============================================= */
         .sidebar {
@@ -105,7 +120,7 @@
             background: var(--color-white);
             border-right: 1px solid var(--color-border);
             position: fixed;
-            z-index: 1040;
+            z-index: 1030;
             left: 0;
             top: 0;
             bottom: 0;
@@ -461,7 +476,7 @@
             padding: 0 24px;
             position: sticky;
             top: 0;
-            z-index: 1020;
+            z-index: 1010;
             flex-shrink: 0;
         }
 
@@ -567,7 +582,7 @@
             background: rgba(15, 23, 42, 0.3);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
-            z-index: 1035;
+            z-index: 1025;
             opacity: 0;
             transition: opacity var(--duration) var(--ease);
         }
