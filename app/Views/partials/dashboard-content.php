@@ -267,62 +267,10 @@
         transform: translateY(-1px);
     }
 
-    /* WhatsApp Float */
-    .wa-float {
-        position: fixed;
-        bottom: 28px;
-        right: 28px;
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: #25D366;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.6rem;
-        text-decoration: none;
-        z-index: 990;
-        box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
-        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-                    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-        animation: waPulse 2.5s ease-in-out infinite;
-    }
-    .wa-float:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45);
-        color: #fff;
-    }
-    .wa-float:active {
-        transform: scale(1.05);
-    }
-
-    /* Mobile: smaller and adjusted position */
-    @media (max-width: 768px) {
-        .wa-float {
-            width: 48px;
-            height: 48px;
-            font-size: 1.35rem;
-            bottom: 20px;
-            right: 20px;
-            box-shadow: 0 3px 12px rgba(37, 211, 102, 0.4);
-        }
-    }
-
-    /* Extra spacing at bottom of dashboard to prevent WA button overlap with last card */
+    /* Extra spacing at bottom of dashboard to prevent content overlap */
     .feature-grid + .upcoming-section,
     .feature-grid:last-child {
-        margin-bottom: 90px;
-    }
-
-    @keyframes waPulse {
-        0%, 100% {
-            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
-        }
-        50% {
-            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35),
-                        0 0 0 12px rgba(37, 211, 102, 0.08);
-        }
+        margin-bottom: 24px;
     }
 
     @keyframes dashSlideUp {
@@ -404,15 +352,6 @@
         <div class="upcoming-body" id="meeting-detail"></div>
     </div>
 </div>
-
-<!-- WhatsApp Float -->
-<a href="https://wa.me/6285702444966"
-   target="_blank"
-   rel="noopener noreferrer"
-   class="wa-float"
-   title="Hubungi via WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-</a>
 
 <script>
 {

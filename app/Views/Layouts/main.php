@@ -112,6 +112,78 @@
         }
 
         /* =============================================
+           WHATSAPP FLOATING BUTTON (Global)
+           ============================================= */
+        .wa-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #25D366;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-decoration: none;
+            z-index: 1000;
+            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3), 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                        box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .wa-float::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px solid rgba(37, 211, 102, 0.35);
+            animation: waPulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            pointer-events: none;
+        }
+        .wa-float:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4), 0 2px 6px rgba(0, 0, 0, 0.08);
+            color: #fff;
+        }
+        .wa-float:active {
+            transform: scale(1.02);
+        }
+        @keyframes waPulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1.55);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile: smaller button, positioned to avoid content */
+        @media (max-width: 768px) {
+            .wa-float {
+                width: 46px;
+                height: 46px;
+                font-size: 1.3rem;
+                bottom: 16px;
+                right: 16px;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 380px) {
+            .wa-float {
+                width: 42px;
+                height: 42px;
+                font-size: 1.15rem;
+                bottom: 14px;
+                right: 14px;
+            }
+        }
+
+        /* =============================================
            SIDEBAR — Fixed Left, Light Theme
            ============================================= */
         .sidebar {
@@ -884,6 +956,18 @@
         </div>
     </div>
 </div>
+
+<!-- ============================================
+     WHATSAPP FLOATING BUTTON (Global - outside content transform)
+     ============================================ -->
+<a href="https://wa.me/6285702444966"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="wa-float"
+   title="Hubungi via WhatsApp"
+   aria-label="Hubungi via WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+</a>
 
 <!-- ============================================
      SCRIPTS
