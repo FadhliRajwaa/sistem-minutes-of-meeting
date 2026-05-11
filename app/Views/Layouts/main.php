@@ -649,6 +649,126 @@
         .content-body {
             flex: 1;
             padding: 24px;
+            position: relative;
+            min-height: calc(100vh - var(--topbar-height));
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        #mainContent {
+            width: 100%;
+            max-width: 100%;
+            opacity: 1;
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #mainContent.is-loading {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ----- Loading Skeleton Overlay ----- */
+        .content-skeleton {
+            position: absolute;
+            inset: 24px;
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .content-skeleton.active {
+            display: flex;
+        }
+        .skeleton-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .skeleton-line {
+            height: 14px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #F1F5F9 0%, #E2E8F0 40%, #F1F5F9 80%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s linear infinite;
+        }
+        .skeleton-title {
+            width: 200px;
+            height: 28px;
+        }
+        .skeleton-btn {
+            width: 140px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #F1F5F9 0%, #E2E8F0 40%, #F1F5F9 80%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s linear infinite;
+        }
+        .skeleton-card {
+            background: #fff;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .skeleton-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 768px) {
+            .skeleton-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ----- Page Loading Spinner (full overlay) ----- */
+        .page-loader {
+            position: fixed;
+            top: var(--topbar-height);
+            left: var(--sidebar-width);
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(2px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 900;
+            flex-direction: column;
+            gap: 14px;
+            transition: left var(--duration) var(--ease);
+        }
+        .page-loader.active {
+            display: flex;
+        }
+        .content.expanded + .page-loader,
+        body:has(.content.expanded) .page-loader {
+            left: var(--sidebar-collapsed);
+        }
+        .loader-spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid var(--color-border);
+            border-top-color: var(--color-primary);
+            border-radius: 50%;
+            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        .loader-text {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+            font-weight: 500;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .page-loader {
+                left: 0;
+            }
         }
 
         /* ----- Fade-In Animation (opacity-only, NO transform) -----
@@ -992,10 +1112,47 @@
 
     <!-- Content Body -->
     <div class="content-body">
-        <div id="mainContent" class="fade-in">
+        <!-- Skeleton Loader -->
+        <div class="content-skeleton" id="contentSkeleton">
+            <div class="skeleton-header">
+                <div class="skeleton-line skeleton-title"></div>
+                <div class="skeleton-btn"></div>
+            </div>
+            <div class="skeleton-grid">
+                <div class="skeleton-card">
+                    <div class="skeleton-line" style="width: 60%; margin-bottom: 12px;"></div>
+                    <div class="skeleton-line" style="width: 90%; margin-bottom: 8px;"></div>
+                    <div class="skeleton-line" style="width: 75%;"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-line" style="width: 60%; margin-bottom: 12px;"></div>
+                    <div class="skeleton-line" style="width: 90%; margin-bottom: 8px;"></div>
+                    <div class="skeleton-line" style="width: 75%;"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-line" style="width: 60%; margin-bottom: 12px;"></div>
+                    <div class="skeleton-line" style="width: 90%; margin-bottom: 8px;"></div>
+                    <div class="skeleton-line" style="width: 75%;"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-line" style="width: 60%; margin-bottom: 12px;"></div>
+                    <div class="skeleton-line" style="width: 90%; margin-bottom: 8px;"></div>
+                    <div class="skeleton-line" style="width: 75%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div id="mainContent">
             <!-- SPA content loaded here via AJAX -->
         </div>
     </div>
+</div>
+
+<!-- Page Loader -->
+<div class="page-loader" id="pageLoader">
+    <div class="loader-spinner"></div>
+    <div class="loader-text">Memuat...</div>
 </div>
 
 <!-- ============================================
@@ -1036,77 +1193,101 @@
     const $mobileToggle   = $('#mobileToggle');
     const $desktopToggle  = $('#desktopToggle');
     const $sidebarClose   = $('#sidebarClose');
+    const $skeleton       = $('#contentSkeleton');
+    const $pageLoader     = $('#pageLoader');
+
+    let isLoadingContent = false;
 
     // ── loadContent(page) ──
-    // Loads partial view via AJAX with fade transition
+    // Loads partial view via AJAX with smooth loading indicator
     window.loadContent = function (page) {
+        if (isLoadingContent) return;
+        isLoadingContent = true;
+
         // Close mobile sidebar
         if (window.innerWidth <= 768) {
             $sidebar.removeClass('active');
             $overlay.removeClass('active');
         }
 
-        // Fade out current content (opacity only - transform breaks modal position:fixed)
-        $mainContent.css({
-            opacity: 0,
-            transition: 'opacity 0.15s ease'
-        });
+        // Show loading indicators
+        $mainContent.addClass('is-loading').html('');
+        $skeleton.addClass('active');
 
-        // Load new content after brief fade-out
-        setTimeout(function () {
-            $.ajax({
-                url: siteBaseUrl + 'partials/' + page + '-content',
-                type: 'GET',
-                dataType: 'html',
-                success: function (response) {
-                    $mainContent.html(response);
+        // Show page loader after short delay (only if loading is slow)
+        var loaderTimeout = setTimeout(function () {
+            $pageLoader.addClass('active');
+        }, 400);
 
-                    // Force reflow then fade in (opacity only)
-                    void $mainContent[0].offsetWidth;
-                    $mainContent.css({
-                        transition: 'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                        opacity: 1
-                    });
+        $.ajax({
+            url: siteBaseUrl + 'partials/' + page + '-content',
+            type: 'GET',
+            dataType: 'html',
+            cache: false,
+            success: function (response) {
+                clearTimeout(loaderTimeout);
 
-                    // Move any modal inside loaded content to body to avoid transform/z-index issues
-                    $mainContent.find('.modal').each(function () {
-                        $(this).appendTo('body');
-                    });
-                },
-                error: function (xhr) {
-                    // Handle 401 Unauthorized (session expired)
-                    if (xhr.status === 401) {
-                        try {
-                            var data = JSON.parse(xhr.responseText);
-                            if (data.redirect) {
-                                window.location.href = siteBaseUrl + data.redirect.replace(/^\//, '');
-                                return;
-                            }
-                        } catch (e) {}
-                        window.location.href = siteBaseUrl + 'auth/login';
-                        return;
-                    }
+                // Inject content
+                $mainContent.html(response);
 
-                    // Other errors: show retry UI
-                    $mainContent.html(
-                        '<div class="content-loading">' +
-                        '<i class="fas fa-exclamation-triangle me-2" style="color:var(--color-danger)"></i>' +
-                        'Gagal memuat konten. <a href="#" onclick="loadContent(\'' + page + '\'); return false;" style="color:var(--color-primary); font-weight:600;">Coba lagi</a>' +
-                        '</div>'
-                    );
-                    $mainContent.css({
-                        transition: 'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                        opacity: 1
-                    });
+                // Move any modal inside loaded content to body
+                $mainContent.find('.modal').each(function () {
+                    $(this).appendTo('body');
+                });
+
+                // Hide loading states
+                $skeleton.removeClass('active');
+                $pageLoader.removeClass('active');
+
+                // Fade in content
+                setTimeout(function () {
+                    $mainContent.removeClass('is-loading');
+                    isLoadingContent = false;
+                }, 50);
+            },
+            error: function (xhr) {
+                clearTimeout(loaderTimeout);
+                $skeleton.removeClass('active');
+                $pageLoader.removeClass('active');
+
+                // Handle 401 Unauthorized (session expired)
+                if (xhr.status === 401) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        if (data.redirect) {
+                            window.location.href = siteBaseUrl + data.redirect.replace(/^\//, '');
+                            return;
+                        }
+                    } catch (e) {}
+                    window.location.href = siteBaseUrl + 'auth/login';
+                    return;
                 }
-            });
-        }, 150);
+
+                // Other errors: show retry UI
+                $mainContent.html(
+                    '<div style="text-align:center; padding:60px 20px;">' +
+                    '<div style="width:72px; height:72px; margin:0 auto 16px; background:#FEF2F2; color:#DC2626; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">' +
+                    '<i class="fas fa-exclamation-triangle"></i>' +
+                    '</div>' +
+                    '<h5 style="font-family:\'Plus Jakarta Sans\',sans-serif; color:#0F172A; margin-bottom:8px;">Gagal memuat konten</h5>' +
+                    '<p style="color:#64748B; font-size:0.9rem; margin-bottom:20px;">Terjadi kesalahan saat memuat halaman. Coba lagi atau periksa koneksi Anda.</p>' +
+                    '<button onclick="loadContent(\'' + page + '\')" style="padding:10px 24px; background:#0F766E; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.85rem;">' +
+                    '<i class="fas fa-arrow-rotate-right me-2"></i> Coba Lagi' +
+                    '</button>' +
+                    '</div>'
+                );
+                $mainContent.removeClass('is-loading');
+                isLoadingContent = false;
+            }
+        });
     };
 
     // ── Global AJAX error handler for 401 (session expired) ──
-    $(document).ajaxError(function (event, xhr) {
+    $(document).ajaxError(function (event, xhr, settings) {
+        // Skip if this is the loadContent AJAX (handled already)
+        if (settings && settings.url && settings.url.indexOf('partials/') !== -1) return;
+
         if (xhr.status === 401) {
-            // Show message and redirect to login
             try {
                 var data = JSON.parse(xhr.responseText);
                 if (data.redirect) {
