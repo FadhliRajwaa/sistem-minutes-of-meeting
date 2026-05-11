@@ -628,20 +628,17 @@
             padding: 24px;
         }
 
-        /* ----- Fade-In Animation ----- */
+        /* ----- Fade-In Animation (opacity-only, NO transform) -----
+           IMPORTANT: Using transform here breaks position:fixed for
+           descendant elements (like Bootstrap modals, toasts, WA button).
+           Opacity is safe. */
         .fade-in {
-            animation: fadeInUp 0.3s var(--ease) both;
+            animation: fadeIn 0.25s var(--ease) both;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* =============================================
@@ -1005,11 +1002,10 @@
             $overlay.removeClass('active');
         }
 
-        // Fade out current content
+        // Fade out current content (opacity only - transform breaks modal position:fixed)
         $mainContent.css({
             opacity: 0,
-            transform: 'translateY(8px)',
-            transition: 'opacity 0.15s ease, transform 0.15s ease'
+            transition: 'opacity 0.15s ease'
         });
 
         // Load new content after brief fade-out
@@ -1024,12 +1020,16 @@
                     );
                 }
 
-                // Force reflow then fade in
+                // Force reflow then fade in (opacity only)
                 void $mainContent[0].offsetWidth;
                 $mainContent.css({
-                    transition: 'opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                    opacity: 1,
-                    transform: 'translateY(0)'
+                    transition: 'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                    opacity: 1
+                });
+
+                // Move any modal inside loaded content to body to avoid transform/z-index issues
+                $mainContent.find('.modal').each(function () {
+                    $(this).appendTo('body');
                 });
             });
         }, 150);
