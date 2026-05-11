@@ -370,6 +370,17 @@
             gap: 10px;
             margin-bottom: 12px;
             overflow: hidden;
+            padding: 6px 8px;
+            margin: -6px -8px 12px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: inherit;
+            transition: background-color var(--duration) var(--ease);
+            cursor: pointer;
+        }
+        .user-profile:hover {
+            background-color: var(--color-surface);
+            color: inherit;
         }
 
         .user-avatar {
@@ -575,6 +586,17 @@
             font-weight: 600;
         }
 
+        .topbar-avatar-link {
+            display: block;
+            text-decoration: none;
+            border-radius: 50%;
+            transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+        }
+        .topbar-avatar-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+        }
+
         .topbar-avatar {
             width: 34px;
             height: 34px;
@@ -588,6 +610,7 @@
             color: var(--color-white);
             flex-shrink: 0;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .topbar-avatar img {
@@ -882,30 +905,46 @@
                 </a>
             </li>
         </ul>
+
+        <div class="sidebar-nav-label">Akun</div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="loadContent('profile'); setActive(this)">
+                    <i class="fas fa-user-gear"></i>
+                    <span>Pengaturan Profil</span>
+                </a>
+            </li>
+        </ul>
     </div>
 
     <!-- Footer: User Profile & Logout -->
     <div class="sidebar-footer">
-        <div class="user-profile">
-            <div class="user-avatar">
+        <a href="#" onclick="loadContent('profile'); setActive(document.querySelector('a[onclick*=profile]')); return false;" class="user-profile" title="Pengaturan Profil" id="sidebarUserProfile">
+            <div class="user-avatar" id="sidebarAvatar">
                 <?php
                     $user = session()->get('user');
                     $foto = $user['foto'] ?? '';
                     $username = $user['username'] ?? 'User';
                     $role = $user['role'] ?? 'peserta';
                     $initial = strtoupper(substr($username, 0, 1));
+                    
+                    // Deteksi apakah foto adalah URL (Google) atau file lokal
+                    $isUrlFoto = !empty($foto) && filter_var($foto, FILTER_VALIDATE_URL);
+                    $hasLocalFoto = !empty($foto) && $foto !== 'default.png' && !$isUrlFoto;
                 ?>
-                <?php if (!empty($foto) && $foto !== 'default.png'): ?>
+                <?php if ($isUrlFoto): ?>
+                    <img src="<?= esc($foto) ?>" alt="<?= esc($username) ?>" referrerpolicy="no-referrer">
+                <?php elseif ($hasLocalFoto): ?>
                     <img src="<?= base_url('uploads/foto/' . $foto) ?>" alt="<?= esc($username) ?>">
                 <?php else: ?>
                     <?= $initial ?>
                 <?php endif; ?>
             </div>
             <div class="user-info">
-                <div class="user-info-name"><?= esc($username) ?></div>
+                <div class="user-info-name" id="sidebarUserName"><?= esc($username) ?></div>
                 <div class="user-info-role"><?= ucfirst(esc($role)) ?></div>
             </div>
-        </div>
+        </a>
         <a href="<?= base_url('/auth/logout') ?>" class="btn-logout" title="Logout">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             <span>Logout</span>
@@ -936,13 +975,18 @@
         </div>
 
         <div class="topbar-right">
-            <div class="topbar-avatar">
-                <?php if (!empty($foto) && $foto !== 'default.png'): ?>
-                    <img src="<?= base_url('uploads/foto/' . $foto) ?>" alt="<?= esc($username) ?>">
-                <?php else: ?>
-                    <?= $initial ?>
-                <?php endif; ?>
-            </div>
+            <a href="#" onclick="loadContent('profile'); setActive(document.querySelector('a[onclick*=profile]')); return false;" class="topbar-avatar-link" title="Pengaturan Profil">
+                <div class="topbar-avatar" id="topbarAvatar">
+                    <?php if ($isUrlFoto): ?>
+                        <img src="<?= esc($foto) ?>" alt="<?= esc($username) ?>" referrerpolicy="no-referrer">
+                    <?php elseif ($hasLocalFoto): ?>
+                        <img src="<?= base_url('uploads/foto/' . $foto) ?>" alt="<?= esc($username) ?>">
+                    <?php else: ?>
+                        <?= $initial ?>
+                    <?php endif; ?>
+                </div>
+            </a>
+        </div>
         </div>
     </header>
 

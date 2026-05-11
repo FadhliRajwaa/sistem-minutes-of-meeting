@@ -96,6 +96,7 @@ class Filters extends BaseFilters
                 'discussion',
                 'discussion/*',
                 'export/*',
+                'profile/*',
             ]
         ]
     ];

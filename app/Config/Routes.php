@@ -53,3 +53,8 @@ $routes->post('discussion/delete', 'DiscussionController::delete');
 $routes->post('export/pdf', 'ExportController::generatePDF');
 $routes->get('export/pdf/(:num)', 'ExportController::generatePDF/$1');
 $routes->get('export/preview/(:num)', 'ExportController::previewHTML/$1');
+
+// ✅ PROFILE - Protected by AuthFilter
+$routes->get('partials/profile-content', 'ProfileController::index');
+$routes->post('profile/update', 'ProfileController::update');
+$routes->post('profile/change-password', 'ProfileController::changePassword');
