@@ -9,13 +9,23 @@ class MainController extends BaseController
         return view('Layouts/main');
     }
 
-    public function welcome()
+    public function load($view)
     {
-        return view('wellcome');
-    }
-        public function load($view)
-    {
+        // Whitelist view yang boleh dimuat (mencegah path traversal)
+        $allowed = [
+            'dashboard-content',
+            'meeting-content',
+            'participant-content',
+            'discussion-content',
+            'export-content',
+            'profile-content',
+            'settings-content',
+        ];
+
+        if (!in_array($view, $allowed, true)) {
+            return $this->response->setStatusCode(404)->setBody('Halaman tidak ditemukan');
+        }
+
         return view('partials/' . $view);
     }
-
 }

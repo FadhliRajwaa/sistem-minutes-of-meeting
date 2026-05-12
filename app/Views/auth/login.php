@@ -575,6 +575,7 @@
 
             <!-- Login Form -->
             <form action="<?= base_url('auth/login') ?>" method="post">
+                <?= csrf_field() ?>
 
                 <div class="form-group">
                     <label for="username">Username atau Email</label>

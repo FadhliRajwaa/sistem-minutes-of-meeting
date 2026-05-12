@@ -658,6 +658,7 @@
                                 <th>Barcode ID</th>
                                 <th>Status</th>
                                 <th>Waktu Scan</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="participantTable"></tbody>
@@ -735,13 +736,78 @@
     </div>
 </div>
 
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<!-- Modal QR Code -->
+<div class="modal fade participant-page" id="modalQR" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content p-modal">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-qrcode" style="color:#0F766E"></i>
+                    QR Code Peserta
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p id="qrParticipantName" style="font-weight:700;font-size:1rem;color:#0F172A;margin-bottom:0.25rem;"></p>
+                <p id="qrBarcodeLabel" style="font-size:0.75rem;color:#64748B;margin-bottom:1rem;font-family:monospace;"></p>
+                <div id="qrCanvas" style="display:inline-block;padding:16px;background:#fff;border:2px solid #E2E8F0;border-radius:12px;"></div>
+            </div>
+            <div class="modal-footer justify-content-center" style="gap:0.5rem;">
+                <button id="btnDownloadQR" class="btn-save" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
+                    <i class="fas fa-download me-1"></i> Download
+                </button>
+                <button id="btnPrintQR" class="btn-cancel" style="font-size:0.8125rem;padding:0.5rem 1.25rem;">
+                    <i class="fas fa-print me-1"></i> Cetak
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 
 <script>
 {
     const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
     let html5QrCode = null;
     let isScanning = false;
+    let isStarting = false; // Guard untuk race condition
+
+    // ===== AUDIO BEEP (Web Audio API) =====
+    function playBeep(type) {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            if (type === 'success') {
+                osc.frequency.value = 880;
+                gain.gain.value = 0.3;
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } else if (type === 'warning') {
+                osc.frequency.value = 440;
+                gain.gain.value = 0.2;
+                osc.start();
+                osc.stop(ctx.currentTime + 0.3);
+            } else {
+                osc.frequency.value = 220;
+                gain.gain.value = 0.2;
+                osc.start();
+                osc.stop(ctx.currentTime + 0.4);
+            }
+
+            // Vibrate jika tersedia
+            if (navigator.vibrate) {
+                navigator.vibrate(type === 'success' ? 100 : type === 'warning' ? [100, 50, 100] : [200, 100, 200]);
+            }
+        } catch (e) {
+            // Audio tidak tersedia, skip
+        }
+    }
 
     // ===== TOAST NOTIFICATION =====
     function showToast(message, type) {
@@ -816,7 +882,7 @@
 
             if (data.length === 0) {
                 $('#participantTable').append(
-                    '<tr><td colspan="5">' +
+                    '<tr><td colspan="6">' +
                     '<div class="empty-state">' +
                     '<div class="empty-icon"><i class="fas fa-users"></i></div>' +
                     '<p>Belum ada peserta terdaftar</p>' +
@@ -835,13 +901,18 @@
                     ? '<span class="td-time">' + new Date(p.scanned_at).toLocaleString('id-ID', {hour:'2-digit', minute:'2-digit', day:'2-digit', month:'short'}) + '</span>'
                     : '<span class="td-time">-</span>';
 
+                // Escape data untuk atribut HTML
+                const safeName = $('<span>').text(p.name).html();
+                const safeBarcode = $('<span>').text(p.barcode_id).html();
+
                 $('#participantTable').append(
                     '<tr>' +
                     '<td class="td-num">' + (i + 1) + '</td>' +
-                    '<td class="td-name">' + p.name + '</td>' +
-                    '<td><span class="td-barcode">' + p.barcode_id + '</span></td>' +
+                    '<td class="td-name">' + safeName + '</td>' +
+                    '<td><span class="td-barcode">' + safeBarcode + '</span></td>' +
                     '<td>' + badge + '</td>' +
                     '<td>' + scanTime + '</td>' +
+                    '<td><button class="btn-qr-show" data-name="' + safeName + '" data-barcode="' + safeBarcode + '" title="Lihat QR Code"><i class="fas fa-qrcode"></i></button></td>' +
                     '</tr>'
                 );
             });
@@ -851,6 +922,77 @@
             }
         });
     }
+
+    // ===== QR CODE GENERATION =====
+    function showQRCode(name, barcodeId) {
+        $('#qrParticipantName').text(name);
+        $('#qrBarcodeLabel').text(barcodeId);
+        $('#qrCanvas').empty();
+
+        if (typeof QRCode !== 'undefined') {
+            QRCode.toCanvas(barcodeId, {
+                width: 200,
+                margin: 2,
+                color: { dark: '#0F172A', light: '#FFFFFF' }
+            }, function(err, canvas) {
+                if (err) {
+                    $('#qrCanvas').html('<p style="color:#DC2626;">Gagal generate QR</p>');
+                    return;
+                }
+                canvas.style.borderRadius = '8px';
+                $('#qrCanvas').append(canvas);
+            });
+        } else {
+            $('#qrCanvas').html('<p style="color:#DC2626;font-size:0.8rem;">Library QR Code belum dimuat</p>');
+        }
+
+        $('#modalQR').modal('show');
+    }
+
+    // Download QR sebagai PNG
+    $('#btnDownloadQR').off('click').click(function() {
+        const canvas = $('#qrCanvas canvas')[0];
+        if (!canvas) return;
+        const name = $('#qrParticipantName').text();
+        const link = document.createElement('a');
+        link.download = 'QR_' + name.replace(/\s+/g, '_') + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    });
+
+    // Cetak QR
+    $('#btnPrintQR').off('click').click(function() {
+        const canvas = $('#qrCanvas canvas')[0];
+        if (!canvas) return;
+        const name = $('#qrParticipantName').text();
+        const barcode = $('#qrBarcodeLabel').text();
+        const imgData = canvas.toDataURL('image/png');
+        const win = window.open('', '_blank');
+        win.document.write(
+            '<!DOCTYPE html><html><head><title>QR - ' + name + '</title>' +
+            '<style>body{font-family:Inter,sans-serif;text-align:center;padding:40px;}' +
+            '.qr-card{display:inline-block;border:2px solid #E2E8F0;border-radius:16px;padding:32px;background:#fff;}' +
+            'h2{margin:0 0 4px;font-size:1.25rem;color:#0F172A;}' +
+            'p{margin:0 0 20px;font-size:0.875rem;color:#64748B;font-family:monospace;}' +
+            'img{border-radius:8px;}' +
+            '@media print{body{padding:20px;}}</style></head>' +
+            '<body><div class="qr-card">' +
+            '<h2>' + name + '</h2>' +
+            '<p>' + barcode + '</p>' +
+            '<img src="' + imgData + '" width="200" height="200">' +
+            '</div>' +
+            '<script>setTimeout(function(){window.print();},300);<\/script>' +
+            '</body></html>'
+        );
+        win.document.close();
+    });
+
+    // Event: klik tombol QR di tabel
+    $(document).off('click', '.btn-qr-show').on('click', '.btn-qr-show', function() {
+        const name = $(this).data('name');
+        const barcode = $(this).data('barcode');
+        showQRCode(name, barcode);
+    });
 
     // ===== EVENT HANDLERS =====
     $('#meetingSelect').off('change').on('change', loadParticipants);
@@ -931,13 +1073,22 @@
         startScanner();
     });
 
+    function getResponsiveQrBox() {
+        // Responsif qrbox berdasarkan viewport
+        var modalWidth = Math.min(window.innerWidth - 60, 460);
+        var size = Math.min(Math.floor(modalWidth * 0.6), 250);
+        size = Math.max(size, 150); // minimum 150px
+        return { width: size, height: size };
+    }
+
     function startScanner() {
-        if (isScanning) return;
+        if (isScanning || isStarting) return;
+        isStarting = true;
 
         html5QrCode = new Html5Qrcode("reader");
         const config = {
             fps: 10,
-            qrbox: { width: 250, height: 250 },
+            qrbox: getResponsiveQrBox(),
             aspectRatio: 1.0
         };
 
@@ -946,9 +1097,11 @@
             config,
             function onScanSuccess(decodedText) {
                 isScanning = false;
+                isStarting = false;
                 html5QrCode.stop().then(function() {
                     $('#reader').hide();
                     showScanProcessing();
+                    playBeep('success');
                     submitAbsen(decodedText);
                 }).catch(function(err) {
                     console.error("Stop error:", err);
@@ -960,23 +1113,55 @@
             }
         ).then(function() {
             isScanning = true;
+            isStarting = false;
         }).catch(function(err) {
+            isStarting = false;
             console.error("Scanner start error:", err);
-            showScanResult('error', 'Gagal mengakses kamera. Pastikan izin kamera diberikan.');
+            var msg = 'Gagal mengakses kamera.';
+            if (err && err.toString().includes('NotAllowedError')) {
+                msg = 'Izin kamera ditolak. Buka pengaturan browser dan izinkan akses kamera.';
+            } else if (err && err.toString().includes('NotFoundError')) {
+                msg = 'Kamera tidak ditemukan pada perangkat ini.';
+            } else if (err && err.toString().includes('NotReadableError')) {
+                msg = 'Kamera sedang digunakan aplikasi lain.';
+            } else if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+                msg = 'Kamera membutuhkan koneksi HTTPS yang aman.';
+            }
+            showScanResult('error', msg);
         });
     }
 
     function stopScanner() {
-        if (html5QrCode && isScanning) {
-            html5QrCode.stop().then(function() {
-                html5QrCode.clear();
-                isScanning = false;
-            }).catch(function(err) {
-                console.error("Stop error:", err);
-                isScanning = false;
-            });
+        isStarting = false;
+        if (html5QrCode) {
+            if (isScanning) {
+                html5QrCode.stop().then(function() {
+                    html5QrCode.clear();
+                    isScanning = false;
+                }).catch(function(err) {
+                    console.error("Stop error:", err);
+                    isScanning = false;
+                });
+            } else {
+                try { html5QrCode.clear(); } catch(e) {}
+            }
+            html5QrCode = null;
         }
     }
+
+    // SPA cleanup function — dipanggil oleh main layout saat navigasi
+    window._participantCleanup = function() {
+        stopScanner();
+        // Tutup modal yang masih terbuka
+        try {
+            var modalScan = bootstrap.Modal.getInstance(document.getElementById('modalScan'));
+            if (modalScan) modalScan.hide();
+            var modalAdd = bootstrap.Modal.getInstance(document.getElementById('addParticipantModal'));
+            if (modalAdd) modalAdd.hide();
+            var modalQR = bootstrap.Modal.getInstance(document.getElementById('modalQR'));
+            if (modalQR) modalQR.hide();
+        } catch(e) {}
+    };
 
     function showScanProcessing() {
         $('#scanStatus').removeClass('d-none');
@@ -1012,6 +1197,7 @@
                 if (response.already_present) {
                     showScanResult('warning', response.message);
                     showToast(response.message, 'warning');
+                    playBeep('warning');
                 } else {
                     showScanResult('success', response.message);
                     showToast(response.message, 'success');
@@ -1020,6 +1206,7 @@
             } else {
                 showScanResult('error', response.message || 'Barcode tidak ditemukan!');
                 showToast(response.message || 'Barcode tidak ditemukan!', 'error');
+                playBeep('error');
             }
         }, 'json')
         .fail(function(jqXHR) {
@@ -1029,6 +1216,7 @@
             }
             showScanResult('error', 'Terjadi kesalahan server');
             showToast('Terjadi kesalahan server saat absen', 'error');
+            playBeep('error');
         });
     }
 
@@ -1036,3 +1224,26 @@
     loadMeetings();
 }
 </script>
+
+<style>
+    /* Tombol QR di tabel */
+    .participant-page .btn-qr-show {
+        background: rgba(15,118,110,0.08);
+        color: var(--color-primary);
+        border: 1px solid rgba(15,118,110,0.15);
+        border-radius: var(--radius-sm);
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+    .participant-page .btn-qr-show:hover {
+        background: rgba(15,118,110,0.15);
+        border-color: rgba(15,118,110,0.3);
+        transform: translateY(-1px);
+    }
+</style>

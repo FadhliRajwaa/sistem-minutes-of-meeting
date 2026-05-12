@@ -7,11 +7,6 @@ use App\Models\MeetingModel;
 
 class DiscussionController extends BaseController
 {
-    private function getUserId(): int
-    {
-        return (int) session()->get('user')['id'];
-    }
-
     public function index()
     {
         $meetingModel = new MeetingModel();

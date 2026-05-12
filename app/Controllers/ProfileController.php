@@ -6,11 +6,6 @@ use App\Models\UserModel;
 
 class ProfileController extends BaseController
 {
-    private function getUserId(): int
-    {
-        return (int) session()->get('user')['id'];
-    }
-
     /**
      * Render profile partial view
      */

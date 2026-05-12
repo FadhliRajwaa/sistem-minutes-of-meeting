@@ -16,7 +16,7 @@ class MeetingModel extends Model
 
     protected $allowedFields = ['user_id', 'nama_meeting', 'tanggal', 'tempat', 'status']; 
 
-    protected $useTimestamps = false; 
+    protected $useTimestamps = true;
     protected $validationRules    = [];
     protected $validationMessages = [];
     protected $skipValidation     = false;

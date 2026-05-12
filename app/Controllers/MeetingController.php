@@ -15,11 +15,6 @@ class MeetingController extends BaseController
         $this->meetingModel = new MeetingModel();
     }
 
-    private function getUserId(): int
-    {
-        return (int) session()->get('user')['id'];
-    }
-
     public function index()
     {
         $data['meetings'] = $this->meetingModel
@@ -98,8 +93,8 @@ class MeetingController extends BaseController
             $db = \Config\Database::connect();
             $db->transStart();
 
-            (new ParticipantModel())->where('meeting_id', $id)->delete();
-            (new DiscussionModel())->where('meeting_id', $id)->delete();
+            (new ParticipantModel())->where('meeting_id', $id)->where('user_id', $userId)->delete();
+            (new DiscussionModel())->where('meeting_id', $id)->where('user_id', $userId)->delete();
             $this->meetingModel->delete($id);
 
             $db->transComplete();

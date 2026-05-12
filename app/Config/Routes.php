@@ -25,8 +25,6 @@ $routes->get('partials/meeting-content', 'MeetingController::index');
 $routes->get('partials/participant-content', 'ParticipantController::index');
 $routes->get('partials/discussion-content', 'DiscussionController::index');
 $routes->get('partials/export-content', 'ExportController::index');
-$routes->get('partials/settings-content', 'PartialController::settings');
-$routes->get('partials/settings-info', 'SettingsController::info');
 
 // ✅ API & CRUD Meeting - Protected by AuthFilter
 $routes->get('v1/meetings', 'MeetingController::getMeetings');

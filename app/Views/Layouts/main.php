@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title><?= $title ?? 'Minutes of Meeting' ?></title>
 
+    <!-- CSRF Token Meta -->
+    <meta name="<?= csrf_token() ?>" content="<?= csrf_hash() ?>">
+
     <!-- Preconnect & Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -948,6 +951,25 @@
     }
     window.siteBaseUrl = siteBaseUrl;
 
+    // CSRF: otomatis kirim token di setiap AJAX POST/PUT/DELETE
+    var csrfName = '<?= csrf_token() ?>';
+    var csrfHash = '<?= csrf_hash() ?>';
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (settings.type && settings.type.toUpperCase() !== 'GET') {
+                xhr.setRequestHeader('X-CSRF-TOKEN', csrfHash);
+                // Juga kirim sebagai parameter jika data berupa string/FormData
+                if (typeof settings.data === 'string') {
+                    settings.data += '&' + csrfName + '=' + encodeURIComponent(csrfHash);
+                } else if (settings.data instanceof FormData) {
+                    settings.data.append(csrfName, csrfHash);
+                } else if (typeof settings.data === 'object' && settings.data !== null && !(settings.data instanceof FormData)) {
+                    settings.data[csrfName] = csrfHash;
+                }
+            }
+        }
+    });
+
     const $appShell      = $('#appShell');
     const $sidebar       = $('#sidebar');
     const $overlay       = $('#sidebarOverlay');
@@ -982,13 +1004,29 @@
             type: 'GET',
             dataType: 'html',
             cache: false,
+            beforeSend: function () {
+                // Cleanup: hapus modal lama yang dipindah ke body oleh load sebelumnya
+                $('body > .modal[data-spa-modal]').each(function () {
+                    var $m = $(this);
+                    // Force hide modal jika sedang terbuka
+                    if ($m.hasClass('show')) {
+                        $m.modal('hide');
+                    }
+                    $m.remove();
+                });
+                // Stop kamera scanner jika masih aktif
+                if (window._participantCleanup) {
+                    window._participantCleanup();
+                    window._participantCleanup = null;
+                }
+            },
             success: function (response) {
                 clearTimeout(loaderTimeout);
                 $mainContent.html(response);
 
-                // Move modals to body (prevents transform issues)
+                // Move modals to body (prevents transform issues) — tandai dengan data attribute
                 $mainContent.find('.modal').each(function () {
-                    $(this).appendTo('body');
+                    $(this).attr('data-spa-modal', '1').appendTo('body');
                 });
 
                 $skeleton.removeClass('active');

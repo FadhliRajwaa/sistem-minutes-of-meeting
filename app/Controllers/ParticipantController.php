@@ -7,11 +7,6 @@ use App\Models\MeetingModel;
 
 class ParticipantController extends BaseController
 {
-    private function getUserId(): int
-    {
-        return (int) session()->get('user')['id'];
-    }
-
     public function index()
     {
         return view('partials/participant-content');

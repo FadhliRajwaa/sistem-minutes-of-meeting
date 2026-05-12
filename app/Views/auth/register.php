@@ -538,6 +538,7 @@
 
             <!-- Register Form -->
             <form action="<?= base_url('/auth/register') ?>" method="post">
+                <?= csrf_field() ?>
                 <div class="form-group">
                     <label for="name" class="form-label-custom">Nama Lengkap</label>
                     <input type="text" class="form-input" id="name" name="name" placeholder="Masukkan nama lengkap" value="<?= old('name') ?>" required autofocus>

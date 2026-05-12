@@ -55,4 +55,13 @@ abstract class BaseController extends Controller
 
         // E.g.: $this->session = service('session');
     }
+
+    /**
+     * Ambil user_id dari session yang sedang login.
+     * Dipusatkan di BaseController agar tidak duplikasi di setiap controller.
+     */
+    protected function getUserId(): int
+    {
+        return (int) session()->get('user')['id'];
+    }
 }

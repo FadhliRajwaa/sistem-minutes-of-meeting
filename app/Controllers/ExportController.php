@@ -8,14 +8,6 @@ use App\Models\ParticipantModel;
 
 class ExportController extends BaseController
 {
-    /**
-     * Helper: ambil user_id dari session
-     */
-    private function getUserId(): int
-    {
-        return (int) session()->get('user')['id'];
-    }
-
     public function index()
     {
         $model = new DiscussionModel();
@@ -46,13 +38,21 @@ class ExportController extends BaseController
             return "Data diskusi tidak ditemukan.";
         }
         
-        // Ambil data meeting terkait
+        // Ambil data meeting terkait (dengan filter user_id)
         $meetingModel = new MeetingModel();
-        $meeting = $meetingModel->find($discussion['meeting_id']);
-        
-        // Ambil data peserta hadir
+        $meeting = $meetingModel->where('id', $discussion['meeting_id'])
+                                ->where('user_id', $userId)
+                                ->first();
+
+        if (!$meeting) {
+            return "Data meeting tidak ditemukan.";
+        }
+
+        // Ambil data peserta (dengan filter user_id)
         $participantModel = new ParticipantModel();
-        $participants = $participantModel->where('meeting_id', $discussion['meeting_id'])->findAll();
+        $participants = $participantModel->where('meeting_id', $discussion['meeting_id'])
+                                        ->where('user_id', $userId)
+                                        ->findAll();
 
         $data = [
             'discussion' => $discussion,
@@ -124,13 +124,21 @@ class ExportController extends BaseController
             return "Data diskusi tidak ditemukan.";
         }
         
-        // Ambil data meeting terkait
+        // Ambil data meeting terkait (dengan filter user_id)
         $meetingModel = new MeetingModel();
-        $meeting = $meetingModel->find($discussion['meeting_id']);
-        
-        // Ambil data peserta hadir
+        $meeting = $meetingModel->where('id', $discussion['meeting_id'])
+                                ->where('user_id', $userId)
+                                ->first();
+
+        if (!$meeting) {
+            return "Data meeting tidak ditemukan.";
+        }
+
+        // Ambil data peserta (dengan filter user_id)
         $participantModel = new ParticipantModel();
-        $participants = $participantModel->where('meeting_id', $discussion['meeting_id'])->findAll();
+        $participants = $participantModel->where('meeting_id', $discussion['meeting_id'])
+                                        ->where('user_id', $userId)
+                                        ->findAll();
 
         $data = [
             'discussion' => $discussion,
