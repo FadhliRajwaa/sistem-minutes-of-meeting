@@ -29,7 +29,7 @@ class DiscussionController extends BaseController
         $namaNotulis = trim($this->request->getPost('nama_notulis') ?? '');
 
         // Validasi
-        if (empty($meetingId) || empty($topik) || empty($tanggal) || empty($namaNotulis)) {
+        if (empty($meetingId) || empty($topik) || empty($pembahasan) || empty($tanggal) || empty($namaNotulis)) {
             return $this->response->setJSON(['success' => false, 'message' => 'Semua field wajib diisi']);
         }
 

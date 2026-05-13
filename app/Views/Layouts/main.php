@@ -788,7 +788,7 @@
             <a href="<?= base_url('settings') ?>" onclick="loadContent('profile'); return false;" class="user-profile" title="Pengaturan Profil">
                 <div class="user-avatar">
                     <?php if ($isBase64Foto): ?>
-                        <img src="<?= $foto ?>" alt="<?= esc($username) ?>">
+                        <img src="<?= esc($foto) ?>" alt="<?= esc($username) ?>">
                     <?php elseif ($isUrlFoto): ?>
                         <img src="<?= esc($foto) ?>" alt="<?= esc($username) ?>" referrerpolicy="no-referrer">
                     <?php elseif ($hasLocalFoto): ?>
@@ -833,7 +833,7 @@
             <a href="<?= base_url('settings') ?>" onclick="loadContent('profile'); return false;" title="Pengaturan Profil">
                 <div class="topbar-avatar">
                     <?php if ($isBase64Foto): ?>
-                        <img src="<?= $foto ?>" alt="<?= esc($username) ?>">
+                        <img src="<?= esc($foto) ?>" alt="<?= esc($username) ?>">
                     <?php elseif ($isUrlFoto): ?>
                         <img src="<?= esc($foto) ?>" alt="<?= esc($username) ?>" referrerpolicy="no-referrer">
                     <?php elseif ($hasLocalFoto): ?>
@@ -1087,10 +1087,29 @@
         }
     });
 
-    // setActive kept for backward compat but not used by sidebar anymore
-    window.setActive = function (element) {
-        $('.sidebar .nav-link').removeClass('active');
-        $(element).addClass('active');
+    // Refresh avatar in sidebar and topbar after profile update
+    window.refreshLayoutAvatar = function (userData) {
+        if (!userData) return;
+        var foto = userData.foto || '';
+        var username = userData.username || '';
+        var initial = username.charAt(0).toUpperCase();
+
+        function setAvatar(container) {
+            if (!container) return;
+            if (foto && foto.indexOf('data:image/') === 0) {
+                container.innerHTML = '<img src="' + foto.replace(/"/g, '&quot;') + '" alt="' + initial + '">';
+            } else if (foto && (foto.indexOf('http://') === 0 || foto.indexOf('https://') === 0)) {
+                container.innerHTML = '<img src="' + foto.replace(/"/g, '&quot;') + '" alt="' + initial + '" referrerpolicy="no-referrer">';
+            } else {
+                container.textContent = initial;
+            }
+        }
+
+        setAvatar(document.querySelector('.sidebar-footer .user-avatar'));
+        setAvatar(document.querySelector('.topbar-avatar'));
+
+        var sidebarName = document.querySelector('.user-info-name');
+        if (sidebarName && username) sidebarName.textContent = username;
     };
 
     function closeMobileSidebar() {

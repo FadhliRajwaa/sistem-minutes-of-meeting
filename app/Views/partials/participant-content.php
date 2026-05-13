@@ -774,10 +774,25 @@
     let isScanning = false;
     let isStarting = false; // Guard untuk race condition
 
+    function escapeHtml(text) {
+        if (!text) return '';
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(text));
+        return div.innerHTML;
+    }
+
     // ===== AUDIO BEEP (Web Audio API) =====
+    var _audioCtx = null;
+    function getAudioContext() {
+        if (!_audioCtx) {
+            _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        return _audioCtx;
+    }
+
     function playBeep(type) {
         try {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const ctx = getAudioContext();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
@@ -848,13 +863,12 @@
                 }
 
                 if (!Array.isArray(data)) {
-                    console.error("Invalid data format:", data);
                     $('#meetingSelect').html('<option value="">Error memuat data</option>');
                     return;
                 }
 
                 $.each(data, function(i, meeting) {
-                    $('#meetingSelect').append('<option value="' + meeting.id + '">' + meeting.nama_meeting + '</option>');
+                    $('#meetingSelect').append($('<option>').val(meeting.id).text(meeting.nama_meeting));
                 });
 
                 $('#addParticipantBtn').prop('disabled', false).css('opacity', '1');
@@ -862,7 +876,6 @@
                 loadParticipants();
             })
             .fail(function(jqXHR) {
-                console.error("AJAX Error:", jqXHR.statusText);
                 if (jqXHR.status === 401) {
                     window.location.href = baseUrl + 'auth/login';
                     return;
@@ -969,7 +982,7 @@
         const imgData = canvas.toDataURL('image/png');
         const win = window.open('', '_blank');
         win.document.write(
-            '<!DOCTYPE html><html><head><title>QR - ' + name + '</title>' +
+            '<!DOCTYPE html><html><head><title>QR - ' + escapeHtml(name) + '</title>' +
             '<style>body{font-family:Inter,sans-serif;text-align:center;padding:40px;}' +
             '.qr-card{display:inline-block;border:2px solid #E2E8F0;border-radius:16px;padding:32px;background:#fff;}' +
             'h2{margin:0 0 4px;font-size:1.25rem;color:#0F172A;}' +
@@ -977,8 +990,8 @@
             'img{border-radius:8px;}' +
             '@media print{body{padding:20px;}}</style></head>' +
             '<body><div class="qr-card">' +
-            '<h2>' + name + '</h2>' +
-            '<p>' + barcode + '</p>' +
+            '<h2>' + escapeHtml(name) + '</h2>' +
+            '<p>' + escapeHtml(barcode) + '</p>' +
             '<img src="' + imgData + '" width="200" height="200">' +
             '</div>' +
             '<script>setTimeout(function(){window.print();},300);<\/script>' +
@@ -1103,8 +1116,7 @@
                     showScanProcessing();
                     playBeep('success');
                     submitAbsen(decodedText);
-                }).catch(function(err) {
-                    console.error("Stop error:", err);
+                }).catch(function() {
                     submitAbsen(decodedText);
                 });
             },
@@ -1116,7 +1128,6 @@
             isStarting = false;
         }).catch(function(err) {
             isStarting = false;
-            console.error("Scanner start error:", err);
             var msg = 'Gagal mengakses kamera.';
             if (err && err.toString().includes('NotAllowedError')) {
                 msg = 'Izin kamera ditolak. Buka pengaturan browser dan izinkan akses kamera.';
@@ -1138,8 +1149,7 @@
                 html5QrCode.stop().then(function() {
                     html5QrCode.clear();
                     isScanning = false;
-                }).catch(function(err) {
-                    console.error("Stop error:", err);
+                }).catch(function() {
                     isScanning = false;
                 });
             } else {

@@ -43,7 +43,6 @@ $routes->post('v1/scan', 'ParticipantController::scanBarcode');
 $routes->post('participant/absen', 'ParticipantController::absen');
 
 // API Discussion
-$routes->get('discussion', 'DiscussionController::index');
 $routes->post('discussion/save', 'DiscussionController::save');
 $routes->get('discussion/search', 'DiscussionController::search');
 $routes->post('discussion/delete', 'DiscussionController::delete');

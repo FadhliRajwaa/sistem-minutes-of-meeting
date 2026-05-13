@@ -47,6 +47,10 @@ class MeetingController extends BaseController
             return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Semua field harus diisi']);
         }
 
+        if (!empty($tanggal) && strtotime($tanggal) === false) {
+            return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Format tanggal tidak valid']);
+        }
+
         $this->meetingModel->save([
             'user_id'      => $this->getUserId(),
             'nama_meeting' => $nama,
@@ -128,6 +132,12 @@ class MeetingController extends BaseController
             'tempat'       => trim($this->request->getPost('tempat') ?? ''),
             'status'       => $this->request->getPost('status')
         ], fn($v) => $v !== '' && $v !== null);
+
+        // Whitelist status
+        $validStatuses = ['Belum Dilaksanakan', 'Sedang Berlangsung', 'Sudah Dilaksanakan'];
+        if (!empty($data['status']) && !in_array($data['status'], $validStatuses)) {
+            return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Status tidak valid']);
+        }
 
         if (empty($data)) {
             return $this->response->setJSON(['success' => false, 'message' => 'Tidak ada data untuk diupdate']);

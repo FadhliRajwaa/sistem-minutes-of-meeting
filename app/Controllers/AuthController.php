@@ -156,10 +156,19 @@ class AuthController extends Controller
         $user = $userModel->where('email', $userInfo['email'])->first();
 
         if (!$user) {
+            // Handle username collision
+            $baseUsername = $userInfo['name'] ?? $userInfo['email'];
+            $uniqueUsername = $baseUsername;
+            $counter = 1;
+            while ($userModel->where('username', $uniqueUsername)->first()) {
+                $uniqueUsername = $baseUsername . $counter;
+                $counter++;
+            }
+
             // Change from model save to direct db builder
             $db = \Config\Database::connect();
             $db->table('users')->insert([
-                'username' => $userInfo['name'] ?? $userInfo['email'],
+                'username' => $uniqueUsername,
                 'email'    => $userInfo['email'],
                 'foto'     => $userInfo['picture'] ?? 'default.png',
                 'role'     => 'peserta',

@@ -437,7 +437,8 @@
                 document.getElementById('upcoming-meeting').classList.add('show');
             }
         })
-        .catch(function(err) {
+        .catch(function() {
+            // Silent fail for reminder widget
         });
 }
 </script>

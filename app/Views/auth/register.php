@@ -541,12 +541,12 @@
                 <?= csrf_field() ?>
                 <div class="form-group">
                     <label for="name" class="form-label-custom">Nama Lengkap</label>
-                    <input type="text" class="form-input" id="name" name="name" placeholder="Masukkan nama lengkap" value="<?= old('name') ?>" required autofocus>
+                    <input type="text" class="form-input" id="name" name="name" placeholder="Masukkan nama lengkap" value="<?= esc(old('name')) ?>" required autofocus>
                 </div>
 
                 <div class="form-group">
                     <label for="email" class="form-label-custom">Alamat Email</label>
-                    <input type="email" class="form-input" id="email" name="email" placeholder="Masukkan alamat email" value="<?= old('email') ?>" required>
+                    <input type="email" class="form-input" id="email" name="email" placeholder="Masukkan alamat email" value="<?= esc(old('email')) ?>" required>
                 </div>
 
                 <div class="form-row-grid">

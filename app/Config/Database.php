@@ -71,6 +71,11 @@ class Database extends Config
         if (getenv('AIVEN_PASSWORD')) {
             $this->aiven['password'] = getenv('AIVEN_PASSWORD');
         }
+
+        // Production safety check
+        if (ENVIRONMENT === 'production' && empty($this->{$this->defaultGroup}['password'])) {
+            log_message('critical', 'Database password is empty in production environment!');
+        }
     }
 }
 

@@ -797,7 +797,9 @@
 
                         refreshRadioEvents();
                     })
-                    .catch(function(err) { });
+                    .catch(function() {
+                        alert('Terjadi kesalahan koneksi. Silakan coba lagi.');
+                    });
             }, 300);
         });
     }
@@ -866,7 +868,9 @@
                     }
                 }
             })
-            .catch(function(err) { });
+            .catch(function() {
+                alert('Terjadi kesalahan koneksi. Silakan coba lagi.');
+            });
         });
     }
 }

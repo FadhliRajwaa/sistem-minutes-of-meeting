@@ -34,8 +34,8 @@ class ProfileController extends BaseController
         $email = trim($this->request->getPost('email') ?? '');
 
         // Validasi
-        if (empty($username) || strlen($username) < 3) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Nama minimal 3 karakter']);
+        if (empty($username) || strlen($username) < 3 || strlen($username) > 50) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Nama harus 3-50 karakter']);
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -46,6 +46,12 @@ class ProfileController extends BaseController
         $existing = $userModel->where('email', $email)->where('id !=', $userId)->first();
         if ($existing) {
             return $this->response->setJSON(['success' => false, 'message' => 'Email sudah digunakan']);
+        }
+
+        // Cek username duplikat
+        $existingUsername = $userModel->where('username', $username)->where('id !=', $userId)->first();
+        if ($existingUsername) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Username sudah digunakan']);
         }
 
         $data = [
@@ -106,6 +112,10 @@ class ProfileController extends BaseController
         $userModel = new UserModel();
         $user = $userModel->find($userId);
 
+        if (!$user) {
+            return $this->response->setJSON(['success' => false, 'message' => 'User tidak ditemukan']);
+        }
+
         $currentPassword = $this->request->getPost('current_password');
         $newPassword = $this->request->getPost('new_password');
         $confirmPassword = $this->request->getPost('confirm_password');
@@ -126,9 +136,11 @@ class ProfileController extends BaseController
             return $this->response->setJSON(['success' => false, 'message' => 'Password saat ini salah']);
         }
 
-        $userModel->update($userId, [
+        \Config\Database::connect()->table('users')->where('id', $userId)->update([
             'password' => password_hash($newPassword, PASSWORD_DEFAULT)
         ]);
+
+        session()->regenerate(true);
 
         return $this->response->setJSON(['success' => true, 'message' => 'Password berhasil diubah']);
     }

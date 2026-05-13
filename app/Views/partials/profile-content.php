@@ -353,7 +353,7 @@
                     if (!empty($foto) && $foto !== 'default.png'):
                         if (strpos($foto, 'data:image/') === 0):
                     ?>
-                        <img src="<?= $foto ?>" alt="Foto profil" id="avatarImg">
+                        <img src="<?= esc($foto) ?>" alt="Foto profil" id="avatarImg">
                     <?php elseif (filter_var($foto, FILTER_VALIDATE_URL)):
                     ?>
                         <img src="<?= esc($foto) ?>" alt="Foto profil" id="avatarImg">
@@ -560,12 +560,10 @@
 
                     selectedBase64 = null;
 
-                    // Reload sidebar avatar dengan update foto
-                    setTimeout(function() {
-                        if (typeof window.refreshLayoutAvatar === 'function') {
-                            window.refreshLayoutAvatar();
-                        }
-                    }, 500);
+                    // Reload sidebar avatar
+                    if (typeof window.refreshLayoutAvatar === 'function') {
+                        window.refreshLayoutAvatar(data.user);
+                    }
                 } else {
                     showToast(data.message || 'Gagal memperbarui profil', 'error');
                 }
