@@ -728,25 +728,25 @@
             <div class="sidebar-nav-label">Menu Utama</div>
             <ul class="nav">
                 <li class="nav-item">
-                    <a href="#" class="nav-link active" onclick="loadContent('dashboard'); setActive(this); return false;">
+                    <a href="<?= base_url('dashboard') ?>" class="nav-link" data-page="dashboard" onclick="loadContent('dashboard'); return false;">
                         <i class="fas fa-home"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="loadContent('meeting'); setActive(this); return false;">
+                    <a href="<?= base_url('meetings') ?>" class="nav-link" data-page="meeting" onclick="loadContent('meeting'); return false;">
                         <i class="fas fa-calendar-alt"></i>
                         <span>Manage Meeting</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="loadContent('participant'); setActive(this); return false;">
+                    <a href="<?= base_url('participants') ?>" class="nav-link" data-page="participant" onclick="loadContent('participant'); return false;">
                         <i class="fas fa-users"></i>
                         <span>Participant Input</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="loadContent('discussion'); setActive(this); return false;">
+                    <a href="<?= base_url('discussions') ?>" class="nav-link" data-page="discussion" onclick="loadContent('discussion'); return false;">
                         <i class="fas fa-comments"></i>
                         <span>Add Discussion</span>
                     </a>
@@ -756,7 +756,7 @@
             <div class="sidebar-nav-label">Export</div>
             <ul class="nav">
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="loadContent('export'); setActive(this); return false;">
+                    <a href="<?= base_url('export') ?>" class="nav-link" data-page="export" onclick="loadContent('export'); return false;">
                         <i class="fas fa-file-pdf"></i>
                         <span>Export to PDF</span>
                     </a>
@@ -766,7 +766,7 @@
             <div class="sidebar-nav-label">Akun</div>
             <ul class="nav">
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="loadContent('profile'); setActive(this); return false;">
+                    <a href="<?= base_url('settings') ?>" class="nav-link" data-page="profile" onclick="loadContent('profile'); return false;">
                         <i class="fas fa-user-gear"></i>
                         <span>Pengaturan Profil</span>
                     </a>
@@ -781,12 +781,15 @@
                 $username = $user['username'] ?? 'User';
                 $role = $user['role'] ?? 'peserta';
                 $initial = strtoupper(substr($username, 0, 1));
-                $isUrlFoto = !empty($foto) && filter_var($foto, FILTER_VALIDATE_URL);
-                $hasLocalFoto = !empty($foto) && $foto !== 'default.png' && !$isUrlFoto;
+                $isBase64Foto = !empty($foto) && strpos($foto, 'data:image/') === 0;
+                $isUrlFoto = !empty($foto) && !$isBase64Foto && filter_var($foto, FILTER_VALIDATE_URL);
+                $hasLocalFoto = !empty($foto) && $foto !== 'default.png' && !$isUrlFoto && !$isBase64Foto;
             ?>
-            <a href="#" onclick="loadContent('profile'); setActive(document.querySelector('a[onclick*=profile]')); return false;" class="user-profile" title="Pengaturan Profil">
+            <a href="<?= base_url('settings') ?>" onclick="loadContent('profile'); return false;" class="user-profile" title="Pengaturan Profil">
                 <div class="user-avatar">
-                    <?php if ($isUrlFoto): ?>
+                    <?php if ($isBase64Foto): ?>
+                        <img src="<?= $foto ?>" alt="<?= esc($username) ?>">
+                    <?php elseif ($isUrlFoto): ?>
                         <img src="<?= esc($foto) ?>" alt="<?= esc($username) ?>" referrerpolicy="no-referrer">
                     <?php elseif ($hasLocalFoto): ?>
                         <img src="<?= base_url('uploads/foto/' . $foto) ?>" alt="<?= esc($username) ?>">
@@ -827,9 +830,11 @@
             </span>
         </div>
         <div class="topbar-right">
-            <a href="#" onclick="loadContent('profile'); setActive(document.querySelector('a[onclick*=profile]')); return false;" title="Pengaturan Profil">
+            <a href="<?= base_url('settings') ?>" onclick="loadContent('profile'); return false;" title="Pengaturan Profil">
                 <div class="topbar-avatar">
-                    <?php if ($isUrlFoto): ?>
+                    <?php if ($isBase64Foto): ?>
+                        <img src="<?= $foto ?>" alt="<?= esc($username) ?>">
+                    <?php elseif ($isUrlFoto): ?>
                         <img src="<?= esc($foto) ?>" alt="<?= esc($username) ?>" referrerpolicy="no-referrer">
                     <?php elseif ($hasLocalFoto): ?>
                         <img src="<?= base_url('uploads/foto/' . $foto) ?>" alt="<?= esc($username) ?>">
@@ -890,26 +895,34 @@
 (function () {
     'use strict';
 
-    let siteBaseUrl = '<?= rtrim(base_url(), '/') ?>/';
-    if (window.location.protocol === 'https:' && siteBaseUrl.startsWith('http:')) {
+    var siteBaseUrl = '<?= rtrim(base_url(), '/') ?>/';
+    if (window.location.protocol === 'https:' && siteBaseUrl.indexOf('http:') === 0) {
         siteBaseUrl = siteBaseUrl.replace(/^http:/, 'https:');
     }
     window.siteBaseUrl = siteBaseUrl;
 
-    // CSRF: otomatis kirim token di setiap AJAX POST/PUT/DELETE
+    // Page <-> URL mapping
+    var pageUrlMap = {
+        'dashboard': 'dashboard',
+        'meeting': 'meetings',
+        'participant': 'participants',
+        'discussion': 'discussions',
+        'export': 'export',
+        'profile': 'settings'
+    };
+    var urlPageMap = {};
+    for (var k in pageUrlMap) { urlPageMap[pageUrlMap[k]] = k; }
+
+    // CSRF
     var csrfName = '<?= csrf_token() ?>';
     var csrfHash = '<?= csrf_hash() ?>';
-    // Helper: Get CSRF headers for native fetch()
     window.getCsrfHeaders = function(extraHeaders) {
         var headers = { 'X-CSRF-TOKEN': csrfHash };
         if (extraHeaders) {
-            for (var key in extraHeaders) {
-                headers[key] = extraHeaders[key];
-            }
+            for (var key in extraHeaders) { headers[key] = extraHeaders[key]; }
         }
         return headers;
     };
-    // Helper: Append CSRF to FormData/URLSearchParams
     window.appendCsrf = function(data) {
         if (data instanceof FormData) {
             data.append(csrfName, csrfHash);
@@ -922,7 +935,6 @@
         beforeSend: function(xhr, settings) {
             if (settings.type && settings.type.toUpperCase() !== 'GET') {
                 xhr.setRequestHeader('X-CSRF-TOKEN', csrfHash);
-                // Juga kirim sebagai parameter jika data berupa string/FormData
                 if (typeof settings.data === 'string') {
                     settings.data += '&' + csrfName + '=' + encodeURIComponent(csrfHash);
                 } else if (settings.data instanceof FormData) {
@@ -934,21 +946,39 @@
         }
     });
 
-    const $appShell      = $('#appShell');
-    const $sidebar       = $('#sidebar');
-    const $overlay       = $('#sidebarOverlay');
-    const $mainContent   = $('#mainContent');
-    const $mobileToggle  = $('#mobileToggle');
-    const $desktopToggle = $('#desktopToggle');
-    const $sidebarClose  = $('#sidebarClose');
-    const $skeleton      = $('#contentSkeleton');
-    const $pageLoader    = $('#pageLoader');
+    var $appShell      = $('#appShell');
+    var $sidebar       = $('#sidebar');
+    var $overlay       = $('#sidebarOverlay');
+    var $mainContent   = $('#mainContent');
+    var $mobileToggle  = $('#mobileToggle');
+    var $desktopToggle = $('#desktopToggle');
+    var $sidebarClose  = $('#sidebarClose');
+    var $skeleton      = $('#contentSkeleton');
+    var $pageLoader    = $('#pageLoader');
 
-    let isLoading = false;
+    var isLoading = false;
+    var currentPage = null;
 
-    window.loadContent = function (page) {
+    function updateActiveLink(page) {
+        $('.sidebar .nav-link').removeClass('active');
+        $('.sidebar .nav-link[data-page="' + page + '"]').addClass('active');
+    }
+
+    function getPageFromUrl() {
+        var basePath = '/';
+        try { basePath = new URL(siteBaseUrl).pathname; } catch(e) {}
+        var currentPath = window.location.pathname;
+        var relative = currentPath.replace(basePath, '').replace(/^\/|\/$/g, '');
+        return urlPageMap[relative] || 'dashboard';
+    }
+
+    // Core loader (no URL change)
+    function loadPageContent(page) {
         if (isLoading) return;
         isLoading = true;
+        currentPage = page;
+
+        updateActiveLink(page);
 
         // Close mobile sidebar
         if (window.innerWidth < 768) {
@@ -969,16 +999,11 @@
             dataType: 'html',
             cache: false,
             beforeSend: function () {
-                // Cleanup: hapus modal lama yang dipindah ke body oleh load sebelumnya
                 $('body > .modal[data-spa-modal]').each(function () {
                     var $m = $(this);
-                    // Force hide modal jika sedang terbuka
-                    if ($m.hasClass('show')) {
-                        $m.modal('hide');
-                    }
+                    if ($m.hasClass('show')) { $m.modal('hide'); }
                     $m.remove();
                 });
-                // Stop kamera scanner jika masih aktif
                 if (window._participantCleanup) {
                     window._participantCleanup();
                     window._participantCleanup = null;
@@ -987,15 +1012,11 @@
             success: function (response) {
                 clearTimeout(loaderTimeout);
                 $mainContent.html(response);
-
-                // Move modals to body (prevents transform issues) — tandai dengan data attribute
                 $mainContent.find('.modal').each(function () {
                     $(this).attr('data-spa-modal', '1').appendTo('body');
                 });
-
                 $skeleton.removeClass('active');
                 $pageLoader.removeClass('active');
-
                 setTimeout(function () {
                     $mainContent.removeClass('is-loading');
                     isLoading = false;
@@ -1031,8 +1052,27 @@
                 isLoading = false;
             }
         });
+    }
+
+    // Navigate to page (public, with pushState)
+    window.loadContent = function (page) {
+        var url = siteBaseUrl + (pageUrlMap[page] || 'dashboard');
+        history.pushState({page: page}, '', url);
+        loadPageContent(page);
     };
 
+    // Browser back/forward
+    window.addEventListener('popstate', function (e) {
+        var page;
+        if (e.state && e.state.page) {
+            page = e.state.page;
+        } else {
+            page = getPageFromUrl();
+        }
+        loadPageContent(page);
+    });
+
+    // Global AJAX error handler
     $(document).ajaxError(function (event, xhr, settings) {
         if (settings && settings.url && settings.url.indexOf('partials/') !== -1) return;
         if (xhr.status === 401) {
@@ -1047,6 +1087,7 @@
         }
     });
 
+    // setActive kept for backward compat but not used by sidebar anymore
     window.setActive = function (element) {
         $('.sidebar .nav-link').removeClass('active');
         $(element).addClass('active');
@@ -1058,34 +1099,31 @@
     }
 
     $(function () {
-        // Initial load
-        loadContent('dashboard');
+        // Initial load from server-provided page
+        var initialPage = '<?= $initialPage ?? "dashboard" ?>';
+        history.replaceState({page: initialPage}, '', window.location.href);
+        loadPageContent(initialPage);
 
-        // Mobile open
         $mobileToggle.on('click', function () {
             $sidebar.addClass('active');
             $overlay.addClass('active');
         });
 
-        // Desktop toggle collapse
         $desktopToggle.on('click', function () {
             $appShell.toggleClass('sidebar-collapsed');
             $('body').toggleClass('sidebar-is-collapsed');
         });
 
-        // Close mobile sidebar
         $sidebarClose.on('click', closeMobileSidebar);
         $overlay.on('click', closeMobileSidebar);
 
-        // Escape key
         $(document).on('keydown', function (e) {
             if (e.key === 'Escape' && $sidebar.hasClass('active')) {
                 closeMobileSidebar();
             }
         });
 
-        // Resize handler
-        let resizeTimer;
+        var resizeTimer;
         $(window).on('resize', function () {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(function () {

@@ -6,30 +6,24 @@ class MainController extends BaseController
 {
     public function index()
     {
-        return view('Layouts/main');
+        $segment = $this->request->getUri()->getSegment(1);
+
+        $pageMap = [
+            'dashboard'    => 'dashboard',
+            'meetings'     => 'meeting',
+            'participants' => 'participant',
+            'discussions'  => 'discussion',
+            'export'       => 'export',
+            'settings'     => 'profile',
+        ];
+
+        $initialPage = $pageMap[$segment] ?? 'dashboard';
+
+        return view('Layouts/main', ['initialPage' => $initialPage]);
     }
 
     public function dashboard()
     {
         return view('partials/dashboard-content');
-    }
-
-    public function load($view)
-    {
-        // Whitelist view yang boleh dimuat (mencegah path traversal)
-        $allowed = [
-            'dashboard-content',
-            'meeting-content',
-            'participant-content',
-            'discussion-content',
-            'export-content',
-            'profile-content',
-        ];
-
-        if (!in_array($view, $allowed, true)) {
-            return $this->response->setStatusCode(404)->setBody('Halaman tidak ditemukan');
-        }
-
-        return view('partials/' . $view);
     }
 }

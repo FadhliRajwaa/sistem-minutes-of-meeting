@@ -351,8 +351,10 @@
                     $initial = strtoupper(substr($user['username'] ?? 'U', 0, 1));
                     
                     if (!empty($foto) && $foto !== 'default.png'):
-                        // Cek apakah URL (Google foto) atau file lokal
-                        if (filter_var($foto, FILTER_VALIDATE_URL)):
+                        if (strpos($foto, 'data:image/') === 0):
+                    ?>
+                        <img src="<?= $foto ?>" alt="Foto profil" id="avatarImg">
+                    <?php elseif (filter_var($foto, FILTER_VALIDATE_URL)):
                     ?>
                         <img src="<?= esc($foto) ?>" alt="Foto profil" id="avatarImg">
                     <?php else: ?>
@@ -478,39 +480,53 @@
         setTimeout(function () { toast.classList.remove('show'); }, 3500);
     }
 
-    // === Avatar upload preview ===
+    // === Avatar upload with client-side resize ===
     var avatarInput = document.getElementById('avatarInput');
     var avatarDisplay = document.getElementById('avatarDisplay');
-    var selectedFile = null;
+    var selectedBase64 = null;
+
+    function resizeImage(file, maxSize, quality, callback) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var img = new Image();
+            img.onload = function() {
+                var canvas = document.createElement('canvas');
+                var size = Math.min(img.width, img.height);
+                var sx = (img.width - size) / 2;
+                var sy = (img.height - size) / 2;
+                canvas.width = maxSize;
+                canvas.height = maxSize;
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(img, sx, sy, size, size, 0, 0, maxSize, maxSize);
+                callback(canvas.toDataURL('image/jpeg', quality));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
 
     if (avatarInput) {
-        avatarInput.addEventListener('change', function (e) {
+        avatarInput.addEventListener('change', function(e) {
             var file = e.target.files[0];
             if (!file) return;
 
-            // Validate
             var allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
             if (allowed.indexOf(file.type) === -1) {
                 showToast('Format foto harus JPG, PNG, GIF, atau WEBP', 'error');
                 avatarInput.value = '';
                 return;
             }
-            if (file.size > 2 * 1024 * 1024) {
-                showToast('Ukuran foto maksimal 2MB', 'error');
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('Ukuran foto maksimal 5MB', 'error');
                 avatarInput.value = '';
                 return;
             }
 
-            selectedFile = file;
-
-            // Preview
-            var reader = new FileReader();
-            reader.onload = function (ev) {
-                avatarDisplay.innerHTML = '<img src="' + ev.target.result + '" alt="Preview" id="avatarImg">';
-            };
-            reader.readAsDataURL(file);
-
-            showToast('Foto dipilih. Klik "Simpan Perubahan" untuk menyimpan.', 'success');
+            resizeImage(file, 200, 0.8, function(base64) {
+                selectedBase64 = base64;
+                avatarDisplay.innerHTML = '<img src="' + base64 + '" alt="Preview" id="avatarImg">';
+                showToast('Foto dipilih. Klik "Simpan Perubahan" untuk menyimpan.', 'success');
+            });
         });
     }
 
@@ -525,8 +541,8 @@
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status"></span> Menyimpan...';
 
             var formData = new FormData(infoForm);
-            if (selectedFile) {
-                formData.append('foto', selectedFile);
+            if (selectedBase64) {
+                formData.append('foto_base64', selectedBase64);
             }
 
             fetch(baseUrl + 'profile/update', {
@@ -542,7 +558,7 @@
                     var displayName = document.getElementById('displayName');
                     if (displayName && data.user) displayName.textContent = data.user.username;
 
-                    selectedFile = null;
+                    selectedBase64 = null;
 
                     // Reload sidebar avatar dengan update foto
                     setTimeout(function() {

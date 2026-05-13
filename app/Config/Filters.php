@@ -87,11 +87,14 @@ class Filters extends BaseFilters
         'auth' => [
             'before' => [
                 'dashboard',
-                'dashboard/*',
+                'meetings',
+                'participants',
+                'discussions',
+                'export',
+                'settings',
                 'partials/*',
                 'v1/*',
                 'meeting/*',
-                'meetings/*',
                 'participant/*',
                 'discussion',
                 'discussion/*',

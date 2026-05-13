@@ -53,38 +53,20 @@ class ProfileController extends BaseController
             'email'    => $email,
         ];
 
-        // Handle upload foto
-        $fotoFile = $this->request->getFile('foto');
-        if ($fotoFile && $fotoFile->isValid() && !$fotoFile->hasMoved()) {
-            // Validasi tipe file
-            $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            if (!in_array($fotoFile->getMimeType(), $allowedMimes)) {
-                return $this->response->setJSON(['success' => false, 'message' => 'Format foto harus JPG, PNG, GIF, atau WEBP']);
+        // Handle foto base64
+        $fotoBase64 = $this->request->getPost('foto_base64');
+        if (!empty($fotoBase64)) {
+            // Validate data URI format
+            if (!preg_match('/^data:image\/(jpeg|png|gif|webp);base64,/', $fotoBase64)) {
+                return $this->response->setJSON(['success' => false, 'message' => 'Format foto tidak valid']);
             }
 
-            // Validasi ukuran (max 2MB)
-            if ($fotoFile->getSize() > 2 * 1024 * 1024) {
-                return $this->response->setJSON(['success' => false, 'message' => 'Ukuran foto maksimal 2MB']);
+            // Check size (max ~500KB as base64)
+            if (strlen($fotoBase64) > 500 * 1024) {
+                return $this->response->setJSON(['success' => false, 'message' => 'Ukuran foto terlalu besar']);
             }
 
-            $uploadPath = FCPATH . 'uploads/foto/';
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0775, true);
-            }
-
-            // Hapus foto lama jika bukan default dan bukan URL (google foto)
-            if (!empty($user['foto']) && $user['foto'] !== 'default.png' && !filter_var($user['foto'], FILTER_VALIDATE_URL)) {
-                $oldFile = $uploadPath . $user['foto'];
-                if (file_exists($oldFile)) {
-                    @unlink($oldFile);
-                }
-            }
-
-            // Generate nama unique
-            $newName = 'user_' . $userId . '_' . time() . '.' . $fotoFile->getExtension();
-            $fotoFile->move($uploadPath, $newName);
-
-            $data['foto'] = $newName;
+            $data['foto'] = $fotoBase64;
         }
 
         // Update database
