@@ -531,7 +531,8 @@
 
             fetch(baseUrl + 'profile/update', {
                 method: 'POST',
-                body: formData
+                headers: getCsrfHeaders(),
+                body: appendCsrf(formData)
             })
             .then(function (res) { return res.json(); })
             .then(function (data) {
@@ -577,7 +578,8 @@
 
             fetch(baseUrl + 'profile/change-password', {
                 method: 'POST',
-                body: formData
+                headers: getCsrfHeaders(),
+                body: appendCsrf(formData)
             })
             .then(function (res) { return res.json(); })
             .then(function (data) {

@@ -614,7 +614,8 @@
 
             fetch(baseUrl + 'discussion/save', {
                 method: 'POST',
-                body: formData
+                headers: getCsrfHeaders(),
+                body: appendCsrf(formData)
             })
             .then(function(response) {
                 if (!response.ok) throw new Error('Network response was not ok');
@@ -650,7 +651,6 @@
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
                 showDiscToast('Gagal menyimpan notulensi. Periksa koneksi Anda.', 'error');
-                console.error('Discussion save error:', error);
             });
         });
     }

@@ -9,6 +9,11 @@ class MainController extends BaseController
         return view('Layouts/main');
     }
 
+    public function dashboard()
+    {
+        return view('partials/dashboard-content');
+    }
+
     public function load($view)
     {
         // Whitelist view yang boleh dimuat (mencegah path traversal)
@@ -19,7 +24,6 @@ class MainController extends BaseController
             'discussion-content',
             'export-content',
             'profile-content',
-            'settings-content',
         ];
 
         if (!in_array($view, $allowed, true)) {

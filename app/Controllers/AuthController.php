@@ -50,8 +50,18 @@ class AuthController extends Controller
     public function processRegister()
     {
         $rules = [
-            'name' => 'required|min_length[3]|max_length[50]',
-            'email' => 'required|valid_email|is_unique[users.email]',
+            'name' => [
+                'rules' => 'required|min_length[3]|max_length[50]|is_unique[users.username]',
+                'errors' => [
+                    'is_unique' => 'Username sudah terdaftar.'
+                ]
+            ],
+            'email' => [
+                'rules' => 'required|valid_email|is_unique[users.email]',
+                'errors' => [
+                    'is_unique' => 'Email sudah terdaftar.'
+                ]
+            ],
             'password' => 'required|min_length[6]',
             'password_confirm' => 'matches[password]'
         ];
@@ -60,13 +70,14 @@ class AuthController extends Controller
             return redirect()->back()->withInput()->with('error', $this->validator->listErrors());
         }
 
-        $model = new \App\Models\UserModel();
-        
-        $model->save([
-            'username' => $this->request->getPost('name'), 
+        $db = \Config\Database::connect();
+        $db->table('users')->insert([
+            'username' => $this->request->getPost('name'),
             'email' => $this->request->getPost('email'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
             'role' => 'peserta',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
         return redirect()->to('/auth/login')->with('success', 'Registrasi berhasil! Silakan login.');
@@ -79,7 +90,10 @@ class AuthController extends Controller
     public function googleLogin()
     {
         $config = new \Config\Google();
-        
+
+        $state = bin2hex(random_bytes(16));
+        session()->set('oauth_state', $state);
+
         $params = [
             'client_id'     => $config->clientID,
             'redirect_uri'  => $config->redirectUri,
@@ -87,10 +101,11 @@ class AuthController extends Controller
             'scope'         => 'email profile',
             'access_type'   => 'online',
             'prompt'        => 'select_account',
+            'state'         => $state,
         ];
 
         $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query($params);
-        
+
         return redirect()->to($authUrl);
     }
 
@@ -101,9 +116,17 @@ class AuthController extends Controller
     public function googleCallback()
     {
         $code = $this->request->getGet('code');
-        
+        $state = $this->request->getGet('state');
+
         if (!$code) {
             return redirect()->to('/auth/login')->with('error', 'Gagal login dengan Google');
+        }
+
+        // Validate OAuth state parameter
+        $savedState = session()->get('oauth_state');
+        session()->remove('oauth_state');
+        if (!$state || !$savedState || !hash_equals($savedState, $state)) {
+            return redirect()->to('/auth/login')->with('error', 'Sesi OAuth tidak valid. Silakan coba lagi.');
         }
 
         $config = new \Config\Google();
@@ -133,12 +156,16 @@ class AuthController extends Controller
         $user = $userModel->where('email', $userInfo['email'])->first();
 
         if (!$user) {
-            $userModel->save([
+            // Change from model save to direct db builder
+            $db = \Config\Database::connect();
+            $db->table('users')->insert([
                 'username' => $userInfo['name'] ?? $userInfo['email'],
                 'email'    => $userInfo['email'],
                 'foto'     => $userInfo['picture'] ?? 'default.png',
                 'role'     => 'peserta',
-                'password' => password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT)
+                'password' => password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
             $user = $userModel->where('email', $userInfo['email'])->first();
         } else {
@@ -232,6 +259,7 @@ class AuthController extends Controller
      */
     private function setUserSession(array $user): void
     {
+        session()->regenerate(true);
         session()->set([
             'user' => [
                 'id'         => (int) $user['id'],

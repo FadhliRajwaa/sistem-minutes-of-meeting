@@ -25,19 +25,19 @@ class ExportController extends BaseController
         }
 
         if (!$id) {
-            return "ID diskusi tidak diberikan.";
+            return $this->response->setStatusCode(400)->setBody('ID diskusi tidak diberikan.');
         }
 
         $userId = $this->getUserId();
         $model = new DiscussionModel();
-        
+
         // Pastikan discussion milik user ini
         $discussion = $model->where('id', $id)->where('user_id', $userId)->first();
 
         if (!$discussion) {
-            return "Data diskusi tidak ditemukan.";
+            return $this->response->setStatusCode(404)->setBody('Data diskusi tidak ditemukan.');
         }
-        
+
         // Ambil data meeting terkait (dengan filter user_id)
         $meetingModel = new MeetingModel();
         $meeting = $meetingModel->where('id', $discussion['meeting_id'])
@@ -45,7 +45,7 @@ class ExportController extends BaseController
                                 ->first();
 
         if (!$meeting) {
-            return "Data meeting tidak ditemukan.";
+            return $this->response->setStatusCode(404)->setBody('Data meeting tidak ditemukan.');
         }
 
         // Ambil data peserta (dengan filter user_id)
@@ -65,7 +65,7 @@ class ExportController extends BaseController
             $html = view('pdf/discussion', $data);
             
             $options = $dompdf->getOptions();
-            $options->set('isRemoteEnabled', true);
+            $options->set('isRemoteEnabled', false);
             
             $tmpDir = sys_get_temp_dir();
             $options->set('fontDir', $tmpDir);
@@ -101,7 +101,8 @@ class ExportController extends BaseController
             return $response;
 
         } catch (\Throwable $e) {
-            return "Maaf, gagal membuat PDF. Server Error: " . $e->getMessage();
+            log_message('error', 'PDF generation failed: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)->setBody('Maaf, gagal membuat PDF. Silakan coba lagi nanti.');
         }
     }
 
@@ -111,19 +112,19 @@ class ExportController extends BaseController
     public function previewHTML($id = null)
     {
         if (!$id) {
-            return "ID diskusi tidak diberikan.";
+            return $this->response->setStatusCode(400)->setBody('ID diskusi tidak diberikan.');
         }
 
         $userId = $this->getUserId();
         $model = new DiscussionModel();
-        
+
         // Pastikan discussion milik user ini
         $discussion = $model->where('id', $id)->where('user_id', $userId)->first();
 
         if (!$discussion) {
-            return "Data diskusi tidak ditemukan.";
+            return $this->response->setStatusCode(404)->setBody('Data diskusi tidak ditemukan.');
         }
-        
+
         // Ambil data meeting terkait (dengan filter user_id)
         $meetingModel = new MeetingModel();
         $meeting = $meetingModel->where('id', $discussion['meeting_id'])
@@ -131,7 +132,7 @@ class ExportController extends BaseController
                                 ->first();
 
         if (!$meeting) {
-            return "Data meeting tidak ditemukan.";
+            return $this->response->setStatusCode(404)->setBody('Data meeting tidak ditemukan.');
         }
 
         // Ambil data peserta (dengan filter user_id)

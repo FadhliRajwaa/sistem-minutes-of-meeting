@@ -621,45 +621,6 @@
         }
 
         /* ==========================================================
-           WHATSAPP FLOAT
-           ========================================================== */
-        .wa-float {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: #25D366;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            z-index: 35;
-            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3), 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
-        }
-        .wa-float::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            border: 2px solid rgba(37, 211, 102, 0.35);
-            animation: waPulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-            pointer-events: none;
-        }
-        .wa-float:hover {
-            transform: scale(1.08);
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-            color: #fff;
-        }
-        @keyframes waPulse {
-            0% { transform: scale(1); opacity: 0.6; }
-            100% { transform: scale(1.55); opacity: 0; }
-        }
-
-        /* ==========================================================
            BOOTSTRAP OVERRIDES
            ========================================================== */
         .modal-backdrop {
@@ -726,13 +687,6 @@
                 left: 0;
             }
 
-            .wa-float {
-                width: 46px;
-                height: 46px;
-                font-size: 1.3rem;
-                bottom: 16px;
-                right: 16px;
-            }
         }
 
         @media (max-width: 380px) {
@@ -741,13 +695,6 @@
             }
             .main-area {
                 padding: 12px;
-            }
-            .wa-float {
-                width: 44px;
-                height: 44px;
-                font-size: 1.2rem;
-                bottom: 14px;
-                right: 14px;
             }
         }
     </style>
@@ -852,10 +799,13 @@
                     <div class="user-info-role"><?= ucfirst(esc($role)) ?></div>
                 </div>
             </a>
-            <a href="<?= base_url('/auth/logout') ?>" class="btn-logout" title="Logout">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                <span>Logout</span>
-            </a>
+            <form action="<?= base_url('/auth/logout') ?>" method="post" style="margin:0;padding:0;">
+                <?= csrf_field() ?>
+                <button type="submit" class="btn-logout" title="Logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Logout</span>
+                </button>
+            </form>
         </div>
     </nav>
 
@@ -932,11 +882,6 @@
     <div class="loader-text">Memuat...</div>
 </div>
 
-<!-- WhatsApp Floating Button -->
-<a href="https://wa.me/6285702444966" target="_blank" rel="noopener noreferrer" class="wa-float" title="Hubungi via WhatsApp" aria-label="Hubungi via WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-</a>
-
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -954,6 +899,25 @@
     // CSRF: otomatis kirim token di setiap AJAX POST/PUT/DELETE
     var csrfName = '<?= csrf_token() ?>';
     var csrfHash = '<?= csrf_hash() ?>';
+    // Helper: Get CSRF headers for native fetch()
+    window.getCsrfHeaders = function(extraHeaders) {
+        var headers = { 'X-CSRF-TOKEN': csrfHash };
+        if (extraHeaders) {
+            for (var key in extraHeaders) {
+                headers[key] = extraHeaders[key];
+            }
+        }
+        return headers;
+    };
+    // Helper: Append CSRF to FormData/URLSearchParams
+    window.appendCsrf = function(data) {
+        if (data instanceof FormData) {
+            data.append(csrfName, csrfHash);
+        } else if (typeof data === 'string') {
+            data += '&' + csrfName + '=' + encodeURIComponent(csrfHash);
+        }
+        return data;
+    };
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
             if (settings.type && settings.type.toUpperCase() !== 'GET') {

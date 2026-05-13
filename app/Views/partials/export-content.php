@@ -616,6 +616,7 @@
         </div>
 
         <form action="<?= base_url('export/pdf') ?>" method="post" target="_blank" id="exportForm">
+            <?= csrf_field() ?>
             <div class="e-table-wrap mobile-stack">
                 <table class="e-table">
                     <thead>
@@ -719,6 +720,12 @@
 <script>
 {
     const exportBtn = document.getElementById("exportBtn");
+    function escapeHtml(text) {
+        if (!text) return '';
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(text));
+        return div.innerHTML;
+    }
     const viewBtn = document.getElementById("viewBtn");
     const deleteBtn = document.getElementById("deleteBtn");
     let selectedID = null;
@@ -773,10 +780,10 @@
                         } else {
                             data.forEach(function(item) {
                                 rows += '<tr>' +
-                                    '<td><input class="e-radio" type="radio" name="discussion_id" value="' + item.id + '" required></td>' +
-                                    '<td class="td-topic">' + item.topik + '</td>' +
-                                    '<td class="td-notulis">' + (item.notulis || item.nama_notulis) + '</td>' +
-                                    '<td class="td-date">' + item.tanggal + '</td>' +
+                                    '<td><input class="e-radio" type="radio" name="discussion_id" value="' + escapeHtml(String(item.id)) + '" required></td>' +
+                                    '<td class="td-topic">' + escapeHtml(item.topik) + '</td>' +
+                                    '<td class="td-notulis">' + escapeHtml(item.notulis || item.nama_notulis) + '</td>' +
+                                    '<td class="td-date">' + escapeHtml(item.tanggal) + '</td>' +
                                     '</tr>';
                             });
                         }
@@ -790,7 +797,7 @@
 
                         refreshRadioEvents();
                     })
-                    .catch(function(err) { console.error("Search error:", err); });
+                    .catch(function(err) { });
             }, 300);
         });
     }
@@ -839,8 +846,8 @@
 
             fetch(baseUrl + "discussion/delete", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: selectedID })
+                headers: getCsrfHeaders({ "Content-Type": "application/x-www-form-urlencoded" }),
+                body: appendCsrf("id=" + encodeURIComponent(selectedID))
             })
             .then(function(res) { return res.json(); })
             .then(function(result) {
@@ -859,7 +866,7 @@
                     }
                 }
             })
-            .catch(function(err) { console.error("Delete error:", err); });
+            .catch(function(err) { });
         });
     }
 }

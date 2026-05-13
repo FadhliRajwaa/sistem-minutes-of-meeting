@@ -701,8 +701,8 @@
 
         fetch(baseUrl + 'meeting/delete', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'id=' + encodeURIComponent(id)
+            headers: getCsrfHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
+            body: appendCsrf('id=' + encodeURIComponent(id))
         })
         .then(function(res) { return res.json(); })
         .then(function(data) {
@@ -722,7 +722,6 @@
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-trash-alt me-1"></i> Ya, Hapus';
             showToast('Terjadi kesalahan jaringan!', 'error');
-            console.error('Delete error:', err);
         });
     });
 
@@ -739,7 +738,8 @@
 
         fetch(baseUrl + 'meeting/save', {
             method: 'POST',
-            body: formData
+            headers: getCsrfHeaders(),
+            body: appendCsrf(formData)
         })
         .then(function(res) { return res.json(); })
         .then(function(data) {
@@ -762,7 +762,6 @@
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
             showToast('Gagal membuat meeting. Periksa koneksi Anda.', 'error');
-            console.error('Create error:', err);
         });
     });
 }

@@ -18,8 +18,8 @@ class Database extends Config
         'pConnect' => false,
         'DBDebug'  => (ENVIRONMENT !== 'production'),
         'cacheOn'  => false,
-        'charset'  => 'utf8',
-        'DBCollat' => 'utf8_general_ci',
+        'charset'  => 'utf8mb4',
+        'DBCollat' => 'utf8mb4_general_ci',
         'swapPre'  => '',
         'encrypt'  => false,
         'compress' => false,
@@ -42,8 +42,8 @@ class Database extends Config
         'pConnect' => false,
         'DBDebug'  => (ENVIRONMENT !== 'production'),
         'cacheOn'  => false,
-        'charset'  => 'utf8',
-        'DBCollat' => 'utf8_general_ci',
+        'charset'  => 'utf8mb4',
+        'DBCollat' => 'utf8mb4_general_ci',
         'swapPre'  => '',
         'encrypt'  => true, // SSL Mode: REQUIRED
         'compress' => false,
@@ -61,7 +61,13 @@ class Database extends Config
             $this->defaultGroup = getenv('DATABASE_DEFAULT_GROUP');
         }
 
-        // Load Aiven password from Environment Variable if exists
+        // Load Aiven credentials from Environment Variables if exists
+        if (getenv('AIVEN_HOSTNAME')) {
+            $this->aiven['hostname'] = getenv('AIVEN_HOSTNAME');
+        }
+        if (getenv('AIVEN_USERNAME')) {
+            $this->aiven['username'] = getenv('AIVEN_USERNAME');
+        }
         if (getenv('AIVEN_PASSWORD')) {
             $this->aiven['password'] = getenv('AIVEN_PASSWORD');
         }

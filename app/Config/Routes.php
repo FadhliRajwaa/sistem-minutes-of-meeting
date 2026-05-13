@@ -12,7 +12,7 @@ $routes->get('auth/register', 'AuthController::register');
 $routes->post('auth/register', 'AuthController::processRegister');
 $routes->get('auth/google-login', 'AuthController::googleLogin');
 $routes->get('auth/google-callback', 'AuthController::googleCallback');
-$routes->get('auth/logout', 'AuthController::logout');
+$routes->post('auth/logout', 'AuthController::logout');
 
 // ✅ MAIN ROUTE (SPA Dashboard) - Protected by AuthFilter
 $routes->get('dashboard', 'MainController::index');
@@ -20,7 +20,7 @@ $routes->get('dashboard/(:any)', 'MainController::index');
 $routes->get('dashboard/load/(:segment)', 'MainController::load/$1');
 
 // ✅ PARTIAL VIEWS (SPA Loads) - Protected by AuthFilter
-$routes->get('partials/dashboard-content', 'PartialController::dashboard');
+$routes->get('partials/dashboard-content', 'MainController::dashboard');
 $routes->get('partials/meeting-content', 'MeetingController::index'); 
 $routes->get('partials/participant-content', 'ParticipantController::index');
 $routes->get('partials/discussion-content', 'DiscussionController::index');
@@ -31,7 +31,6 @@ $routes->get('v1/meetings', 'MeetingController::getMeetings');
 $routes->post('meeting/save', 'MeetingController::save');
 $routes->post('meeting/update', 'MeetingController::update');
 $routes->post('meeting/delete', 'MeetingController::delete');
-$routes->get('meetings/json', 'MeetingController::getMeetings');
 $routes->get('v1/reminder', 'MeetingController::getUpcoming');
 
 // ✅ API Participant - Protected by AuthFilter
@@ -43,7 +42,6 @@ $routes->post('participant/absen', 'ParticipantController::absen');
 // ✅ API Discussion - Protected by AuthFilter
 $routes->get('discussion', 'DiscussionController::index');
 $routes->post('discussion/save', 'DiscussionController::save');
-$routes->post('discussion/store', 'DiscussionController::save');
 $routes->get('discussion/search', 'DiscussionController::search');
 $routes->post('discussion/delete', 'DiscussionController::delete');
 

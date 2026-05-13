@@ -562,14 +562,14 @@
             <?php if (session()->getFlashdata('error')): ?>
                 <div class="alert-flash alert-error">
                     <i class="fa-solid fa-circle-exclamation"></i>
-                    <span><?= session()->getFlashdata('error') ?></span>
+                    <span><?= esc(session()->getFlashdata('error')) ?></span>
                 </div>
             <?php endif; ?>
 
             <?php if (session()->getFlashdata('message')): ?>
                 <div class="alert-flash alert-success">
                     <i class="fa-solid fa-circle-check"></i>
-                    <span><?= session()->getFlashdata('message') ?></span>
+                    <span><?= esc(session()->getFlashdata('message')) ?></span>
                 </div>
             <?php endif; ?>
 

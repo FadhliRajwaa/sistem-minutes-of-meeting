@@ -63,6 +63,7 @@ class ParticipantController extends BaseController
         // Cek duplikasi barcode di meeting yang sama
         $existing = $model->where('barcode_id', $barcodeId)
                           ->where('meeting_id', $meetingId)
+                          ->where('user_id', $userId)
                           ->first();
         
         if ($existing) {

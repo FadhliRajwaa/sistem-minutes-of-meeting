@@ -44,7 +44,7 @@ class MeetingController extends BaseController
         $tempat = trim($this->request->getPost('tempat') ?? '');
 
         if (empty($nama) || empty($tanggal) || empty($tempat)) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Semua field harus diisi']);
+            return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Semua field harus diisi']);
         }
 
         $this->meetingModel->save([
@@ -95,7 +95,7 @@ class MeetingController extends BaseController
 
             (new ParticipantModel())->where('meeting_id', $id)->where('user_id', $userId)->delete();
             (new DiscussionModel())->where('meeting_id', $id)->where('user_id', $userId)->delete();
-            $this->meetingModel->delete($id);
+            $this->meetingModel->where('user_id', $userId)->delete($id);
 
             $db->transComplete();
 

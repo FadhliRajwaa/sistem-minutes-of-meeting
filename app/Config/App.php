@@ -24,13 +24,17 @@ class App extends BaseConfig
 
         // Override baseURL dynamically if on Vercel/Production and not set via Env
         if (isset($_SERVER['HTTP_HOST']) && !getenv('app.baseURL')) {
+            // Validate Host header to prevent Host Header Injection
+            $host = $_SERVER['HTTP_HOST'];
+            if (!preg_match('/^[a-zA-Z0-9.\-]+(:\d+)?$/', $host)) {
+                $host = 'localhost';
+            }
+
             $protocol = 'http://';
-            
-            // Check standard HTTPS header
+
             if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
                 $protocol = 'https://';
             }
-            // Check Proxy headers (Vercel/Cloudflare/etc)
             elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
                 $protocol = 'https://';
             }
@@ -38,7 +42,12 @@ class App extends BaseConfig
                 $protocol = 'https://';
             }
 
-            $this->baseURL = $protocol . $_SERVER['HTTP_HOST'] . '/';
+            $this->baseURL = $protocol . $host . '/';
+        }
+
+        // Force HTTPS in production
+        if (ENVIRONMENT === 'production') {
+            $this->forceGlobalSecureRequests = true;
         }
     }
 
@@ -157,7 +166,7 @@ class App extends BaseConfig
      * @see https://www.php.net/manual/en/timezones.php for list of timezones
      *      supported by PHP.
      */
-    public string $appTimezone = 'UTC';
+    public string $appTimezone = 'Asia/Jakarta';
 
     /**
      * --------------------------------------------------------------------------

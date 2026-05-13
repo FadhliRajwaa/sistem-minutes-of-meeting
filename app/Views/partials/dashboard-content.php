@@ -357,6 +357,13 @@
 {
     const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
 
+    function escapeHtml(text) {
+        if (!text) return '';
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(text));
+        return div.innerHTML;
+    }
+
     /**
      * Calculate time remaining until meeting and return formatted badge HTML
      * @param {string} meetingTime - ISO datetime string of the meeting
@@ -407,9 +414,9 @@
 
                 var detail = '' +
                     '<div class="upcoming-info">' +
-                        '<h4>' + meeting.nama_meeting + '</h4>' +
+                        '<h4>' + escapeHtml(meeting.nama_meeting) + '</h4>' +
                         '<div class="upcoming-meta">' +
-                            '<span><i class="fas fa-map-marker-alt"></i> ' + meeting.tempat + '</span>' +
+                            '<span><i class="fas fa-map-marker-alt"></i> ' + escapeHtml(meeting.tempat) + '</span>' +
                             '<span><i class="fas fa-calendar-day"></i> ' + formattedDate + '</span>' +
                             '<span><i class="fas fa-clock"></i> ' + formattedTime + '</span>' +
                         '</div>' +
@@ -431,7 +438,6 @@
             }
         })
         .catch(function(err) {
-            console.error('Error loading reminder:', err);
         });
 }
 </script>

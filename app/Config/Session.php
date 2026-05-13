@@ -30,10 +30,10 @@ class Session extends BaseConfig
 
     /**
      * --------------------------------------------------------------------------
-     * Session Expiration (7 days)
+     * Session Expiration (1 day)
      * --------------------------------------------------------------------------
      */
-    public int $expiration = 604800;
+    public int $expiration = 86400;
 
     /**
      * --------------------------------------------------------------------------
@@ -65,7 +65,7 @@ class Session extends BaseConfig
      * Session Regenerate Destroy
      * --------------------------------------------------------------------------
      */
-    public bool $regenerateDestroy = false;
+    public bool $regenerateDestroy = true;
 
     /**
      * --------------------------------------------------------------------------

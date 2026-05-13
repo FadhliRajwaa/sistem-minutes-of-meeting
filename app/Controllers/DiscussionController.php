@@ -91,19 +91,23 @@ class DiscussionController extends BaseController
 
     public function delete()
     {
-        $json = $this->request->getJSON();
-        $id = $json->id ?? null;
-        
+        $id = $this->request->getPost('id');
         if (!$id) {
-            return $this->response->setJSON(['success' => false, 'message' => 'ID tidak valid']);
+            // Fallback: try JSON body
+            $json = $this->request->getJSON();
+            $id = $json->id ?? null;
+        }
+
+        if (!$id) {
+            return $this->response->setStatusCode(422)->setJSON(['success' => false, 'message' => 'ID tidak valid']);
         }
 
         $userId = $this->getUserId();
         $model = new DiscussionModel();
-        
+
         $discussion = $model->where('id', $id)->where('user_id', $userId)->first();
         if (!$discussion) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Data tidak ditemukan']);
+            return $this->response->setStatusCode(404)->setJSON(['success' => false, 'message' => 'Data tidak ditemukan']);
         }
 
         if ($model->delete($id)) {
