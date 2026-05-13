@@ -40,14 +40,18 @@ class MeetingController extends BaseController
     public function save()
     {
         $nama = trim($this->request->getPost('nama_meeting') ?? '');
-        $tanggal = $this->request->getPost('tanggal');
+        $tanggal = trim($this->request->getPost('tanggal') ?? '');
         $tempat = trim($this->request->getPost('tempat') ?? '');
 
         if (empty($nama) || empty($tanggal) || empty($tempat)) {
             return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Semua field harus diisi']);
         }
 
-        if (!empty($tanggal) && strtotime($tanggal) === false) {
+        if (strlen($nama) > 255 || strlen($tempat) > 255) {
+            return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Nama meeting dan tempat maksimal 255 karakter']);
+        }
+
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}([ T]\d{2}:\d{2}(:\d{2})?)?$/', $tanggal) || strtotime($tanggal) === false) {
             return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Format tanggal tidak valid']);
         }
 
@@ -128,7 +132,7 @@ class MeetingController extends BaseController
 
         $data = array_filter([
             'nama_meeting' => trim($this->request->getPost('nama_meeting') ?? ''),
-            'tanggal'      => $this->request->getPost('tanggal'),
+            'tanggal'      => trim($this->request->getPost('tanggal') ?? ''),
             'tempat'       => trim($this->request->getPost('tempat') ?? ''),
             'status'       => $this->request->getPost('status')
         ], fn($v) => $v !== '' && $v !== null);
@@ -137,6 +141,21 @@ class MeetingController extends BaseController
         $validStatuses = ['Belum Dilaksanakan', 'Sedang Berlangsung', 'Sudah Dilaksanakan'];
         if (!empty($data['status']) && !in_array($data['status'], $validStatuses)) {
             return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Status tidak valid']);
+        }
+
+        // Validasi panjang
+        if (!empty($data['nama_meeting']) && strlen($data['nama_meeting']) > 255) {
+            return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Nama meeting maksimal 255 karakter']);
+        }
+        if (!empty($data['tempat']) && strlen($data['tempat']) > 255) {
+            return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Tempat maksimal 255 karakter']);
+        }
+
+        // Validasi format tanggal
+        if (!empty($data['tanggal'])) {
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}([ T]\d{2}:\d{2}(:\d{2})?)?$/', $data['tanggal']) || strtotime($data['tanggal']) === false) {
+                return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Format tanggal tidak valid']);
+            }
         }
 
         if (empty($data)) {

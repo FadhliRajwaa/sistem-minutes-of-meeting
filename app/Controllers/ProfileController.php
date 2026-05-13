@@ -77,6 +77,9 @@ class ProfileController extends BaseController
 
         // Update database
         if ($userModel->update($userId, $data)) {
+            // Regenerate session setelah perubahan profil
+            session()->regenerate(true);
+
             // Update session dengan data baru
             $updatedUser = $userModel->find($userId);
             session()->set('user', [

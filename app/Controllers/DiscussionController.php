@@ -33,6 +33,17 @@ class DiscussionController extends BaseController
             return $this->response->setJSON(['success' => false, 'message' => 'Semua field wajib diisi']);
         }
 
+        // Validasi panjang
+        if (strlen($topik) > 500 || strlen($namaNotulis) > 255) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Topik maksimal 500 karakter, nama notulis maksimal 255 karakter']);
+        }
+
+        // Validasi format tanggal
+        $tanggal = trim($tanggal);
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}([ T]\d{2}:\d{2}(:\d{2})?)?$/', $tanggal) || strtotime($tanggal) === false) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Format tanggal tidak valid']);
+        }
+
         // Verifikasi meeting milik user
         $meetingModel = new MeetingModel();
         $meeting = $meetingModel->where('id', $meetingId)->where('user_id', $userId)->first();
@@ -40,9 +51,12 @@ class DiscussionController extends BaseController
             return $this->response->setJSON(['success' => false, 'message' => 'Meeting tidak ditemukan']);
         }
 
-        // Filter pembahasan kosong
+        // Filter pembahasan kosong dan batasi jumlah
         if (is_array($pembahasan)) {
             $pembahasan = array_values(array_filter($pembahasan, fn($p) => trim($p) !== ''));
+            if (count($pembahasan) > 100) {
+                return $this->response->setJSON(['success' => false, 'message' => 'Maksimal 100 item pembahasan']);
+            }
         }
 
         $discussionModel = new DiscussionModel();

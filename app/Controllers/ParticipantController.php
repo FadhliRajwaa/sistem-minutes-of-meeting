@@ -51,6 +51,10 @@ class ParticipantController extends BaseController
             return $this->response->setJSON(['status' => 'error', 'message' => 'Semua field harus diisi']);
         }
 
+        if (strlen($name) > 255 || strlen($barcodeId) > 255) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Nama dan Barcode ID maksimal 255 karakter']);
+        }
+
         // Verifikasi meeting milik user
         $meetingModel = new MeetingModel();
         $meeting = $meetingModel->select('id')->where('id', $meetingId)->where('user_id', $userId)->first();
@@ -86,14 +90,20 @@ class ParticipantController extends BaseController
         $model = new ParticipantModel();
         $userId = $this->getUserId();
         $barcode = trim($this->request->getPost('barcode') ?? '');
-        
+        $meetingId = $this->request->getPost('meeting_id');
+
         if (empty($barcode)) {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Barcode tidak valid']);
         }
 
-        $participant = $model->where('barcode_id', $barcode)
-                            ->where('user_id', $userId)
-                            ->first();
+        $query = $model->where('barcode_id', $barcode)
+                       ->where('user_id', $userId);
+
+        if (!empty($meetingId)) {
+            $query->where('meeting_id', $meetingId);
+        }
+
+        $participant = $query->first();
 
         if (!$participant) {
             return $this->response->setJSON([

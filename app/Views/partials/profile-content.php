@@ -358,10 +358,10 @@
                     ?>
                         <img src="<?= esc($foto) ?>" alt="Foto profil" id="avatarImg">
                     <?php else: ?>
-                        <img src="<?= base_url('uploads/foto/' . $foto) ?>" alt="Foto profil" id="avatarImg">
+                        <img src="<?= base_url('uploads/foto/' . esc($foto, 'url')) ?>" alt="Foto profil" id="avatarImg">
                     <?php endif;
                     else: ?>
-                        <span id="avatarInitial"><?= $initial ?></span>
+                        <span id="avatarInitial"><?= esc($initial) ?></span>
                     <?php endif; ?>
                 </div>
                 <label for="avatarInput" class="avatar-edit-btn" title="Ganti foto">

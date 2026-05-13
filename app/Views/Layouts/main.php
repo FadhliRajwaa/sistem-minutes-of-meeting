@@ -792,9 +792,9 @@
                     <?php elseif ($isUrlFoto): ?>
                         <img src="<?= esc($foto) ?>" alt="<?= esc($username) ?>" referrerpolicy="no-referrer">
                     <?php elseif ($hasLocalFoto): ?>
-                        <img src="<?= base_url('uploads/foto/' . $foto) ?>" alt="<?= esc($username) ?>">
+                        <img src="<?= base_url('uploads/foto/' . esc($foto, 'url')) ?>" alt="<?= esc($username) ?>">
                     <?php else: ?>
-                        <?= $initial ?>
+                        <?= esc($initial) ?>
                     <?php endif; ?>
                 </div>
                 <div class="user-info">
@@ -837,9 +837,9 @@
                     <?php elseif ($isUrlFoto): ?>
                         <img src="<?= esc($foto) ?>" alt="<?= esc($username) ?>" referrerpolicy="no-referrer">
                     <?php elseif ($hasLocalFoto): ?>
-                        <img src="<?= base_url('uploads/foto/' . $foto) ?>" alt="<?= esc($username) ?>">
+                        <img src="<?= base_url('uploads/foto/' . esc($foto, 'url')) ?>" alt="<?= esc($username) ?>">
                     <?php else: ?>
-                        <?= $initial ?>
+                        <?= esc($initial) ?>
                     <?php endif; ?>
                 </div>
             </a>
