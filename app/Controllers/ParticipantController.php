@@ -9,7 +9,14 @@ class ParticipantController extends BaseController
 {
     public function index()
     {
-        return view('partials/participant-content');
+        $userId = $this->getUserId();
+        $meetingModel = new MeetingModel();
+        $meetings = $meetingModel->select('id, nama_meeting')
+            ->where('user_id', $userId)
+            ->orderBy('tanggal', 'DESC')
+            ->findAll();
+
+        return view('partials/participant-content', ['meetings' => $meetings]);
     }
 
     public function getParticipants($meetingId)

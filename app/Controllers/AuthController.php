@@ -285,7 +285,7 @@ class AuthController extends Controller
      */
     private function setUserSession(array $user): void
     {
-        session()->regenerate(true);
+        session()->regenerate(false);
         session()->set([
             'user' => [
                 'id'         => (int) $user['id'],

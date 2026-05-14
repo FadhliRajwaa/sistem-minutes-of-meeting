@@ -948,6 +948,14 @@
         }
     });
 
+    // Sync CSRF token from cookie if it changed (safety net for session regeneration)
+    $(document).ajaxComplete(function(event, xhr) {
+        var cookieMatch = document.cookie.match(/(?:^|;\s*)csrf_cookie_name=([^;]+)/);
+        if (cookieMatch && cookieMatch[1] && cookieMatch[1] !== csrfHash) {
+            csrfHash = decodeURIComponent(cookieMatch[1]);
+        }
+    });
+
     var $appShell      = $('#appShell');
     var $sidebar       = $('#sidebar');
     var $overlay       = $('#sidebarOverlay');

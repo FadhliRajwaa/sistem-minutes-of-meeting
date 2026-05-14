@@ -630,7 +630,15 @@
                 </div>
                 <div class="p-card-body">
                     <label class="form-label-sm">Meeting Aktif</label>
-                    <select id="meetingSelect" class="select-meeting"></select>
+                    <select id="meetingSelect" class="select-meeting">
+                        <?php if (empty($meetings)): ?>
+                            <option value="">Tidak ada meeting aktif</option>
+                        <?php else: ?>
+                            <?php foreach ($meetings as $m): ?>
+                                <option value="<?= esc($m['id'], 'attr') ?>"><?= esc($m['nama_meeting']) ?></option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </select>
                     <button id="addParticipantBtn" class="btn-add-manual">
                         <i class="fas fa-plus" style="font-size:0.7rem"></i>
                         Tambah Manual
@@ -855,26 +863,37 @@
 
     // ===== LOAD MEETINGS =====
     function loadMeetings() {
-        $('#meetingSelect').html('<option>Memuat data...</option>');
+        var $sel = $('#meetingSelect');
+        // If meetings already rendered server-side, skip AJAX
+        if ($sel.find('option[value!=""]').length > 0) {
+            $('#addParticipantBtn').prop('disabled', false).css('opacity', '1');
+            $('#btnScan').prop('disabled', false).css('opacity', '1');
+            loadParticipants();
+            return;
+        }
 
+        // No meetings — disable controls
+        if ($sel.find('option').length > 0 && !$sel.val()) {
+            $('#addParticipantBtn').prop('disabled', true).css('opacity', '0.5');
+            $('#btnScan').prop('disabled', true).css('opacity', '0.5');
+            return;
+        }
+
+        // Fallback: fetch via AJAX
+        $sel.html('<option>Memuat data...</option>');
         $.get(baseUrl + 'v1/meetings')
             .done(function(data) {
-                $('#meetingSelect').empty();
+                $sel.empty();
 
-                if (Array.isArray(data) && data.length === 0) {
-                    $('#meetingSelect').append('<option value="">Tidak ada meeting aktif</option>');
+                if (!Array.isArray(data) || data.length === 0) {
+                    $sel.append('<option value="">Tidak ada meeting aktif</option>');
                     $('#addParticipantBtn').prop('disabled', true).css('opacity', '0.5');
                     $('#btnScan').prop('disabled', true).css('opacity', '0.5');
                     return;
                 }
 
-                if (!Array.isArray(data)) {
-                    $('#meetingSelect').html('<option value="">Error memuat data</option>');
-                    return;
-                }
-
                 $.each(data, function(i, meeting) {
-                    $('#meetingSelect').append($('<option>').val(meeting.id).text(meeting.nama_meeting));
+                    $sel.append($('<option>').val(meeting.id).text(meeting.nama_meeting));
                 });
 
                 $('#addParticipantBtn').prop('disabled', false).css('opacity', '1');
@@ -886,7 +905,7 @@
                     window.location.href = baseUrl + 'auth/login';
                     return;
                 }
-                $('#meetingSelect').html('<option value="">Gagal memuat data</option>');
+                $sel.html('<option value="">Gagal memuat data</option>');
             });
     }
 

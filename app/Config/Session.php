@@ -57,15 +57,22 @@ class Session extends BaseConfig
      * --------------------------------------------------------------------------
      * Session Time to Update
      * --------------------------------------------------------------------------
+     *
+     * On Vercel serverless, frequent regeneration causes race conditions
+     * with concurrent AJAX requests. 1800s (30 min) is safe.
      */
-    public int $timeToUpdate = 300;
+    public int $timeToUpdate = 1800;
 
     /**
      * --------------------------------------------------------------------------
      * Session Regenerate Destroy
      * --------------------------------------------------------------------------
+     *
+     * MUST be false on Vercel serverless. When true, the old session row
+     * is deleted immediately on regeneration — any concurrent request
+     * still carrying the old cookie finds no session and gets logged out.
      */
-    public bool $regenerateDestroy = true;
+    public bool $regenerateDestroy = false;
 
     /**
      * --------------------------------------------------------------------------
