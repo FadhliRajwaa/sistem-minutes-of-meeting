@@ -53,21 +53,38 @@ class AuthController extends Controller
             'name' => [
                 'rules' => 'required|min_length[3]|max_length[50]|is_unique[users.username]',
                 'errors' => [
-                    'is_unique' => 'Username sudah terdaftar.'
+                    'required'   => 'Nama lengkap harus diisi.',
+                    'min_length' => 'Nama minimal 3 karakter.',
+                    'max_length' => 'Nama maksimal 50 karakter.',
+                    'is_unique'  => 'Username sudah terdaftar.',
                 ]
             ],
             'email' => [
                 'rules' => 'required|valid_email|is_unique[users.email]',
                 'errors' => [
-                    'is_unique' => 'Email sudah terdaftar.'
+                    'required'    => 'Email harus diisi.',
+                    'valid_email' => 'Format email tidak valid.',
+                    'is_unique'   => 'Email sudah terdaftar.',
                 ]
             ],
-            'password' => 'required|min_length[6]',
-            'password_confirm' => 'matches[password]'
+            'password' => [
+                'rules' => 'required|min_length[6]',
+                'errors' => [
+                    'required'   => 'Password harus diisi.',
+                    'min_length' => 'Password minimal 6 karakter.',
+                ]
+            ],
+            'password_confirm' => [
+                'rules' => 'matches[password]',
+                'errors' => [
+                    'matches' => 'Konfirmasi password tidak cocok.',
+                ]
+            ],
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('error', $this->validator->listErrors());
+            $errors = implode(' ', $this->validator->getErrors());
+            return redirect()->back()->withInput()->with('error', $errors);
         }
 
         $db = \Config\Database::connect();
