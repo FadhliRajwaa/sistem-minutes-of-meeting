@@ -958,8 +958,8 @@
     var $skeleton      = $('#contentSkeleton');
     var $pageLoader    = $('#pageLoader');
 
-    var isLoading = false;
     var currentPage = null;
+    var currentXhr = null;
 
     function updateActiveLink(page) {
         $('.sidebar .nav-link').removeClass('active');
@@ -976,16 +976,30 @@
 
     // Core loader (no URL change)
     function loadPageContent(page) {
-        if (isLoading) return;
-        isLoading = true;
-        currentPage = page;
+        // Abort previous request if still loading
+        if (currentXhr) {
+            currentXhr.abort();
+            currentXhr = null;
+        }
 
+        currentPage = page;
         updateActiveLink(page);
 
         // Close mobile sidebar
         if (window.innerWidth < 768) {
             $sidebar.removeClass('active');
             $overlay.removeClass('active');
+        }
+
+        // Cleanup before loading new content
+        $('body > .modal[data-spa-modal]').each(function () {
+            var $m = $(this);
+            if ($m.hasClass('show')) { $m.modal('hide'); }
+            $m.remove();
+        });
+        if (window._participantCleanup) {
+            window._participantCleanup();
+            window._participantCleanup = null;
         }
 
         $mainContent.addClass('is-loading').html('');
@@ -995,24 +1009,15 @@
             $pageLoader.addClass('active');
         }, 400);
 
-        $.ajax({
+        currentXhr = $.ajax({
             url: siteBaseUrl + 'partials/' + page + '-content',
             type: 'GET',
             dataType: 'html',
             cache: false,
-            beforeSend: function () {
-                $('body > .modal[data-spa-modal]').each(function () {
-                    var $m = $(this);
-                    if ($m.hasClass('show')) { $m.modal('hide'); }
-                    $m.remove();
-                });
-                if (window._participantCleanup) {
-                    window._participantCleanup();
-                    window._participantCleanup = null;
-                }
-            },
+            timeout: 15000,
             success: function (response) {
                 clearTimeout(loaderTimeout);
+                currentXhr = null;
                 $mainContent.html(response);
                 $mainContent.find('.modal').each(function () {
                     $(this).attr('data-spa-modal', '1').appendTo('body');
@@ -1021,13 +1026,15 @@
                 $pageLoader.removeClass('active');
                 setTimeout(function () {
                     $mainContent.removeClass('is-loading');
-                    isLoading = false;
                 }, 50);
             },
-            error: function (xhr) {
+            error: function (xhr, textStatus) {
                 clearTimeout(loaderTimeout);
+                currentXhr = null;
                 $skeleton.removeClass('active');
                 $pageLoader.removeClass('active');
+
+                if (textStatus === 'abort') return;
 
                 if (xhr.status === 401) {
                     try {
@@ -1041,17 +1048,20 @@
                     return;
                 }
 
+                var errorMsg = textStatus === 'timeout'
+                    ? 'Koneksi terlalu lama. Periksa jaringan Anda.'
+                    : 'Terjadi kesalahan saat memuat halaman.';
+
                 $mainContent.html(
                     '<div style="text-align:center; padding:60px 20px; background:#fff; border:1px solid #E2E8F0; border-radius:12px;">' +
                     '<div style="width:72px; height:72px; margin:0 auto 16px; background:#FEF2F2; color:#DC2626; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">' +
                     '<i class="fas fa-exclamation-triangle"></i></div>' +
                     '<h5 style="font-family:\'Plus Jakarta Sans\',sans-serif; color:#0F172A; margin-bottom:8px;">Gagal memuat konten</h5>' +
-                    '<p style="color:#64748B; font-size:0.9rem; margin-bottom:20px;">Terjadi kesalahan saat memuat halaman.</p>' +
+                    '<p style="color:#64748B; font-size:0.9rem; margin-bottom:20px;">' + errorMsg + '</p>' +
                     '<button onclick="loadContent(\'' + page + '\')" style="padding:10px 24px; background:#0F766E; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.85rem;">' +
                     '<i class="fas fa-arrow-rotate-right me-2"></i> Coba Lagi</button></div>'
                 );
                 $mainContent.removeClass('is-loading');
-                isLoading = false;
             }
         });
     }

@@ -966,30 +966,43 @@
         $('#modalQR').modal('show');
     }
 
-    // Download QR sebagai PNG (prefer img — qrcodejs stores final data there)
-    $('#btnDownloadQR').off('click').click(function() {
+    // Build download image with quiet zone (white padding required by QR spec)
+    function getQrDownloadUrl() {
         var img = $('#qrCanvas img')[0];
         var canvas = $('#qrCanvas canvas')[0];
-        if (!img && !canvas) return;
+        var src = (img && img.src) ? img.src : (canvas ? canvas.toDataURL('image/png') : null);
+        if (!src) return null;
+
+        var padding = 40;
+        var tmpImg = new Image();
+        tmpImg.src = src;
+        var dlCanvas = document.createElement('canvas');
+        dlCanvas.width = tmpImg.naturalWidth + padding * 2;
+        dlCanvas.height = tmpImg.naturalHeight + padding * 2;
+        var ctx = dlCanvas.getContext('2d');
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, dlCanvas.width, dlCanvas.height);
+        ctx.drawImage(tmpImg, padding, padding);
+        return dlCanvas.toDataURL('image/png');
+    }
+
+    // Download QR sebagai PNG dengan quiet zone
+    $('#btnDownloadQR').off('click').click(function() {
+        var dataUrl = getQrDownloadUrl();
+        if (!dataUrl) return;
         var name = $('#qrParticipantName').text();
         var link = document.createElement('a');
         link.download = 'QR_' + name.replace(/\s+/g, '_') + '.png';
-        if (img && img.src) {
-            link.href = img.src;
-        } else if (canvas) {
-            link.href = canvas.toDataURL('image/png');
-        }
+        link.href = dataUrl;
         link.click();
     });
 
     // Cetak QR
     $('#btnPrintQR').off('click').click(function() {
-        var img = $('#qrCanvas img')[0];
-        var canvas = $('#qrCanvas canvas')[0];
-        if (!img && !canvas) return;
+        var dataUrl = getQrDownloadUrl();
+        if (!dataUrl) return;
         var name = $('#qrParticipantName').text();
         var barcode = $('#qrBarcodeLabel').text();
-        var imgData = (img && img.src) ? img.src : canvas.toDataURL('image/png');
         var win = window.open('', '_blank');
         win.document.write(
             '<!DOCTYPE html><html><head><title>QR - ' + escapeHtml(name) + '</title>' +
@@ -1002,7 +1015,7 @@
             '<body><div class="qr-card">' +
             '<h2>' + escapeHtml(name) + '</h2>' +
             '<p>' + escapeHtml(barcode) + '</p>' +
-            '<img src="' + imgData + '" width="200" height="200">' +
+            '<img src="' + dataUrl + '" width="200" height="200">' +
             '</div>' +
             '<script>setTimeout(function(){window.print();},300);<\/script>' +
             '</body></html>'
