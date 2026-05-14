@@ -97,7 +97,7 @@ class AuthController extends Controller
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        return redirect()->to('/auth/login')->with('success', 'Registrasi berhasil! Silakan login.');
+        return redirect()->to('/auth/login')->with('message', 'Registrasi berhasil! Silakan login.');
     }
 
     /**

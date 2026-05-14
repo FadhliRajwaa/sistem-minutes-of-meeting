@@ -732,6 +732,15 @@
                     <i class="fas fa-redo"></i> Scan Lagi
                 </button>
             </div>
+            <div style="padding:1rem 1.25rem;border-top:1px solid #E2E8F0;">
+                <p style="font-size:0.75rem;color:#64748B;margin:0 0 0.5rem;font-weight:600;">Atau masukkan Barcode ID secara manual:</p>
+                <div style="display:flex;gap:0.5rem;">
+                    <input type="text" id="manualBarcodeInput" class="p-input" placeholder="Ketik Barcode ID peserta" style="flex:1;padding:0.5rem 0.75rem;font-size:0.8125rem;">
+                    <button id="btnManualAbsen" class="btn-save" style="padding:0.5rem 1rem;font-size:0.8125rem;white-space:nowrap;">
+                        <i class="fas fa-check me-1"></i> Absen
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -1066,6 +1075,7 @@
         $('#scanStatus').addClass('d-none');
         $('#scanResult').addClass('d-none');
         $('#btnRescan').addClass('d-none');
+        $('#manualBarcodeInput').val('');
         $('#reader').show();
         $('#modalScan').modal('show');
     });
@@ -1097,27 +1107,46 @@
         if (isScanning || isStarting) return;
         isStarting = true;
 
-        html5QrCode = new Html5Qrcode("reader");
-        const config = {
-            fps: 10,
-            qrbox: getResponsiveQrBox(),
-            aspectRatio: 1.0
+        try {
+            var qrFormats = (typeof Html5QrcodeSupportedFormats !== 'undefined')
+                ? [Html5QrcodeSupportedFormats.QR_CODE]
+                : undefined;
+
+            html5QrCode = new Html5Qrcode("reader", {
+                formatsToSupport: qrFormats,
+                experimentalFeatures: { useBarCodeDetectorIfSupported: true }
+            });
+        } catch (e) {
+            isStarting = false;
+            showScanResult('error', 'Gagal memuat scanner: ' + e.message);
+            return;
+        }
+
+        var config = {
+            fps: 15,
+            qrbox: getResponsiveQrBox()
         };
 
         html5QrCode.start(
             { facingMode: "environment" },
             config,
             function onScanSuccess(decodedText) {
-                isScanning = false;
-                isStarting = false;
-                html5QrCode.stop().then(function() {
-                    $('#reader').hide();
+                try {
+                    isScanning = false;
+                    isStarting = false;
+                    html5QrCode.stop().then(function() {
+                        $('#reader').hide();
+                        showScanProcessing();
+                        playBeep('success');
+                        submitAbsen(decodedText);
+                    }).catch(function() {
+                        showScanProcessing();
+                        submitAbsen(decodedText);
+                    });
+                } catch (e) {
                     showScanProcessing();
-                    playBeep('success');
                     submitAbsen(decodedText);
-                }).catch(function() {
-                    submitAbsen(decodedText);
-                });
+                }
             },
             function onScanFailure(error) {
                 // Ignore - normal saat belum ada barcode terdeteksi
@@ -1228,6 +1257,24 @@
             playBeep('error');
         });
     }
+
+    // ===== MANUAL BARCODE INPUT =====
+    $('#btnManualAbsen').off('click').click(function() {
+        var barcode = $('#manualBarcodeInput').val().trim();
+        if (!barcode) {
+            showToast('Masukkan Barcode ID terlebih dahulu!', 'warning');
+            return;
+        }
+        showScanProcessing();
+        submitAbsen(barcode);
+    });
+
+    $('#manualBarcodeInput').off('keypress').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            $('#btnManualAbsen').click();
+        }
+    });
 
     // ===== INITIALIZE =====
     loadMeetings();
