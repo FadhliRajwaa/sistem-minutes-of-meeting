@@ -951,12 +951,14 @@
         if (typeof QRCode !== 'undefined') {
             new QRCode(document.getElementById('qrCanvas'), {
                 text: String(barcodeId),
-                width: 200,
-                height: 200,
+                width: 512,
+                height: 512,
                 colorDark: '#0F172A',
                 colorLight: '#FFFFFF',
                 correctLevel: QRCode.CorrectLevel.H
             });
+            // Scale down display, keep high-res for download
+            $('#qrCanvas canvas, #qrCanvas img').css({ width: '200px', height: '200px' });
         } else {
             $('#qrCanvas').html('<p style="color:#DC2626;font-size:0.8rem;">Library QR Code belum dimuat. Coba refresh halaman.</p>');
         }
@@ -964,30 +966,30 @@
         $('#modalQR').modal('show');
     }
 
-    // Download QR sebagai PNG
+    // Download QR sebagai PNG (prefer img — qrcodejs stores final data there)
     $('#btnDownloadQR').off('click').click(function() {
-        var canvas = $('#qrCanvas canvas')[0];
         var img = $('#qrCanvas img')[0];
-        if (!canvas && !img) return;
+        var canvas = $('#qrCanvas canvas')[0];
+        if (!img && !canvas) return;
         var name = $('#qrParticipantName').text();
         var link = document.createElement('a');
         link.download = 'QR_' + name.replace(/\s+/g, '_') + '.png';
-        if (canvas) {
-            link.href = canvas.toDataURL('image/png');
-        } else if (img) {
+        if (img && img.src) {
             link.href = img.src;
+        } else if (canvas) {
+            link.href = canvas.toDataURL('image/png');
         }
         link.click();
     });
 
     // Cetak QR
     $('#btnPrintQR').off('click').click(function() {
-        var canvas = $('#qrCanvas canvas')[0];
         var img = $('#qrCanvas img')[0];
-        if (!canvas && !img) return;
+        var canvas = $('#qrCanvas canvas')[0];
+        if (!img && !canvas) return;
         var name = $('#qrParticipantName').text();
         var barcode = $('#qrBarcodeLabel').text();
-        var imgData = canvas ? canvas.toDataURL('image/png') : img.src;
+        var imgData = (img && img.src) ? img.src : canvas.toDataURL('image/png');
         var win = window.open('', '_blank');
         win.document.write(
             '<!DOCTYPE html><html><head><title>QR - ' + escapeHtml(name) + '</title>' +
