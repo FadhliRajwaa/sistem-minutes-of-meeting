@@ -940,20 +940,16 @@
         $('#qrCanvas').empty();
 
         if (typeof QRCode !== 'undefined') {
-            QRCode.toCanvas(barcodeId, {
+            new QRCode(document.getElementById('qrCanvas'), {
+                text: String(barcodeId),
                 width: 200,
-                margin: 2,
-                color: { dark: '#0F172A', light: '#FFFFFF' }
-            }, function(err, canvas) {
-                if (err) {
-                    $('#qrCanvas').html('<p style="color:#DC2626;">Gagal generate QR</p>');
-                    return;
-                }
-                canvas.style.borderRadius = '8px';
-                $('#qrCanvas').append(canvas);
+                height: 200,
+                colorDark: '#0F172A',
+                colorLight: '#FFFFFF',
+                correctLevel: QRCode.CorrectLevel.H
             });
         } else {
-            $('#qrCanvas').html('<p style="color:#DC2626;font-size:0.8rem;">Library QR Code belum dimuat</p>');
+            $('#qrCanvas').html('<p style="color:#DC2626;font-size:0.8rem;">Library QR Code belum dimuat. Coba refresh halaman.</p>');
         }
 
         $('#modalQR').modal('show');
@@ -961,23 +957,29 @@
 
     // Download QR sebagai PNG
     $('#btnDownloadQR').off('click').click(function() {
-        const canvas = $('#qrCanvas canvas')[0];
-        if (!canvas) return;
-        const name = $('#qrParticipantName').text();
-        const link = document.createElement('a');
+        var canvas = $('#qrCanvas canvas')[0];
+        var img = $('#qrCanvas img')[0];
+        if (!canvas && !img) return;
+        var name = $('#qrParticipantName').text();
+        var link = document.createElement('a');
         link.download = 'QR_' + name.replace(/\s+/g, '_') + '.png';
-        link.href = canvas.toDataURL('image/png');
+        if (canvas) {
+            link.href = canvas.toDataURL('image/png');
+        } else if (img) {
+            link.href = img.src;
+        }
         link.click();
     });
 
     // Cetak QR
     $('#btnPrintQR').off('click').click(function() {
-        const canvas = $('#qrCanvas canvas')[0];
-        if (!canvas) return;
-        const name = $('#qrParticipantName').text();
-        const barcode = $('#qrBarcodeLabel').text();
-        const imgData = canvas.toDataURL('image/png');
-        const win = window.open('', '_blank');
+        var canvas = $('#qrCanvas canvas')[0];
+        var img = $('#qrCanvas img')[0];
+        if (!canvas && !img) return;
+        var name = $('#qrParticipantName').text();
+        var barcode = $('#qrBarcodeLabel').text();
+        var imgData = canvas ? canvas.toDataURL('image/png') : img.src;
+        var win = window.open('', '_blank');
         win.document.write(
             '<!DOCTYPE html><html><head><title>QR - ' + escapeHtml(name) + '</title>' +
             '<style>body{font-family:Inter,sans-serif;text-align:center;padding:40px;}' +
