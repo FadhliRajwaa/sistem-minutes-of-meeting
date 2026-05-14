@@ -687,8 +687,8 @@
                     <input type="text" id="nama" class="p-input" placeholder="Masukkan nama lengkap">
                 </div>
                 <div class="p-input-group">
-                    <label class="p-input-label" for="barcode">Barcode ID / NIP</label>
-                    <input type="text" id="barcode" class="p-input" placeholder="Scan atau ketik ID barcode">
+                    <label class="p-input-label" for="barcode">Barcode ID <span style="font-weight:400;color:#64748B;font-size:0.75rem;">(opsional — otomatis jika kosong)</span></label>
+                    <input type="text" id="barcode" class="p-input" placeholder="Kosongkan untuk auto-generate">
                 </div>
             </div>
             <div class="modal-footer">
@@ -763,9 +763,6 @@
         </div>
     </div>
 </div>
-
-<script src="https://unpkg.com/html5-qrcode@2.3.8" type="text/javascript"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 
 <script>
 {
@@ -1026,8 +1023,8 @@
         const nameVal = $('#nama').val().trim();
         const barcodeVal = $('#barcode').val().trim();
 
-        if (!nameVal || !barcodeVal) {
-            showToast('Nama dan Barcode harus diisi!', 'warning');
+        if (!nameVal) {
+            showToast('Nama peserta harus diisi!', 'warning');
             return;
         }
 

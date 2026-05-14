@@ -47,12 +47,21 @@ class ParticipantController extends BaseController
         $barcodeId = trim($this->request->getPost('barcode_id') ?? '');
 
         // Validasi input
-        if (empty($meetingId) || empty($name) || empty($barcodeId)) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Semua field harus diisi']);
+        if (empty($meetingId) || empty($name)) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Nama peserta harus diisi']);
         }
 
-        if (strlen($name) > 255 || strlen($barcodeId) > 255) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Nama dan Barcode ID maksimal 255 karakter']);
+        if (strlen($name) > 255) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Nama maksimal 255 karakter']);
+        }
+
+        // Auto-generate barcode ID jika kosong
+        if (empty($barcodeId)) {
+            $barcodeId = strtoupper(substr(md5(uniqid((string)mt_rand(), true)), 0, 8));
+        }
+
+        if (strlen($barcodeId) > 255) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Barcode ID maksimal 255 karakter']);
         }
 
         // Verifikasi meeting milik user
