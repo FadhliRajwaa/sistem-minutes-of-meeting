@@ -251,6 +251,47 @@
         margin: 0;
     }
 
+    /* Dibuat Oleh Input */
+    .export-page .dibuat-oleh-wrap {
+        padding: 0.875rem 1.25rem;
+        border-top: 1px solid var(--color-border);
+        background: var(--color-surface);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .export-page .dibuat-oleh-wrap label {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--color-text);
+        white-space: nowrap;
+    }
+
+    .export-page .dibuat-oleh-input {
+        flex: 1;
+        min-width: 180px;
+        max-width: 320px;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        font-size: 0.8125rem;
+        color: var(--color-text);
+        background: #fff;
+        transition: all var(--transition-fast);
+    }
+
+    .export-page .dibuat-oleh-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(15,118,110,0.1);
+    }
+
+    .export-page .dibuat-oleh-input::placeholder {
+        color: #94A3B8;
+    }
+
     /* Action Footer */
     .export-page .action-footer {
         padding: 0.875rem 1.25rem;
@@ -592,6 +633,16 @@
             width: 100%;
             justify-content: center;
         }
+
+        .export-page .dibuat-oleh-wrap {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .export-page .dibuat-oleh-input {
+            max-width: 100%;
+            width: 100%;
+        }
     }
 </style>
 
@@ -651,6 +702,11 @@
                         <?php endif; ?>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="dibuat-oleh-wrap" id="dibuatOlehWrap" style="display:none;">
+                <label for="dibuat_oleh"><i class="fas fa-user-edit" style="color:var(--color-primary);margin-right:4px;"></i> Dibuat oleh</label>
+                <input type="text" name="dibuat_oleh" id="dibuat_oleh" class="dibuat-oleh-input" placeholder="Nama penanggung jawab (kosongkan = notulis)" maxlength="100" autocomplete="off">
             </div>
 
             <div class="action-footer">
@@ -738,6 +794,10 @@
                 viewBtn.disabled = false;
                 deleteBtn.disabled = false;
 
+                // Show "Dibuat oleh" field
+                var dibuatWrap = document.getElementById('dibuatOlehWrap');
+                if (dibuatWrap) dibuatWrap.style.display = 'flex';
+
                 // Highlight selected row
                 document.querySelectorAll('.e-table tbody tr').forEach(function(r) {
                     r.classList.remove('selected-row');
@@ -794,6 +854,8 @@
                         exportBtn.disabled = true;
                         viewBtn.disabled = true;
                         deleteBtn.disabled = true;
+                        var dibuatWrap = document.getElementById('dibuatOlehWrap');
+                        if (dibuatWrap) dibuatWrap.style.display = 'none';
 
                         refreshRadioEvents();
                     })
@@ -809,8 +871,14 @@
         viewBtn.addEventListener("click", function() {
             if (!selectedID) return;
             const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
-            const previewUrl = baseUrl + "export/pdf/" + selectedID + "?preview=true";
-            const downloadUrl = baseUrl + "export/pdf/" + selectedID;
+            var dibuatOleh = (document.getElementById('dibuat_oleh') || {}).value || '';
+            var previewUrl = baseUrl + "export/pdf/" + selectedID + "?preview=true";
+            var downloadUrl = baseUrl + "export/pdf/" + selectedID;
+            if (dibuatOleh.trim()) {
+                var encoded = encodeURIComponent(dibuatOleh.trim());
+                previewUrl += "&dibuat_oleh=" + encoded;
+                downloadUrl += "?dibuat_oleh=" + encoded;
+            }
 
             const previewModal = new bootstrap.Modal(document.getElementById('previewPdfModal'));
             const loader = document.getElementById('pdfLoader');

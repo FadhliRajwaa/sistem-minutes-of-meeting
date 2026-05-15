@@ -57,7 +57,8 @@ class ExportController extends BaseController
         $data = [
             'discussion' => $discussion,
             'meeting' => $meeting,
-            'participants' => $participants
+            'participants' => $participants,
+            'dibuat_oleh' => trim($this->request->getGetPost('dibuat_oleh') ?? '')
         ];
 
         try {

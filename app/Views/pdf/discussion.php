@@ -189,15 +189,21 @@
         }
 
         .status-hadir {
-            color: #059669;
+            color: #065F46;
+            background-color: #D1FAE5;
             font-weight: 700;
-            font-size: 9pt;
+            font-size: 8.5pt;
+            padding: 2px 8px;
+            border-radius: 3px;
         }
 
         .status-tidak {
-            color: #DC2626;
+            color: #991B1B;
+            background-color: #FEE2E2;
             font-weight: 600;
-            font-size: 9pt;
+            font-size: 8.5pt;
+            padding: 2px 8px;
+            border-radius: 3px;
         }
 
         /* Attendance summary */
@@ -429,9 +435,9 @@
                     <td style="font-family:monospace;font-size:8.5pt;color:#64748B;"><?= esc($p['barcode_id'] ?? '-') ?></td>
                     <td>
                         <?php if (strtolower($p['status'] ?? 'hadir') === 'hadir'): ?>
-                            <span class="status-hadir">&#10003; Hadir</span>
+                            <span class="status-hadir">Hadir</span>
                         <?php else: ?>
-                            <span class="status-tidak">&#10007; Tidak Hadir</span>
+                            <span class="status-tidak">Tidak Hadir</span>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -480,8 +486,8 @@
                     <p class="signature-label">Dibuat oleh,</p>
                     <p class="signature-date"><?= isset($discussion['tanggal']) ? date('d F Y', strtotime($discussion['tanggal'])) : date('d F Y') ?></p>
                     <div class="signature-line">
-                        <p class="signature-name"><?= esc($discussion['nama_notulis'] ?? 'Notulis') ?></p>
-                        <p class="signature-role">Notulis</p>
+                        <p class="signature-name"><?= esc($dibuat_oleh ?? $discussion['nama_notulis'] ?? 'Notulis') ?></p>
+                        <p class="signature-role"><?= !empty($dibuat_oleh) && $dibuat_oleh !== ($discussion['nama_notulis'] ?? '') ? 'Penanggung Jawab' : 'Notulis' ?></p>
                     </div>
                 </td>
             </tr>
