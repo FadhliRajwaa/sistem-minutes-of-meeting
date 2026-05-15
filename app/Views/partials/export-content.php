@@ -809,7 +809,7 @@
         viewBtn.addEventListener("click", function() {
             if (!selectedID) return;
             const baseUrl = typeof siteBaseUrl !== 'undefined' ? siteBaseUrl : '<?= base_url() ?>';
-            const previewUrl = baseUrl + "export/preview/" + selectedID;
+            const previewUrl = baseUrl + "export/pdf/" + selectedID + "?preview=true";
             const downloadUrl = baseUrl + "export/pdf/" + selectedID;
 
             const previewModal = new bootstrap.Modal(document.getElementById('previewPdfModal'));
