@@ -1,8 +1,8 @@
 # Environment
 .env
 
-# Vendor dependencies
-/vendor/
+# Vendor dependencies (tracked for Vercel deployment)
+# /vendor/
 
 # Writable directory (logs, cache, sessions)
 /writable/cache/*
@@ -27,7 +27,7 @@ Thumbs.db
 desktop.ini
 
 # Composer
-composer.lock
+# composer.lock
 
 # Test files
 /test_*.php
